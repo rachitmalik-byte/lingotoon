@@ -32,14 +32,17 @@ const VideosPage = () => {
             className="min-h-[380px] md:min-h-[440px] flex flex-col justify-end p-8 md:p-14 text-white relative overflow-hidden"
             style={{ backgroundColor: featuredColor.bg }}
           >
+            {featuredVideo?.image && (
+              <img
+                src={featuredVideo.image}
+                alt={featuredVideo.title}
+                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
+              />
+            )}
+
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none"></div>
             <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-white/20 blur-3xl pointer-events-none"></div>
-
-            {/* Giant Watermark Icon */}
-            <div className="absolute right-10 top-1/2 -translate-y-1/2 text-[140px] sm:text-[200px] opacity-25 select-none pointer-events-none filter drop-shadow-2xl">
-              {featuredColor.icon}
-            </div>
 
             {/* Content */}
             <div className="relative z-10 max-w-2xl">
@@ -53,17 +56,23 @@ const VideosPage = () => {
                 {featuredVideo.description}
               </p>
               
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <Link 
                   to={`/video/${featuredVideo.id}`} 
                   className="inline-flex items-center gap-2.5 bg-brand-yellow text-brand-purple-dark hover:bg-brand-yellow-light font-display font-bold px-8 py-4 rounded-full text-lg transition-transform hover:scale-105 active:scale-95 shadow-btn-hover"
                 >
-                  <Play className="w-6 h-6 fill-current" />
-                  WATCH NOW
+                  <Play className="w-5 h-5 fill-current" />
+                  <span>Watch Now</span>
                 </Link>
-                <span className="text-white/80 font-body font-bold text-sm bg-black/30 px-3.5 py-2 rounded-full backdrop-blur-sm">
-                  {featuredVideo.duration} • {featuredVideo.subject}
-                </span>
+
+                <a
+                  href="https://youtube.com/@lingotoon-x2m"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold px-6 py-4 rounded-full text-base transition-transform hover:scale-105 active:scale-95 shadow-lg"
+                >
+                  <span>YouTube: @lingotoon-x2m</span>
+                </a>
               </div>
             </div>
           </div>

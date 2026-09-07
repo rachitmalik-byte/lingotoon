@@ -42,13 +42,13 @@ const FeaturePillars = () => {
       description: 'Adventure journey maps, streaks, and colorful badges to keep young learners rewarded and proud.',
       image: '/images/game_math_match.jpg',
       badge: 'Journey Map',
-      badgeColor: 'bg-brand-green text-white',
+      badgeColor: 'bg-brand-yellow text-neutral-900',
       link: '/progress',
       ctaText: 'View Journey',
-      accentColor: '#10B981',
-      bgGradient: 'from-emerald-50 via-white to-teal-50/40',
-      borderColor: 'border-emerald-100 hover:border-brand-green/40',
-      btnBg: 'bg-brand-green hover:bg-emerald-600 text-white'
+      accentColor: '#F59E0B',
+      bgGradient: 'from-amber-50 via-white to-yellow-50/50',
+      borderColor: 'border-amber-200 hover:border-brand-yellow/60',
+      btnBg: 'bg-brand-yellow hover:bg-amber-400 text-neutral-900 font-bold shadow-md hover:shadow-lg'
     }
   ];
 
@@ -59,7 +59,7 @@ const FeaturePillars = () => {
         {/* Section Heading with Big Friendly Readable Typography */}
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-yellow-light border border-brand-yellow/30 shadow-xs">
-            <span className="text-base">🚀</span>
+            <Sparkles className="w-4 h-4 text-brand-purple" />
             <span className="font-display font-bold text-xs uppercase tracking-wider text-neutral-800">
               Explore The Platform
             </span>

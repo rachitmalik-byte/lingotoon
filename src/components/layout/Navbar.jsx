@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShieldAlert, X, Sparkles, Menu, Compass, Lock } from 'lucide-react';
+import { Search, ShieldAlert, X, Sparkles, Menu, Compass, Lock, User } from 'lucide-react';
 import Avatar from '../ui/Avatar';
 import Logo from '../ui/Logo';
 import { useUser } from '../../context/UserContext';
 import { sounds } from '../../utils/soundEffects';
 import AuthModal from '../modals/AuthModal';
 import SearchModal from '../modals/SearchModal';
+import EasterEggModal from '../interactive/EasterEggModal';
 
 const Navbar = () => {
   const { user } = useUser();
@@ -19,6 +20,8 @@ const Navbar = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState('kid');
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [easterEggOpen, setEasterEggOpen] = useState(false);
+  const [logoClicks, setLogoClicks] = useState(0);
 
   useEffect(() => {
     let ticking = false;
@@ -40,8 +43,22 @@ const Navbar = () => {
     { name: 'Learning', path: '/learn' },
     { name: 'Videos', path: '/videos' },
     { name: 'Games', path: '/games' },
+    { name: 'Blog', path: '/blog' },
     { name: 'Progress', path: '/progress' },
   ];
+
+  const handleLogoClick = () => {
+    sounds.playPop();
+    setLogoClicks(c => {
+      const count = c + 1;
+      if (count >= 5) {
+        sounds.playFanfare();
+        setEasterEggOpen(true);
+        return 0;
+      }
+      return count;
+    });
+  };
 
   const openParentLogin = (e) => {
     e.preventDefault();
@@ -75,6 +92,10 @@ const Navbar = () => {
         isOpen={searchModalOpen} 
         onClose={() => setSearchModalOpen(false)} 
       />
+      <EasterEggModal
+        isOpen={easterEggOpen}
+        onClose={() => setEasterEggOpen(false)}
+      />
 
       {/* FIXED NAVIGATION CONTAINER */}
       <header className="fixed top-0 left-0 w-full z-50 pointer-events-none">
@@ -98,19 +119,20 @@ const Navbar = () => {
           >
             <div className="flex items-center justify-between">
               
-              {/* LOGO (Playfully pops beyond capsule boundary when scrolled) */}
+              {/* LOGO with 5-Tap Easter Egg Trigger */}
               <Link 
                 to="/" 
-                onClick={() => sounds.playPop()}
-                className="flex items-center group relative z-10 shrink-0"
+                onClick={handleLogoClick}
+                className="flex items-center group relative z-10 shrink-0 cursor-pointer"
+                title="LiNGO TOON (Tap 5 times for a surprise!)"
               >
                 <motion.div 
                   layout
                   transition={{ layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
                   className={`transform transition-transform duration-500 ease-out ${
                     scrolled 
-                      ? '-my-1 sm:-my-3 scale-100 sm:scale-110 drop-shadow-md group-hover:scale-115' 
-                      : 'scale-100 group-hover:scale-105'
+                      ? '-my-1 sm:-my-3 scale-100 sm:scale-110 drop-shadow-md group-hover:scale-115 active:scale-90' 
+                      : 'scale-100 group-hover:scale-105 active:scale-95'
                   }`}
                 >
                   <Logo size={scrolled ? 'sm' : 'md'} />
@@ -181,24 +203,37 @@ const Navbar = () => {
                   <span>Parent Mode</span>
                 </button>
 
+                {/* Sign In / Explorer Profile Button */}
+                {user ? (
+                  <button 
+                    onClick={openSignUp}
+                    className="flex items-center gap-2 group ml-0.5 cursor-pointer"
+                    title={`Explorer: ${user.name} (Click to manage profile)`}
+                  >
+                    <Avatar name={user.name} level={user.level} size="sm" />
+                    <span className={`hidden lg:inline text-xs font-display font-black ${isTransparent ? 'text-white' : 'text-neutral-800'}`}>
+                      {user.name}
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={openSignUp}
+                    className={`font-display font-black text-xs sm:text-sm px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+                      isTransparent ? 'text-white hover:text-yellow-200' : 'text-neutral-700 hover:text-brand-purple'
+                    }`}
+                  >
+                    Sign In
+                  </button>
+                )}
+
                 {/* Sign up / Join free pill button */}
                 <button 
                   onClick={openSignUp}
                   className="px-2.5 sm:px-5 py-1.5 sm:py-2 bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-black text-xs sm:text-sm rounded-full shadow-sm hover:shadow-md transition-all transform hover:scale-105 active:scale-95 flex items-center gap-1 sm:gap-1.5"
                 >
                   <Sparkles className="w-3 h-3 text-neutral-800" />
-                  <span>Join Club</span>
+                  <span>{user ? 'My Club' : 'Join Club'}</span>
                 </button>
-
-                {/* Child Avatar Badge */}
-                <Link 
-                  to="/progress" 
-                  onClick={() => sounds.playPop()}
-                  className="flex items-center gap-1 group ml-0.5"
-                  title="My Progress"
-                >
-                  <Avatar name={user?.name} level={user?.level} size="sm" />
-                </Link>
               </div>
 
             </div>

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lock, Shield, User, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
+import { useUser } from '../../context/UserContext';
 
 const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
+  const { user, loginUser, logoutUser } = useUser();
   const [activeTab, setActiveTab] = useState(initialTab); // 'kid' or 'parent'
   const [pin, setPin] = useState(['', '', '', '']);
-  const [kidName, setKidName] = useState('Alex');
-  const [selectedAvatar, setSelectedAvatar] = useState('🦁');
+  const [kidName, setKidName] = useState(user?.name || '');
+  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || '🦁');
   const [pinSuccess, setPinSuccess] = useState(false);
   const [pinError, setPinError] = useState(false);
 
@@ -43,6 +45,14 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
   const handleKidSubmit = (e) => {
     e.preventDefault();
     sounds.playFanfare();
+    const finalName = kidName.trim() || 'Young Explorer';
+    loginUser({
+      name: finalName,
+      avatar: selectedAvatar,
+      level: 1,
+      levelTitle: 'Curious Explorer',
+      xp: 150
+    });
     onClose();
   };
 
@@ -181,6 +191,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
                     type="text"
                     value={kidName}
                     onChange={(e) => setKidName(e.target.value)}
+                    placeholder="Enter child or explorer name (e.g. Mia or Leo)"
                     className="w-full px-4 py-3 rounded-2xl border-2 border-neutral-200 focus:border-brand-purple outline-none font-display font-bold text-base bg-neutral-50 focus:bg-white transition-colors"
                   />
                 </div>
@@ -189,9 +200,19 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
                   type="submit"
                   className="w-full py-3.5 bg-brand-yellow hover:bg-yellow-400 text-neutral-900 font-display font-extrabold text-base rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-102 active:scale-98 flex items-center justify-center gap-2"
                 >
-                  <span>Start Exploring Now!</span>
+                  <span>{user ? 'Save Profile' : 'Start Exploring Now!'}</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
+
+                {user && (
+                  <button
+                    type="button"
+                    onClick={() => { sounds.playPop(); logoutUser(); onClose(); }}
+                    className="w-full py-2 text-xs font-display font-bold text-neutral-500 hover:text-red-500 transition-colors"
+                  >
+                    Switch to Guest Mode (Sign Out)
+                  </button>
+                )}
               </form>
             )}
           </div>

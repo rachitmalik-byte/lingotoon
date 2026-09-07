@@ -4,15 +4,28 @@ import { userProgress as initialProgress } from '../data/userProgress'
 const UserContext = createContext(null)
 
 export function UserProvider({ children }) {
-  const [user] = useState({
-    name: 'Alex',
-    avatar: null,
-    age: 7,
-    level: 3,
-    levelTitle: 'Word Builder',
-    xp: 1250,
-    xpToNext: 2000,
-  })
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('lingotoon_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const loginUser = (userData) => {
+    setUser(userData);
+    try {
+      localStorage.setItem('lingotoon_user', JSON.stringify(userData));
+    } catch (e) {}
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    try {
+      localStorage.removeItem('lingotoon_user');
+    } catch (e) {}
+  };
 
   const [progress, setProgress] = useState(initialProgress)
 
@@ -45,6 +58,8 @@ export function UserProvider({ children }) {
   return (
     <UserContext.Provider value={{
       user,
+      loginUser,
+      logoutUser,
       progress,
       updateVideoProgress,
       updateGameScore,

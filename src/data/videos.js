@@ -1,5 +1,23 @@
 export const videos = [
   {
+    id: 'yt-healthy-habits',
+    title: 'Healthy Habits with Kids',
+    description: 'Official Lingo Toons animated song! Sing along and learn healthy everyday habits with fun characters.',
+    subject: 'English',
+    category: 'Healthy Habits',
+    duration: '2:15',
+    durationSeconds: 135,
+    thumbnail: 'healthy-habits',
+    image: 'https://i.ytimg.com/vi/nBy5TBWLook/maxresdefault.jpg',
+    youtubeId: 'nBy5TBWLook',
+    youtubeUrl: 'https://www.youtube.com/watch?v=nBy5TBWLook',
+    isOfficialYoutube: true,
+    channelName: 'LingoToon',
+    channelUrl: 'https://youtube.com/@lingotoon-x2m',
+    progress: 0,
+    featured: true,
+  },
+  {
     id: 'v1',
     title: 'The Alphabet Song',
     description: 'Sing along and learn all 26 letters with Lingo! A fun musical journey through the alphabet.',
@@ -115,4 +133,5 @@ export const videoThumbnailColors = {
   days: { bg: '#FACC15', accent: '#7C3AED' },
   phonics: { bg: '#5B21B6', accent: '#FACC15' },
   water: { bg: '#0284C7', accent: '#22C55E' },
+  'healthy-habits': { bg: '#DC2626', accent: '#FACC15' },
 }

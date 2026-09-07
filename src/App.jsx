@@ -12,6 +12,8 @@ import GamePlayPage from './pages/GamePlayPage'
 import LearnPage from './pages/LearnPage'
 import ProgressPage from './pages/ProgressPage'
 import ParentDashboard from './pages/ParentDashboard'
+import BlogPage from './pages/BlogPage'
+import ScrollToTop from './components/layout/ScrollToTop'
 
 export default function App() {
   const location = useLocation()
@@ -23,6 +25,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       {!isImmersive && <Navbar />}
 
       <main className={`flex-1 ${!isHome && !isImmersive ? 'pt-20 sm:pt-24 md:pt-28' : ''}`}>
@@ -34,6 +37,7 @@ export default function App() {
             <Route path="/games" element={<PageTransition><GamesPage /></PageTransition>} />
             <Route path="/game/play/:id" element={<GamePlayPage />} />
             <Route path="/learn" element={<PageTransition><LearnPage /></PageTransition>} />
+            <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
             <Route path="/progress" element={<PageTransition><ProgressPage /></PageTransition>} />
             <Route path="/parent" element={<PageTransition><ParentDashboard /></PageTransition>} />
           </Routes>

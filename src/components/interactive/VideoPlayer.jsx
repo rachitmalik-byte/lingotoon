@@ -70,6 +70,17 @@ const VideoPlayer = ({ video, onProgress, onComplete }) => {
       className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl group select-none bg-neutral-900"
       style={{ backgroundColor: colorConfig.bg }}
     >
+      {/* Real YouTube Player Embed if playing */}
+      {video?.youtubeId && isPlaying ? (
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+          title={video.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full border-0 z-30"
+        />
+      ) : null}
+
       {/* Background Poster Image */}
       {video?.image && (
         <img 

@@ -20,7 +20,9 @@ import FluidSideAccents from '../components/decorative/FluidSideAccents';
 // Layout & Home Components
 import HeroBanner from '../components/home/HeroBanner';
 import FeaturePillars from '../components/home/FeaturePillars';
+import PinnedLearningJourney from '../components/home/PinnedLearningJourney';
 import CuratedCoursesGrid from '../components/home/CuratedCoursesGrid';
+import YoutubeSpotlight from '../components/home/YoutubeSpotlight';
 import PhysicalAndMobileShowcase from '../components/home/PhysicalAndMobileShowcase';
 import FunEndingZone from '../components/home/FunEndingZone';
 
@@ -55,10 +57,16 @@ const HomePage = () => {
       {/* 2. THREE PILLAR FEATURE CARDS (Interactive Lessons, Adventure Games, Progress Tracker) */}
       <FeaturePillars />
 
-      {/* 3. CURATED COURSE PACKS (Fun with ABCs, Bear's Grammar Safari, Globe Trotter, Taste & Learn) */}
+      {/* 3. PINNED STOP-SCROLL INTERACTIVE SHOWCASE (3-Step Learning Odyssey) */}
+      <PinnedLearningJourney />
+
+      {/* 4. CURATED COURSE PACKS (Fun with ABCs, Bear's Grammar Safari, Globe Trotter, Taste & Learn) */}
       <CuratedCoursesGrid />
 
-      {/* 4. PHYSICAL & MOBILE SHOWCASE (Activity Notebook & Smartphone App) */}
+      {/* 5. OFFICIAL YOUTUBE SPOTLIGHT (Healthy Habits with Kids Episode & Subscribe Link) */}
+      <YoutubeSpotlight />
+
+      {/* 6. PHYSICAL & MOBILE SHOWCASE (Activity Notebook & Smartphone App) */}
       <PhysicalAndMobileShowcase />
 
       {/* 5. CONTINUE LEARNING (ADVENTURE MISSION PODS) */}
