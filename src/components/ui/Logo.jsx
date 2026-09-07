@@ -32,7 +32,7 @@ const Logo = ({ size = 'md', variant = 'default', className = '' }) => {
         src="/images/lingo_logo_3d_transparent.png" 
         alt="Lingo Toon Logo" 
         style={{ height: `${h}px` }}
-        className="w-auto object-contain filter drop-shadow-md"
+        className="w-auto object-contain filter drop-shadow-md transition-all duration-500 ease-out"
       />
     </div>
   );

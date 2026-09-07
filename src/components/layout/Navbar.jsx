@@ -21,10 +21,17 @@ const Navbar = () => {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 35);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -70,36 +77,44 @@ const Navbar = () => {
       />
 
       {/* FIXED NAVIGATION CONTAINER */}
-      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none transition-all duration-300">
+      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none">
         <div className="w-full px-3 sm:px-6 pt-2 sm:pt-3">
           
-          {/* DESKTOP & TABLET NAVBAR */}
+          {/* DESKTOP & TABLET NAVBAR CAPSULE */}
           <motion.div
             layout
-            transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-            className={`pointer-events-auto transition-all duration-300 mx-auto ${
+            transition={{
+              layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+            }}
+            style={{
+              backdropFilter: isTransparent ? 'blur(0px)' : 'blur(20px)',
+              WebkitBackdropFilter: isTransparent ? 'blur(0px)' : 'blur(20px)',
+            }}
+            className={`pointer-events-auto mx-auto transition-[background-color,border-color,box-shadow,border-radius] duration-500 ease-out ${
               isTransparent
-                ? 'w-full max-w-7xl px-4 sm:px-8 py-2.5 bg-transparent'
-                : 'max-w-5xl rounded-full px-5 sm:px-7 py-2 bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)]'
+                ? 'w-full max-w-7xl px-4 sm:px-8 py-3 bg-transparent border-transparent shadow-none rounded-[2rem]'
+                : 'max-w-5xl rounded-full px-5 sm:px-7 py-2 bg-white/70 border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)]'
             }`}
           >
             <div className="flex items-center justify-between">
               
-              {/* LOGO (Playfully pops beyond capsule boundary when scrolled!) */}
+              {/* LOGO (Playfully pops beyond capsule boundary when scrolled) */}
               <Link 
                 to="/" 
                 onClick={() => sounds.playPop()}
                 className="flex items-center group relative z-10"
               >
-                <div 
-                  className={`transition-all duration-300 transform ${
+                <motion.div 
+                  layout
+                  transition={{ layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
+                  className={`transform transition-transform duration-500 ease-out ${
                     scrolled 
-                      ? '-my-3 sm:-my-4 scale-110 sm:scale-120 drop-shadow-md group-hover:scale-125 group-hover:rotate-1' 
+                      ? '-my-2.5 sm:-my-3.5 scale-105 sm:scale-115 drop-shadow-md group-hover:scale-120' 
                       : 'scale-100 group-hover:scale-105'
                   }`}
                 >
                   <Logo size={scrolled ? 'sm' : 'md'} />
-                </div>
+                </motion.div>
               </Link>
 
               {/* CENTER NAVIGATION LINKS */}
@@ -110,7 +125,7 @@ const Navbar = () => {
                     to={link.path}
                     onClick={() => sounds.playPop()}
                     className={({ isActive }) =>
-                      `font-display font-semibold text-sm sm:text-base relative transition-all flex flex-col items-center py-1 ${
+                      `font-display font-semibold text-sm sm:text-base relative transition-colors duration-400 ease-out flex flex-col items-center py-1 ${
                         isActive
                           ? isTransparent
                             ? 'text-white font-bold drop-shadow-sm'
@@ -127,7 +142,8 @@ const Navbar = () => {
                         {isActive && (
                           <motion.span 
                             layoutId="activeNavIndicator"
-                            className={`w-5 sm:w-6 h-1 rounded-full mt-0.5 ${
+                            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                            className={`w-5 sm:w-6 h-1 rounded-full mt-0.5 transition-colors duration-400 ${
                               isTransparent ? 'bg-[#FFD53D] shadow-sm' : 'bg-brand-purple'
                             }`}
                           />
