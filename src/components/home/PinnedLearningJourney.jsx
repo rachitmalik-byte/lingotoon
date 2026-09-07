@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { PlayCircle, Gamepad2, Award, Sparkles, ArrowRight, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { PlayCircle, Gamepad2, Award, Sparkles, ArrowRight, Bookmark, BookOpen } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
 import { Link } from 'react-router-dom';
 
@@ -11,63 +11,79 @@ const PinnedLearningJourney = () => {
   const steps = [
     {
       id: 0,
-      badge: 'Step 1: Watch & Sing',
+      chapter: 'CHAPTER 01',
+      actionBubble: 'POW! WATCH & SING',
       title: 'Captivating Animated Toon Lessons',
-      description: 'Children absorb phonics, grammar, and early vocabulary effortlessly through high-energy music videos and lovable animated characters.',
+      subtitle: 'Catchy Phonics, Melodies & Rhymes',
+      description: 'Children absorb letter sounds, vocabulary, and rhythm naturally through animated musical episodes and singing characters.',
       icon: PlayCircle,
       accentColor: '#7C3AED',
-      badgeBg: 'bg-brand-purple text-white',
-      cardBg: 'from-purple-50 via-white to-indigo-50/50',
+      tagColor: 'bg-brand-purple text-white border-brand-purple',
+      tabColor: 'bg-[#FFD53D] text-neutral-900 border-neutral-900',
+      tabInactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border-neutral-300',
+      panelBg: 'bg-gradient-to-br from-[#FFFDF8] via-white to-purple-50/40',
       image: '/images/video_alphabet_song.jpg',
-      stat: '100+ Musical Videos',
+      stat: '100+ Musical Songs',
       link: '/videos',
-      cta: 'Explore Video Songs'
+      cta: 'Explore Video Songs',
+      stickerText: 'Issue #1: Phonics Beat'
     },
     {
       id: 1,
-      badge: 'Step 2: Play & Spell',
+      chapter: 'CHAPTER 02',
+      actionBubble: 'ZAP! PLAY & SPELL',
       title: 'Interactive Tactile Word Arcades',
-      description: 'Kids drag scrambled letters, hear instant tactile sound chimes, and build confidence while spelling real words in our Word Builder and Math games.',
+      subtitle: 'Drag, Drop & Spell Living Words',
+      description: 'Kids arrange letter tiles, hear instant tactile sound chimes, and build confidence while spelling real words in our Word Builder arcade.',
       icon: Gamepad2,
       accentColor: '#F97316',
-      badgeBg: 'bg-brand-orange text-white',
-      cardBg: 'from-amber-50 via-white to-orange-50/50',
+      tagColor: 'bg-brand-orange text-white border-brand-orange',
+      tabColor: 'bg-[#FF8A3D] text-white border-neutral-900',
+      tabInactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border-neutral-300',
+      panelBg: 'bg-gradient-to-br from-[#FFFDF8] via-white to-orange-50/40',
       image: '/images/game_word_builder.jpg',
-      stat: 'Playable Mini-Games',
+      stat: 'Touch-Friendly Games',
       link: '/games',
-      cta: 'Play Word Builder'
+      cta: 'Play Word Builder',
+      stickerText: 'Issue #2: Letter Quest'
     },
     {
       id: 2,
-      badge: 'Step 3: Celebrate & Master',
-      title: 'Streaks, Golden Stars & XP Gems',
-      description: 'Every completed mission unlocks shiny badges, daily streak flames, and level upgrades that make young learners proud of their progress.',
+      chapter: 'CHAPTER 03',
+      actionBubble: 'BOOM! COLLECT & SHINE',
+      title: 'Streaks, Golden Stars & Badges',
+      subtitle: 'Celebrate Milestones & Earn XP Gems',
+      description: 'Every completed quest unlocks shiny badges, daily streak flames, and level upgrades that make young learners genuinely proud.',
       icon: Award,
       accentColor: '#F59E0B',
-      badgeBg: 'bg-brand-yellow text-neutral-900',
-      cardBg: 'from-yellow-50 via-white to-amber-50/50',
+      tagColor: 'bg-amber-500 text-white border-amber-500',
+      tabColor: 'bg-[#7C3AED] text-white border-neutral-900',
+      tabInactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border-neutral-300',
+      panelBg: 'bg-gradient-to-br from-[#FFFDF8] via-white to-amber-50/40',
       image: '/images/game_math_match.jpg',
-      stat: 'Rewarding Milestones',
+      stat: 'Trophy Hall Unlocked',
       link: '/progress',
-      cta: 'View Learning Badges'
+      cta: 'View Learning Badges',
+      stickerText: 'Issue #3: Star Vault'
     }
   ];
 
-  // Monitor scroll within container to trigger stop-scroll phase
+  // Stop-scroll progress tracking
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      const totalScrollable = rect.height - windowHeight;
-      if (totalScrollable <= 0) return;
+      const scrollableDistance = rect.height - windowHeight;
+      if (scrollableDistance <= 0) return;
       
-      const currentProgress = Math.max(0, Math.min(1, -rect.top / totalScrollable));
+      // Calculate how far container has scrolled past top
+      const scrollProgress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
       
-      if (currentProgress < 0.33) {
+      if (scrollProgress < 0.33) {
         setActiveStep(0);
-      } else if (currentProgress < 0.66) {
+      } else if (scrollProgress < 0.67) {
         setActiveStep(1);
       } else {
         setActiveStep(2);
@@ -75,120 +91,206 @@ const PinnedLearningJourney = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const current = steps[activeStep];
 
   return (
-    <div ref={containerRef} className="relative h-[220vh] bg-gradient-to-b from-[#FAF9F6] via-white to-[#FAF9F6]">
-      {/* Sticky Pinned Screen (Freezes on screen while user scrolls through the 3 phases) */}
-      <div className="sticky top-20 sm:top-24 h-[85vh] min-h-[580px] max-h-[820px] flex items-center overflow-hidden z-20">
-        <div className="container-app w-full">
+    <section 
+      ref={containerRef} 
+      className="relative h-[165vh] bg-[#FAF9F6] border-b border-neutral-200/60"
+    >
+      {/* 
+        STICKY PINNED CONTAINER:
+        Locks to the screen at top-20 until the 165vh scroll track finishes,
+        then smoothly unpins into the next section with ZERO extra whitespace.
+      */}
+      <div className="sticky top-20 sm:top-24 h-[calc(100vh-80px)] min-h-[580px] max-h-[780px] flex items-center justify-center z-20 px-3 sm:px-6">
+        <div className="container-app w-full max-w-6xl">
           
-          {/* Outer Showcase Box */}
-          <div className="rounded-[3.2rem] bg-white/90 backdrop-blur-xl border-2 border-purple-100 shadow-2xl p-6 sm:p-10 lg:p-12 overflow-hidden relative">
+          {/* COMIC NOTEBOOK SHOWCASE BOOKLET */}
+          <div className="relative rounded-[2.8rem] sm:rounded-[3.2rem] bg-[#FFFDF9] border-3 sm:border-4 border-neutral-900 shadow-[8px_8px_0px_0px_#18181B] sm:shadow-[12px_12px_0px_0px_#18181B] overflow-hidden transition-all">
             
-            {/* Top Subtitle Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-neutral-100">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-yellow-light border border-brand-yellow/40 text-neutral-900 text-xs font-display font-black mb-2 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
-                  <span>The 3-Step Learning Odyssey</span>
-                </div>
-                <h3 className="font-display text-2xl sm:text-3xl font-black text-neutral-900">
-                  How Children Master Language with Lingo Toon
-                </h3>
+            {/* SPIRAL BINDER STRIP ON TOP (Authentic Notebook Feel) */}
+            <div className="bg-[#FAF7EE] border-b-3 border-neutral-900 px-6 py-2.5 flex items-center justify-between relative select-none">
+              {/* Spiral Holes Pattern */}
+              <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+                {[...Array(14)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-1">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-neutral-900 shadow-inner" />
+                    <div className="w-1.5 h-3 sm:w-2 sm:h-3.5 bg-neutral-300 rounded-xs -mt-1 shadow-xs border border-neutral-400" />
+                  </div>
+                ))}
               </div>
 
-              {/* Interactive Step Switcher Tabs */}
-              <div className="flex gap-2">
-                {steps.map((step, idx) => (
-                  <button
-                    key={step.id}
-                    onClick={() => { sounds.playPop(); setActiveStep(idx); }}
-                    className={`px-4 py-2 rounded-full font-display font-bold text-xs sm:text-sm transition-all ${
-                      activeStep === idx
-                        ? 'bg-neutral-900 text-white shadow-md scale-105'
-                        : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
-                    }`}
-                  >
-                    Step {idx + 1}
-                  </button>
-                ))}
+              {/* Notebook Title Bar with Washi Tape Stamp */}
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-1 bg-amber-200 border-2 border-neutral-900 rounded-md font-display font-black text-[11px] sm:text-xs text-neutral-900 shadow-[2px_2px_0px_0px_#18181B] transform -rotate-1 hidden sm:flex items-center gap-1.5">
+                  <Bookmark className="w-3 h-3 text-brand-purple fill-current" />
+                  <span>LINGO COMIC NOTEBOOK</span>
+                </div>
+                <span className="font-display font-black text-xs text-neutral-600 tracking-wider">
+                  VOL. 1 • 3-STEP JOURNEY
+                </span>
               </div>
             </div>
 
-            {/* Two-Column Animated Content Stage */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* MAIN COMIC STAGE INTERIOR (Lined Paper Subtle Background) */}
+            <div 
+              className="p-6 sm:p-8 lg:p-10 relative bg-[#FFFDF9]"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(124, 58, 237, 0.05) 32px)',
+                backgroundSize: '100% 32px'
+              }}
+            >
               
-              {/* Left Column: Descriptive Content */}
-              <div className="lg:col-span-6 space-y-6">
-                <motion.div
-                  key={current.id + '-text'}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="space-y-4"
-                >
-                  <span className={`text-xs font-display font-black uppercase tracking-wider px-3.5 py-1 rounded-full inline-block shadow-xs ${current.badgeBg}`}>
-                    {current.badge}
-                  </span>
+              {/* TOP HEADER: CHAPTER TABS & TITLE */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-8 pb-5 border-b-2 border-dashed border-neutral-300">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-100 border-2 border-neutral-900 text-neutral-900 text-xs font-display font-black mb-1.5 shadow-[2px_2px_0px_0px_#18181B]">
+                    <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
+                    <span>How Children Master Language With Lingo Toon</span>
+                  </div>
+                  <h3 className="font-display text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight">
+                    The 3-Step Interactive Storybook Odyssey
+                  </h3>
+                </div>
 
+                {/* NOTEBOOK INDEX TABS (Clickable & Active on Scroll) */}
+                <div className="flex items-center gap-1.5 sm:gap-2 self-start md:self-auto">
+                  {steps.map((step, idx) => {
+                    const isCurrent = activeStep === idx;
+                    return (
+                      <button
+                        key={step.id}
+                        onClick={() => { sounds.playPop(); setActiveStep(idx); }}
+                        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-display font-black text-xs sm:text-sm border-2 transition-all transform duration-200 cursor-pointer ${
+                          isCurrent
+                            ? `${step.tabColor} shadow-[3px_3px_0px_0px_#18181B] -translate-y-1 scale-105`
+                            : 'bg-white text-neutral-600 hover:bg-neutral-100 border-neutral-400 shadow-[1px_1px_0px_0px_#18181B]'
+                        }`}
+                      >
+                        Step {idx + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* TWO-COLUMN COMIC BOOK PANELS (Left: Text & CTA, Right: Artwork) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+                
+                {/* LEFT PANEL: COMIC SPEECH & DESCRIPTION */}
+                <div className="lg:col-span-6 space-y-4">
+                  {/* Comic Bubble Pill */}
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-display font-black tracking-wider px-3.5 py-1 rounded-full border-2 border-neutral-900 shadow-[2px_2px_0px_0px_#18181B] ${current.tagColor}`}>
+                      {current.actionBubble}
+                    </span>
+                    <span className="text-xs font-display font-extrabold text-neutral-400 uppercase tracking-wider">
+                      {current.chapter}
+                    </span>
+                  </div>
+
+                  {/* Main Headline */}
                   <h2 className="font-display font-black text-3xl sm:text-4xl text-neutral-900 leading-tight">
                     {current.title}
                   </h2>
 
-                  <p className="font-body text-base sm:text-lg text-neutral-600 font-medium leading-relaxed">
+                  {/* Subtitle */}
+                  <h4 className="font-display font-extrabold text-sm sm:text-base text-brand-purple">
+                    {current.subtitle}
+                  </h4>
+
+                  {/* Paragraph Description */}
+                  <p className="font-body text-sm sm:text-base text-neutral-700 font-semibold leading-relaxed">
                     {current.description}
                   </p>
 
-                  <div className="pt-2 flex items-center gap-3">
-                    <span className="font-display font-bold text-xs uppercase tracking-wider text-neutral-400">
-                      Feature Highlight:
+                  {/* Tactile Highlight Sticker */}
+                  <div className="pt-1 flex items-center gap-3">
+                    <span className="font-display font-black text-xs uppercase tracking-wider text-neutral-400">
+                      Notebook Milestone:
                     </span>
-                    <span className="font-display font-bold text-xs px-3 py-1 rounded-full bg-purple-50 text-brand-purple border border-purple-200/60">
+                    <span className="font-display font-black text-xs px-3.5 py-1 rounded-lg bg-yellow-100 border-2 border-neutral-900 text-neutral-900 shadow-[2px_2px_0px_0px_#18181B] transform -rotate-1">
                       {current.stat}
                     </span>
                   </div>
-                </motion.div>
 
-                <div className="pt-4">
-                  <Link to={current.link} onClick={() => sounds.playPop()}>
-                    <button className="px-8 py-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white font-display font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2">
-                      <span>{current.cta}</span>
-                      <ArrowRight className="w-4 h-4 text-brand-yellow" />
-                    </button>
-                  </Link>
+                  {/* Primary CTA Button */}
+                  <div className="pt-3">
+                    <Link to={current.link} onClick={() => sounds.playPop()}>
+                      <button className="px-7 sm:px-9 py-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white font-display font-black text-sm sm:text-base border-2 border-neutral-900 shadow-[4px_4px_0px_0px_#FFD53D] hover:shadow-[6px_6px_0px_0px_#FFD53D] transition-all transform hover:-translate-y-0.5 active:translate-y-0.5 flex items-center gap-2.5">
+                        <span>{current.cta}</span>
+                        <ArrowRight className="w-4 h-4 text-brand-yellow stroke-[3]" />
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
 
-              {/* Right Column: 3D Artwork Stage with Claymorphic Frame */}
-              <div className="lg:col-span-6">
-                <motion.div
-                  key={current.id + '-visual'}
-                  initial={{ opacity: 0, scale: 0.94 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.45 }}
-                  className={`relative aspect-[16/11] rounded-[2.6rem] p-3 bg-gradient-to-b ${current.cardBg} border-2 border-white shadow-2xl overflow-hidden`}
-                >
-                  <div className="w-full h-full rounded-[2.2rem] overflow-hidden relative shadow-inner bg-neutral-900">
-                    <img
-                      src={current.image}
-                      alt={current.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                {/* RIGHT PANEL: COMIC FRAMED 3D ARTWORK */}
+                <div className="lg:col-span-6">
+                  <div className={`relative aspect-[16/11] rounded-[2.2rem] p-3 sm:p-4 border-3 sm:border-4 border-neutral-900 shadow-[6px_6px_0px_0px_#18181B] overflow-hidden ${current.panelBg} transition-all duration-300`}>
+                    {/* Inner Comic Art Box */}
+                    <div className="w-full h-full rounded-[1.6rem] overflow-hidden relative border-2 border-neutral-900 shadow-inner bg-neutral-900 group">
+                      <img
+                        key={current.image}
+                        src={current.image}
+                        alt={current.title}
+                        loading="eager"
+                        decoding="async"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-                    {/* Progress Step Indicator Pill */}
-                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-xs px-4 py-1.5 rounded-full shadow-md flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-brand-green animate-pulse" />
-                      <span className="font-display font-black text-xs text-neutral-900">
-                        Odyssey Milestone {current.id + 1} of 3
-                      </span>
+                      {/* Top Washi Tape Corner Label */}
+                      <div className="absolute top-3 left-3 bg-white/95 border-2 border-neutral-900 px-3 py-1 rounded-md font-display font-black text-[11px] text-neutral-900 shadow-[2px_2px_0px_0px_#18181B] transform -rotate-2">
+                        {current.stickerText}
+                      </div>
+
+                      {/* Bottom Step Indicator Pill */}
+                      <div className="absolute bottom-3 left-3 bg-neutral-900/95 text-white border border-white/20 px-3.5 py-1 rounded-full text-xs font-display font-black flex items-center gap-2 shadow-md">
+                        <span className="w-2.5 h-2.5 rounded-full bg-brand-green animate-ping" />
+                        <span>Chapter {current.id + 1} of 3</span>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
+
+              </div>
+
+              {/* BOTTOM FOOTER: NOTEBOOK SCROLL PROGRESS TRACKER */}
+              <div className="mt-8 pt-4 border-t-2 border-dashed border-neutral-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-display font-black text-neutral-600">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-brand-purple" />
+                  <span>Interactive Reading Progress:</span>
+                  <span className="px-2.5 py-0.5 bg-neutral-100 border border-neutral-300 rounded-md text-neutral-900 font-black">
+                    {activeStep === 0 ? '33% (Chapter 1)' : activeStep === 1 ? '66% (Chapter 2)' : '100% (Completed)'}
+                  </span>
+                </div>
+
+                {/* Visual Step Dots */}
+                <div className="flex items-center gap-3">
+                  <span className="text-neutral-400 font-extrabold uppercase tracking-wider text-[11px]">
+                    Scroll Down To Advance Chapters
+                  </span>
+                  <div className="flex gap-1.5">
+                    {[0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className={`h-2.5 rounded-full transition-all duration-300 ${
+                          activeStep === i 
+                            ? 'w-8 bg-neutral-900' 
+                            : activeStep > i 
+                              ? 'w-2.5 bg-brand-green' 
+                              : 'w-2.5 bg-neutral-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -196,7 +298,7 @@ const PinnedLearningJourney = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

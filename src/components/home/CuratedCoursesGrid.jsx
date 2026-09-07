@@ -134,10 +134,10 @@ const CuratedCoursesGrid = () => {
               <motion.div
                 key={course.id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.25 }}
                 whileHover={{ y: -8 }}
                 className="bg-white rounded-[2.5rem] p-5 sm:p-6 shadow-card hover:shadow-2xl transition-all duration-300 border-2 border-neutral-100 flex flex-col justify-between group relative overflow-hidden"
               >
@@ -147,6 +147,8 @@ const CuratedCoursesGrid = () => {
                     <img 
                       src={course.image} 
                       alt={course.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {/* Age Badge */}

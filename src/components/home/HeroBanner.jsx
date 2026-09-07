@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Gamepad2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const HeroBanner = () => {
@@ -21,6 +21,9 @@ const HeroBanner = () => {
           <img 
             src="/images/lingo_hero_exact.jpg" 
             alt="LiNGO TOON Learning Adventure" 
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="w-[125%] sm:w-full h-full object-contain md:object-cover object-center max-w-none md:max-w-none"
           />
           {/* Subtle vignette/glow overlay */}
@@ -102,24 +105,12 @@ const HeroBanner = () => {
       {/* ================= HEADLINE & PRIMARY CTA SECTION (Seamless in #FAF9F6) ================= */}
       <div id="explore-section" className="bg-[#FAF9F6] pt-6 sm:pt-8 pb-14 px-4 text-center">
         <div className="max-w-3xl mx-auto space-y-4">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight"
-          >
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight">
             Unlock the Power of Language, <br className="hidden sm:inline" />
             <span className="text-brand-purple">One Toon at a Time!</span>
-          </motion.h1>
+          </h1>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/learn">
               <button className="px-8 sm:px-10 py-3.5 sm:py-4 bg-[#1877F2] hover:bg-[#1466D2] text-white font-display font-bold text-lg sm:text-xl rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center gap-2">
                 <span>Explore Our Courses</span>
@@ -127,22 +118,17 @@ const HeroBanner = () => {
               </button>
             </Link>
             <Link to="/games">
-              <button className="px-7 py-3.5 sm:py-4 bg-white hover:bg-neutral-50 text-brand-purple font-display font-bold text-lg sm:text-xl rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-brand-purple/20">
-                Play Arcade Games 🎮
+              <button className="px-7 py-3.5 sm:py-4 bg-white hover:bg-neutral-50 text-brand-purple font-display font-bold text-lg sm:text-xl rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-brand-purple/20 flex items-center justify-center gap-2">
+                <Gamepad2 className="w-5 h-5 text-brand-purple" />
+                <span>Play Arcade Games</span>
               </button>
             </Link>
-          </motion.div>
+          </div>
 
           {/* Tagline with centered dots matching laptop mockup */}
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="font-display font-semibold text-sm sm:text-base text-neutral-500 pt-2 tracking-wide"
-          >
+          <p className="font-display font-semibold text-sm sm:text-base text-neutral-500 pt-2 tracking-wide">
             Language <span className="text-brand-yellow font-black mx-1.5">•</span> Learning <span className="text-brand-blue font-black mx-1.5">•</span> Fun
-          </motion.p>
+          </p>
         </div>
       </div>
     </div>

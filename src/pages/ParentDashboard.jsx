@@ -405,9 +405,9 @@ const ParentDashboard = () => {
             <div className="flex gap-2 bg-slate-100 p-1 rounded-full self-start sm:self-auto">
               {[
                 { id: 'all', label: 'All Activities' },
-                { id: 'lesson', label: 'Lessons 📚' },
-                { id: 'game', label: 'Games 🎮' },
-                { id: 'video', label: 'Videos 🎬' }
+                { id: 'lesson', label: 'Lessons' },
+                { id: 'game', label: 'Games' },
+                { id: 'video', label: 'Videos' }
               ].map((tab) => (
                 <button
                   key={tab.id}

@@ -31,13 +31,7 @@ const PhysicalAndMobileShowcase = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           {/* Left: Product Mockup Image Frame */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 relative"
-          >
+          <div className="lg:col-span-7 relative">
             {/* Fluid decorative blob behind the image */}
             <div className="absolute -inset-6 bg-gradient-to-tr from-amber-200/50 to-orange-200/40 rounded-[3rem] blur-2xl -z-10" />
 
@@ -48,6 +42,8 @@ const PhysicalAndMobileShowcase = () => {
               <img 
                 src="/images/practice_notebook_merch.jpg" 
                 alt="LingoToon Activity Notebook, Stickers and Flashcards" 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -59,23 +55,19 @@ const PhysicalAndMobileShowcase = () => {
 
               {/* Floating Badge */}
               <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 border border-white">
-                <span className="text-2xl">📓</span>
+                <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-brand-orange shrink-0">
+                  <BookOpen className="w-4 h-4" />
+                </div>
                 <div>
                   <span className="block font-display font-bold text-sm text-neutral-900">Official Activity Kit</span>
                   <span className="text-xs text-neutral-500 font-medium">Spiral Notebook, Stickers & Flashcards</span>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right: Content & Bullet Points */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-5 space-y-6"
-          >
+          <div className="lg:col-span-5 space-y-6">
             <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-neutral-900 leading-tight">
               Screen-Free Reinforcement for Confident Learning
             </h3>
@@ -115,7 +107,7 @@ const PhysicalAndMobileShowcase = () => {
                 </button>
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -135,13 +127,7 @@ const PhysicalAndMobileShowcase = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           {/* Left: Text Description */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-6 space-y-6 order-2 lg:order-1"
-          >
+          <div className="lg:col-span-6 space-y-6 order-2 lg:order-1">
             <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-neutral-900 leading-tight">
               Seamless Learning, at Your Child’s Pace
             </h3>
@@ -186,16 +172,10 @@ const PhysicalAndMobileShowcase = () => {
                 </button>
               </Link>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right: Phone Mockup Image */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-6 order-1 lg:order-2 relative"
-          >
+          <div className="lg:col-span-6 order-1 lg:order-2 relative">
             {/* Fluid decorative blob behind the image */}
             <div className="absolute -inset-6 bg-gradient-to-tr from-sky-200/50 to-blue-200/40 rounded-[3rem] blur-2xl -z-10" />
 
@@ -203,6 +183,8 @@ const PhysicalAndMobileShowcase = () => {
               <img 
                 src="/images/learn_on_the_go_mockup.jpg" 
                 alt="LingoToon on Smartphone" 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
@@ -219,7 +201,7 @@ const PhysicalAndMobileShowcase = () => {
                 </span>
               </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

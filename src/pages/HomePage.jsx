@@ -47,7 +47,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="w-full pb-20 overflow-hidden bg-[#FAF9F6] relative">
+    <div className="w-full pb-20 bg-[#FAF9F6] relative">
       {/* PERSISTENT FLUID WAVY SIDE ACCENTS MATCHING REFERENCE DESIGN */}
       <FluidSideAccents />
 

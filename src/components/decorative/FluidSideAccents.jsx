@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import { sounds } from '../../utils/soundEffects';
 
 const FluidSideAccents = () => {
@@ -41,9 +42,9 @@ const FluidSideAccents = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 1.1, ease: 'easeOut' }}
             style={{ left: rip.x - 20, top: rip.y - 20 }}
-            className="fixed pointer-events-none z-50 text-2xl"
+            className="fixed pointer-events-none z-50"
           >
-            ✨
+            <Sparkles className="w-6 h-6 text-[#FFD233] fill-current drop-shadow-md" />
           </motion.div>
         ))}
       </AnimatePresence>

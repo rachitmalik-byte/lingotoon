@@ -74,13 +74,9 @@ const FeaturePillars = () => {
 
         {/* 3 Floating Adventure Pods */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-          {pillars.map((pillar, index) => (
+          {pillars.map((pillar) => (
             <motion.div
               key={pillar.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{ y: -8 }}
               className={`rounded-[2.5rem] p-6 sm:p-7 bg-gradient-to-b ${pillar.bgGradient} border-2 ${pillar.borderColor} shadow-card hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group`}
             >
@@ -90,6 +86,8 @@ const FeaturePillars = () => {
                   <img 
                     src={pillar.image} 
                     alt={pillar.title} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-70 group-hover:opacity-60 transition-opacity" />

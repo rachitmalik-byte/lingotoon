@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Star, Flame, Trophy, Heart, ArrowRight } from 'lucide-react';
+import { Sparkles, Star, Flame, Trophy, Heart, ArrowRight, Gamepad2, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Confetti from '../decorative/Confetti';
 import { sounds } from '../../utils/soundEffects';
@@ -76,8 +76,8 @@ const FunEndingZone = () => {
                     : 'bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 ring-2 ring-yellow-200'
                 }`}
               >
-                <span className="text-xl">✋</span>
-                <span>{isHighFived ? "High-Fived! 🎉" : "High-Five Lingo!"}</span>
+                <Sparkles className="w-4 h-4 fill-current" />
+                <span>{isHighFived ? "High-Fived! Awesome!" : "High-Five Lingo!"}</span>
                 <span className="text-xs font-black bg-black/10 px-2 py-0.5 rounded-full ml-1">
                   {highFiveCount}
                 </span>
@@ -105,7 +105,8 @@ const FunEndingZone = () => {
               </Link>
               <Link to="/games" className="w-full sm:w-auto">
                 <button className="w-full sm:w-auto px-8 py-4 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-display font-bold text-lg rounded-full border border-white/40 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-                  <span>Play Arcade Games 🎮</span>
+                  <Gamepad2 className="w-5 h-5 text-white" />
+                  <span>Play Arcade Games</span>
                 </button>
               </Link>
             </div>
@@ -113,13 +114,16 @@ const FunEndingZone = () => {
             {/* Safety & Trust Badges */}
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-display font-semibold text-white/80 border-t border-white/15">
               <span className="flex items-center gap-1.5">
-                <span>🛡️</span> 100% Kid-Safe & COPPA Compliant
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>100% Kid-Safe & COPPA Compliant</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <span>🚫</span> Zero External Ads
+                <CheckCircle2 className="w-4 h-4 text-amber-300" />
+                <span>Zero External Ads</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <span>⭐</span> Rated 4.9/5 by Parents
+                <Star className="w-4 h-4 text-yellow-300 fill-current" />
+                <span>Rated 4.9/5 by Parents</span>
               </span>
             </div>
 

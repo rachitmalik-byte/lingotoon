@@ -126,13 +126,9 @@ const BlogPage = () => {
 
         {/* All Blog Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredPosts.map((post, idx) => (
+          {filteredPosts.map((post) => (
             <motion.article
               key={post.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: idx * 0.1 }}
               whileHover={{ y: -6 }}
               className="bg-white rounded-[2.5rem] border-2 border-neutral-100/90 shadow-card hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
             >
@@ -141,6 +137,8 @@ const BlogPage = () => {
                   <img
                     src={post.image}
                     alt={post.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-brand-purple font-display font-bold text-xs px-3 py-1 rounded-full shadow-sm">
