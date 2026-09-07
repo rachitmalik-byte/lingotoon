@@ -16,7 +16,7 @@ const WorksheetPreviewModal = ({ isOpen, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm select-none">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-16 sm:pt-20 bg-black/75 backdrop-blur-md select-none overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -26,7 +26,9 @@ const WorksheetPreviewModal = ({ isOpen, onClose }) => {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <span className="text-2xl">📓</span>
+              <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-brand-orange">
+                <BookOpen className="w-5 h-5" />
+              </div>
               <div>
                 <h3 className="font-display font-extrabold text-xl text-neutral-900">
                   Activity Workbook Sample

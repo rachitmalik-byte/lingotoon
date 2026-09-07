@@ -39,8 +39,9 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const inProgressLessons = useMemo(() => {
+    if (!user) return [];
     return lessons.filter(lesson => lesson.progress > 0 && lesson.progress < 100);
-  }, []);
+  }, [user]);
 
   const featuredVideos = useMemo(() => {
     return videos.filter(v => v.featured).concat(videos.filter(v => !v.featured)).slice(0, 6);
@@ -69,8 +70,8 @@ const HomePage = () => {
       {/* 6. PHYSICAL & MOBILE SHOWCASE (Activity Notebook & Smartphone App) */}
       <PhysicalAndMobileShowcase />
 
-      {/* 5. CONTINUE LEARNING (ADVENTURE MISSION PODS) */}
-      {inProgressLessons.length > 0 && (
+      {/* 5. CONTINUE LEARNING (ADVENTURE MISSION PODS - Logged in explorers only) */}
+      {user && inProgressLessons.length > 0 && (
         <section className="py-12 md:py-16 bg-gradient-to-b from-white via-purple-50/20 to-white relative z-10 border-b border-purple-100/40 overflow-hidden">
           {/* Subtle Ambient Fluid Blobs */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-brand-purple/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ShieldAlert, X, Sparkles, Menu, Compass, Lock, User } from 'lucide-react';
@@ -17,6 +17,9 @@ const Navbar = () => {
   const isHome = location.pathname === '/';
 
   const [scrolled, setScrolled] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState('kid');
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -28,7 +31,24 @@ const Navbar = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 35);
+          const currentY = window.scrollY;
+          setScrolled(currentY > 35);
+
+          // Always show navbar near the top of the page
+          if (currentY <= 60) {
+            setNavVisible(true);
+          } else {
+            const diff = currentY - lastScrollY.current;
+            // Scroll down -> hide navbar so it never obstructs or traps elements
+            if (diff > 8) {
+              setNavVisible(false);
+            } else if (diff < -8) {
+              // Scroll up -> reveal navbar immediately for quick navigation
+              setNavVisible(true);
+            }
+          }
+
+          lastScrollY.current = currentY;
           ticking = false;
         });
         ticking = true;
@@ -43,7 +63,6 @@ const Navbar = () => {
     { name: 'Learning', path: '/learn' },
     { name: 'Videos', path: '/videos' },
     { name: 'Games', path: '/games' },
-    { name: 'Blog', path: '/blog' },
     { name: 'Progress', path: '/progress' },
   ];
 
@@ -97,8 +116,10 @@ const Navbar = () => {
         onClose={() => setEasterEggOpen(false)}
       />
 
-      {/* FIXED NAVIGATION CONTAINER */}
-      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+      {/* FIXED NAVIGATION CONTAINER (z-40 so modals at z-[100] sit safely above; hides on scroll down to never block elements) */}
+      <header className={`fixed top-0 left-0 w-full z-40 pointer-events-none transition-transform duration-300 ease-out ${
+        navVisible || authModalOpen || searchModalOpen || easterEggOpen ? 'translate-y-0' : '-translate-y-full'
+      }`}>
         <div className="w-full px-3 sm:px-6 pt-2 sm:pt-3">
           
           {/* DESKTOP & TABLET NAVBAR CAPSULE */}
@@ -111,13 +132,13 @@ const Navbar = () => {
               backdropFilter: isTransparent ? 'blur(0px)' : 'blur(20px)',
               WebkitBackdropFilter: isTransparent ? 'blur(0px)' : 'blur(20px)',
             }}
-            className={`pointer-events-auto mx-auto transition-[background-color,border-color,box-shadow,border-radius] duration-500 ease-out ${
+            className={`mx-auto transition-[background-color,border-color,box-shadow,border-radius] duration-500 ease-out ${
               isTransparent
-                ? 'w-full max-w-7xl px-3 sm:px-8 py-2 sm:py-3 bg-transparent border-transparent shadow-none rounded-[2rem]'
-                : 'max-w-5xl rounded-full px-3.5 sm:px-7 py-1.5 sm:py-2 bg-white/70 border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)]'
+                ? 'w-full max-w-7xl px-3 sm:px-8 py-2 sm:py-3 bg-transparent border-transparent shadow-none rounded-[2rem] pointer-events-none'
+                : 'max-w-5xl rounded-full px-3.5 sm:px-7 py-1.5 sm:py-2 bg-white/80 border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)] pointer-events-auto'
             }`}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pointer-events-auto">
               
               {/* LOGO with 5-Tap Easter Egg Trigger */}
               <Link 
@@ -139,8 +160,8 @@ const Navbar = () => {
                 </motion.div>
               </Link>
 
-              {/* CENTER NAVIGATION LINKS */}
-              <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+              {/* CENTER NAVIGATION LINKS (Uncongested, breathable spacing) */}
+              <nav className="hidden md:flex items-center gap-7 lg:gap-9">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.name}

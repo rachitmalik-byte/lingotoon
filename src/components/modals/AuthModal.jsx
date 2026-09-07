@@ -60,7 +60,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm select-none">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-16 sm:pt-20 bg-black/75 backdrop-blur-md select-none overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -77,8 +77,8 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
               <X className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-2xl border border-white/20">
-                {activeTab === 'parent' ? '🛡️' : '🌟'}
+              <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
+                {activeTab === 'parent' ? <Shield className="w-6 h-6 text-brand-yellow" /> : <Sparkles className="w-6 h-6 text-brand-yellow" />}
               </div>
               <div>
                 <h3 className="font-display font-extrabold text-2xl">
@@ -94,19 +94,21 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'kid' }) => {
             <div className="flex gap-2 mt-5 bg-black/20 p-1 rounded-full border border-white/10">
               <button
                 onClick={() => { sounds.playPop(); setActiveTab('kid'); }}
-                className={`flex-1 py-1.5 rounded-full font-display font-bold text-xs transition-all ${
+                className={`flex-1 py-1.5 rounded-full font-display font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
                   activeTab === 'kid' ? 'bg-brand-yellow text-neutral-900 shadow-md' : 'text-white/80 hover:text-white'
                 }`}
               >
-                Young Explorer 🚀
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Young Explorer</span>
               </button>
               <button
                 onClick={() => { sounds.playPop(); setActiveTab('parent'); }}
-                className={`flex-1 py-1.5 rounded-full font-display font-bold text-xs transition-all ${
+                className={`flex-1 py-1.5 rounded-full font-display font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
                   activeTab === 'parent' ? 'bg-white text-brand-purple shadow-md' : 'text-white/80 hover:text-white'
                 }`}
               >
-                Parent Lock 🔒
+                <Lock className="w-3.5 h-3.5" />
+                <span>Parent Lock</span>
               </button>
             </div>
           </div>

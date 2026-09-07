@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Star, ArrowRight, Clock, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { sounds } from '../../utils/soundEffects';
+import { useUser } from '../../context/UserContext';
 
 // Bespoke 3D Vector Emblems with glossy clay highlights and zero emojis
 const Lesson3DEmblem = ({ type, accentColor }) => {
@@ -136,7 +137,10 @@ const subjectStyles = {
 const LessonCard = ({ lesson }) => {
   if (!lesson) return null;
 
-  const isCompleted = lesson.progress === 100;
+  const { user } = useUser();
+  const effectiveProgress = user ? (lesson.progress || 0) : 0;
+  const effectiveCompletedSteps = user ? (lesson.completedSteps || 0) : 0;
+  const isCompleted = user && effectiveProgress === 100;
   const theme = subjectStyles[lesson.subject] || subjectStyles.English;
 
   return (
@@ -193,7 +197,7 @@ const LessonCard = ({ lesson }) => {
                 <Clock className="w-4 h-4 text-neutral-400" />
                 <span>{lesson.duration}</span>
                 <span className="text-neutral-300">•</span>
-                <span className="text-neutral-600 font-bold">Step {lesson.completedSteps || 0} of {lesson.totalSteps || 3}</span>
+                <span className="text-neutral-600 font-bold">Step {effectiveCompletedSteps} of {lesson.totalSteps || 3}</span>
               </p>
             </div>
           </div>
@@ -208,14 +212,14 @@ const LessonCard = ({ lesson }) => {
                 <span>Quest Progress</span>
               </span>
               <span className="font-black text-sm" style={{ color: theme.accentHex }}>
-                {lesson.progress || 0}%
+                {effectiveProgress}%
               </span>
             </div>
             
             <div className="w-full bg-neutral-100 rounded-full h-3 p-0.5 overflow-hidden shadow-inner">
               <motion.div 
                 initial={{ width: 0 }}
-                animate={{ width: `${lesson.progress || 0}%` }}
+                animate={{ width: `${effectiveProgress}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="h-full rounded-full shadow-xs"
                 style={{ backgroundColor: theme.accentHex }}
@@ -238,7 +242,7 @@ const LessonCard = ({ lesson }) => {
               </>
             ) : (
               <>
-                <span>Resume Quest</span>
+                <span>{effectiveProgress > 0 ? 'Resume Quest' : 'Start Quest'}</span>
                 <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
               </>
             )}

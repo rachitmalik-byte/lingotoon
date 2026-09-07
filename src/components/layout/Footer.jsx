@@ -164,14 +164,22 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/15 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-body text-white/70">
           <p>© 2024 Lingo Toon. All rights reserved. Crafted with love for curious kids worldwide.</p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-5 sm:gap-6">
+            <Link 
+              to="/blog" 
+              onClick={() => sounds.playPop()}
+              className="text-[#FFD53D] hover:underline flex items-center gap-1.5 font-bold"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Learning Blog</span>
+            </Link>
             <a 
               href="https://youtube.com/@lingotoon-x2m" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-[#FFD53D] hover:underline flex items-center gap-1"
+              className="text-white/80 hover:text-white flex items-center gap-1.5 transition-colors"
             >
-              <Youtube className="w-3.5 h-3.5" />
+              <Youtube className="w-3.5 h-3.5 text-red-400" />
               <span>YouTube Channel</span>
             </a>
             <span className="hover:text-white transition-colors cursor-pointer">Child Safety</span>

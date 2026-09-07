@@ -1,30 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BookOpen, PlayCircle, Gamepad2, Flame, Trophy, CheckCircle, Star } from 'lucide-react';
+import { BookOpen, PlayCircle, Gamepad2, Flame, Trophy, CheckCircle, Star, Sparkles, UserPlus } from 'lucide-react';
 import { userProgress } from '../data/userProgress';
 import { achievements } from '../data/achievements';
 import StreakCounter from '../components/interactive/StreakCounter';
 import AchievementBadge from '../components/content/AchievementBadge';
 import ProgressBar from '../components/ui/ProgressBar';
 import LingoCharacter from '../components/decorative/LingoCharacter';
+import AuthModal from '../components/modals/AuthModal';
+import { useUser } from '../context/UserContext';
 import { staggerContainer, staggerItem, fadeIn } from '../hooks/useAnimation';
+import { sounds } from '../utils/soundEffects';
 
 const ProgressPage = () => {
-  const levels = userProgress?.levelProgression || [
+  const { user, progress } = useUser();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  // When guest (no user logged in), do NOT show fake progress!
+  const lessonsCount = user ? (progress?.lessonsCompleted?.length || 12) : 0;
+  const videosCount = user ? (progress?.videosWatched?.length || 18) : 0;
+  const gamesCount = user ? (progress?.gamesPlayed || 8) : 0;
+  const currentStreak = user ? (userProgress?.currentStreak || 1) : 0;
+  const longestStreak = user ? (userProgress?.longestStreak || 1) : 0;
+
+  const levels = user ? (userProgress?.levelProgression || [
     { id: 1, level: 1, title: 'Beginner Explorer', status: 'completed', xp: 500 },
     { id: 2, level: 2, title: 'Curious Learner', status: 'current', xp: 1200 },
     { id: 3, level: 3, title: 'Knowledge Seeker', status: 'locked', xp: 2500 },
     { id: 4, level: 4, title: 'Brainiac Buddy', status: 'locked', xp: 4000 },
+  ]) : [
+    { id: 1, level: 1, title: 'Beginner Explorer', status: 'current', xp: 100 },
+    { id: 2, level: 2, title: 'Curious Learner', status: 'locked', xp: 500 },
+    { id: 3, level: 3, title: 'Knowledge Seeker', status: 'locked', xp: 1200 },
+    { id: 4, level: 4, title: 'Brainiac Buddy', status: 'locked', xp: 2500 },
   ];
 
-  const weeklyData = [
+  const weeklyData = user ? [
     { day: 'Mon', mins: 25 },
     { day: 'Tue', mins: 40 },
     { day: 'Wed', mins: 15 },
     { day: 'Thu', mins: 45 },
     { day: 'Fri', mins: 30 },
     { day: 'Sat', mins: 60, current: true },
+    { day: 'Sun', mins: 0 },
+  ] : [
+    { day: 'Mon', mins: 0 },
+    { day: 'Tue', mins: 0 },
+    { day: 'Wed', mins: 0 },
+    { day: 'Thu', mins: 0 },
+    { day: 'Fri', mins: 0 },
+    { day: 'Sat', mins: 0, current: true },
     { day: 'Sun', mins: 0 },
   ];
   const maxMins = Math.max(...weeklyData.map(d => d.mins), 60);
@@ -38,6 +64,34 @@ const ProgressPage = () => {
         </div>
         <LingoCharacter pose="celebrate" size="md" className="hidden md:block w-32 -mt-10" />
       </div>
+
+      {/* Guest Explorer Welcome Banner */}
+      {!user && (
+        <div className="bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#4F46E5] rounded-[2rem] p-6 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 border-2 border-white/20">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-xs font-display font-black">
+              <Sparkles className="w-3.5 h-3.5 text-brand-yellow" />
+              <span>Guest Explorer Mode</span>
+            </div>
+            <h3 className="font-display font-black text-xl sm:text-2xl">Create your profile to save progress!</h3>
+            <p className="text-xs sm:text-sm text-white/85 max-w-lg font-body">
+              Track your completed quests, keep your learning streak on fire, and collect shining achievement badges.
+            </p>
+          </div>
+          <button
+            onClick={() => { sounds.playPop(); setAuthModalOpen(true); }}
+            className="px-6 py-3 rounded-full bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-black text-sm shadow-md transform hover:scale-105 active:scale-95 transition-all whitespace-nowrap cursor-pointer shrink-0"
+          >
+            Sign In / Join Club
+          </button>
+        </div>
+      )}
+
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
+        initialTab="kid" 
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
@@ -55,7 +109,7 @@ const ProgressPage = () => {
               <div className="w-12 h-12 bg-brand-blue-light rounded-full flex items-center justify-center mb-3">
                 <BookOpen className="w-6 h-6 text-brand-blue" />
               </div>
-              <span className="font-display text-3xl text-neutral-800">42</span>
+              <span className="font-display text-3xl text-neutral-800">{lessonsCount}</span>
               <span className="font-body text-sm font-bold text-neutral-500 uppercase tracking-wider">Lessons</span>
             </motion.div>
             
@@ -63,7 +117,7 @@ const ProgressPage = () => {
               <div className="w-12 h-12 bg-brand-orange-light rounded-full flex items-center justify-center mb-3">
                 <PlayCircle className="w-6 h-6 text-brand-orange" />
               </div>
-              <span className="font-display text-3xl text-neutral-800">128</span>
+              <span className="font-display text-3xl text-neutral-800">{videosCount}</span>
               <span className="font-body text-sm font-bold text-neutral-500 uppercase tracking-wider">Videos</span>
             </motion.div>
 
@@ -71,14 +125,14 @@ const ProgressPage = () => {
               <div className="w-12 h-12 bg-brand-green-light rounded-full flex items-center justify-center mb-3">
                 <Gamepad2 className="w-6 h-6 text-brand-green" />
               </div>
-              <span className="font-display text-3xl text-neutral-800">56</span>
+              <span className="font-display text-3xl text-neutral-800">{gamesCount}</span>
               <span className="font-body text-sm font-bold text-neutral-500 uppercase tracking-wider">Games</span>
             </motion.div>
             
             <motion.div variants={staggerItem} className="flex justify-center">
               <StreakCounter 
-                currentStreak={userProgress?.currentStreak || 5} 
-                longestStreak={userProgress?.longestStreak || 7} 
+                currentStreak={currentStreak} 
+                longestStreak={longestStreak} 
               />
             </motion.div>
           </motion.div>

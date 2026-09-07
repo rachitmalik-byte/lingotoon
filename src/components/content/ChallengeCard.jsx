@@ -4,6 +4,7 @@ import { Sparkles, Trophy, Award, ArrowRight, CheckCircle2, Flame } from 'lucide
 import { Link } from 'react-router-dom';
 import ProgressBar from '../ui/ProgressBar';
 import { sounds } from '../../utils/soundEffects';
+import { useUser } from '../../context/UserContext';
 
 // Bespoke 3D Vector Golden Crown SVG with zero emojis
 const GoldenCrownVector = () => (
@@ -53,7 +54,8 @@ const GoldenCrownVector = () => (
 const ChallengeCard = ({ challenge }) => {
   if (!challenge) return null;
 
-  const wordsFound = challenge.wordsFound || challenge.progress || 2;
+  const { user } = useUser();
+  const wordsFound = user ? (challenge.wordsFound || challenge.progress || 0) : 0;
   const totalWords = challenge.totalWords || challenge.total || 5;
   const progressPercent = (wordsFound / totalWords) * 100;
 

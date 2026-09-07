@@ -194,12 +194,12 @@ const BlogPage = () => {
         {/* Read Article Reader Modal */}
         <AnimatePresence>
           {activePost && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-md">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 pt-16 sm:pt-20 pb-12 bg-black/75 backdrop-blur-md overflow-y-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.92, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+                className="relative w-full max-w-3xl max-h-[86vh] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
               >
                 {/* Modal Header */}
                 <div className="p-6 sm:p-8 bg-gradient-to-r from-[#7C3AED] to-[#591ac0] text-white relative shrink-0">
