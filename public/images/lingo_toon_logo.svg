@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Background Circle Gradient -->
+    <linearGradient id="purpleCircleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6B29D8" />
+      <stop offset="100%" stop-color="#4F1AA8" />
+    </linearGradient>
+
+    <!-- Yellow Letter Gradient -->
+    <linearGradient id="yellowTextGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="30%" stop-color="#FFD600" />
+      <stop offset="100%" stop-color="#FFB300" />
+    </linearGradient>
+
+    <!-- Blue Letter Gradient -->
+    <linearGradient id="blueTextGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#66D1FF" />
+      <stop offset="50%" stop-color="#33B3FF" />
+      <stop offset="100%" stop-color="#0095E6" />
+    </linearGradient>
+
+    <!-- Orange Eyes Gradient -->
+    <linearGradient id="orangeEyeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFA834" />
+      <stop offset="100%" stop-color="#FF7A00" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter for Letters -->
+    <filter id="outlineShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="0" flood-color="#190B38" />
+    </filter>
+  </defs>
+
+  <!-- Purple Base Circle -->
+  <circle cx="250" cy="250" r="230" fill="url(#purpleCircleGrad)" />
+
+  <!-- Outer subtle highlight on circle -->
+  <circle cx="250" cy="250" r="226" fill="none" stroke="#8A48F5" stroke-width="4" opacity="0.4" />
+
+  <!-- Little Star bursts around logo -->
+  <!-- Top Right Sparkle -->
+  <path d="M380 145 L384 135 L388 145 L398 149 L388 153 L384 163 L380 153 L370 149 Z" fill="#FFD600" />
+  <rect x="402" y="165" width="16" height="6" rx="3" fill="#FFD600" transform="rotate(15 402 165)" />
+
+  <!-- Left accent mark -->
+  <rect x="80" y="240" width="14" height="6" rx="3" fill="#FFD600" transform="rotate(-20 80 240)" opacity="0.8" />
+
+  <!-- ================= LINGO (Top Word) ================= -->
+  <g filter="url(#outlineShadow)">
+    
+    <!-- L -->
+    <g transform="translate(100, 115) rotate(-8)">
+      <path d="M 0 10 C 0 0, 26 0, 26 10 L 26 58 L 52 58 C 64 58, 64 82, 52 82 L 0 82 Z" 
+            fill="url(#yellowTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Specular Highlight -->
+      <path d="M 7 14 L 7 74" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+    <!-- I with Star Dot -->
+    <g transform="translate(162, 110)">
+      <!-- Star on top of I -->
+      <path d="M 16 0 L 21 14 L 35 19 L 21 24 L 16 38 L 11 24 L -3 19 L 11 14 Z" 
+            fill="#FFD600" stroke="#190B38" stroke-width="8" stroke-linejoin="round" />
+      <!-- Body of I -->
+      <rect x="4" y="44" width="24" height="66" rx="12" 
+            fill="url(#yellowTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Highlight -->
+      <path d="M 12 52 L 12 96" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+    <!-- N -->
+    <g transform="translate(208, 122) rotate(2)">
+      <path d="M 0 12 C 0 0, 24 0, 24 12 L 24 38 L 44 12 C 54 0, 72 4, 72 18 L 72 80 C 72 92, 48 92, 48 80 L 48 54 L 28 80 C 20 90, 0 86, 0 74 Z" 
+            fill="url(#yellowTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Highlight -->
+      <path d="M 8 18 L 8 72" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+    <!-- G -->
+    <g transform="translate(294, 120) rotate(5)">
+      <path d="M 40 0 C 14 0, -4 20, 0 52 C 4 84, 30 96, 56 94 C 74 92, 80 82, 80 70 L 80 54 L 46 54 C 36 54, 36 34, 46 34 L 74 34 C 88 34, 98 48, 98 66 C 96 98, 70 112, 42 112 C 4 112, -20 84, -18 44 C -16 10, 16 -16, 54 -14 C 68 -14, 78 -4, 70 8 C 64 16, 52 0, 40 0 Z" 
+            fill="url(#yellowTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Highlight -->
+      <path d="M 12 36 C 14 18, 30 8, 46 8" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.6" />
+    </g>
+
+    <!-- O -->
+    <g transform="translate(390, 136) rotate(10)">
+      <ellipse cx="32" cy="50" rx="32" ry="40" 
+               fill="url(#yellowTextGrad)" stroke="#190B38" stroke-width="14" />
+      <ellipse cx="32" cy="50" rx="14" ry="18" fill="#5A1FB8" stroke="#190B38" stroke-width="8" />
+      <!-- Highlight -->
+      <path d="M 14 34 C 16 20, 28 14, 42 14" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.6" />
+    </g>
+
+  </g>
+
+  <!-- ================= TOON (Bottom Word) ================= -->
+  <g filter="url(#outlineShadow)">
+
+    <!-- T -->
+    <g transform="translate(108, 222) rotate(-8)">
+      <path d="M 0 14 C 0 0, 68 0, 68 14 C 68 26, 46 26, 46 26 L 46 86 C 46 100, 22 100, 22 86 L 22 26 C 22 26, 0 26, 0 14 Z" 
+            fill="url(#blueTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Highlight -->
+      <path d="M 8 10 L 60 10" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+      <path d="M 28 28 L 28 84" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+    <!-- Eyebrow 1 above First O -->
+    <path d="M 188 226 C 196 215, 218 215, 226 226" stroke="#190B38" stroke-width="8" stroke-linecap="round" fill="none" />
+
+    <!-- First O (Cartoon Eye) -->
+    <g transform="translate(202, 280)">
+      <!-- Outer Orange Round Ring -->
+      <ellipse cx="0" cy="0" rx="38" ry="46" fill="url(#orangeEyeGrad)" stroke="#190B38" stroke-width="14" />
+      <!-- Eyeball White -->
+      <ellipse cx="0" cy="0" rx="26" ry="34" fill="#FFFFFF" stroke="#190B38" stroke-width="4" />
+      <!-- Pupil Black looking up-right -->
+      <ellipse cx="6" cy="-4" rx="15" ry="18" fill="#14082B" />
+      <!-- Pupil Specular Highlight Dot -->
+      <circle cx="11" cy="-10" r="5" fill="#FFFFFF" />
+      <circle cx="2" cy="2" r="2.5" fill="#FFFFFF" />
+    </g>
+
+    <!-- Eyebrow 2 above Second O -->
+    <path d="M 268 228 C 276 217, 298 217, 306 228" stroke="#190B38" stroke-width="8" stroke-linecap="round" fill="none" />
+
+    <!-- Second O (Cartoon Eye) -->
+    <g transform="translate(282, 282)">
+      <!-- Outer Orange Round Ring -->
+      <ellipse cx="0" cy="0" rx="38" ry="46" fill="url(#orangeEyeGrad)" stroke="#190B38" stroke-width="14" />
+      <!-- Eyeball White -->
+      <ellipse cx="0" cy="0" rx="26" ry="34" fill="#FFFFFF" stroke="#190B38" stroke-width="4" />
+      <!-- Pupil Black looking up-right -->
+      <ellipse cx="6" cy="-4" rx="15" ry="18" fill="#14082B" />
+      <!-- Pupil Specular Highlight Dot -->
+      <circle cx="11" cy="-10" r="5" fill="#FFFFFF" />
+      <circle cx="2" cy="2" r="2.5" fill="#FFFFFF" />
+    </g>
+
+    <!-- N -->
+    <g transform="translate(340, 222) rotate(6)">
+      <path d="M 0 14 C 0 0, 24 0, 24 14 L 24 44 L 46 14 C 58 0, 78 4, 78 18 L 78 86 C 78 100, 54 100, 54 86 L 54 56 L 30 86 C 20 98, 0 94, 0 80 Z" 
+            fill="url(#blueTextGrad)" stroke="#190B38" stroke-width="14" stroke-linejoin="round" />
+      <!-- Highlight -->
+      <path d="M 8 20 L 8 78" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+  </g>
+
+</svg>
