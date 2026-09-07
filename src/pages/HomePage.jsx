@@ -63,21 +63,44 @@ const HomePage = () => {
 
       {/* 5. CONTINUE LEARNING (ADVENTURE MISSION PODS) */}
       {inProgressLessons.length > 0 && (
-        <section className="py-10 md:py-14 bg-white/80 backdrop-blur-xs relative z-10 border-b border-neutral-100/70">
-          <div className="container-app mb-3">
-            <span className="text-xs font-display font-black uppercase tracking-wider text-brand-purple bg-brand-purple-light px-3.5 py-1 rounded-full inline-flex items-center gap-1.5 shadow-xs">
-              <BookOpen className="w-3.5 h-3.5" /> Resume Learning
-            </span>
+        <section className="py-12 md:py-16 bg-gradient-to-b from-white via-purple-50/20 to-white relative z-10 border-b border-purple-100/40 overflow-hidden">
+          {/* Subtle Ambient Fluid Blobs */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-brand-purple/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-brand-yellow/10 rounded-full blur-3xl pointer-events-none translate-y-1/3 -translate-x-1/4" />
+
+          <div className="container-app relative z-10">
+            {/* Section Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+              <div>
+                <span className="text-xs font-display font-black uppercase tracking-wider text-brand-purple bg-brand-purple-light px-3.5 py-1.5 rounded-full inline-flex items-center gap-1.5 mb-2.5 shadow-xs">
+                  <BookOpen className="w-3.5 h-3.5" /> Active Missions
+                </span>
+                <h2 className="font-display text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+                  Continue Your Learning Quest
+                </h2>
+                <p className="text-neutral-600 mt-1 font-medium text-sm sm:text-base">
+                  Jump back into your active quests to earn stars, collect XP, and level up!
+                </p>
+              </div>
+              <Link 
+                to="/learn"
+                onClick={() => sounds.playPop()}
+                className="inline-flex items-center gap-2 font-display font-black text-sm text-brand-purple hover:text-white bg-brand-purple-light hover:bg-brand-purple px-5 py-2.5 rounded-full transition-all duration-300 shadow-xs hover:shadow-md transform hover:scale-105"
+              >
+                <span>View All Quests</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Responsive 3-Column Quest Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {inProgressLessons.map((lesson) => (
+                <div key={lesson.id} className="h-full">
+                  <LessonCard lesson={lesson} />
+                </div>
+              ))}
+            </div>
           </div>
-          <ContentRail 
-            title="Continue Learning" 
-            subtitle="Jump back into your in-progress quests"
-            viewAllLink="/learn"
-          >
-            {inProgressLessons.map((lesson) => (
-              <LessonCard key={lesson.id} lesson={lesson} />
-            ))}
-          </ContentRail>
         </section>
       )}
 
