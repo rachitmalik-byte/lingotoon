@@ -1,21 +1,20 @@
 import React from 'react';
 
 const Logo = ({ size = 'md', variant = 'default', className = '' }) => {
-  // Height sizing
-  const heights = {
-    sm: 34,
-    md: 46,
-    lg: 60,
-    xl: 84,
+  const heightClasses = {
+    xs: 'h-6',
+    sm: 'h-7 sm:h-8',
+    md: 'h-8 sm:h-10 md:h-11',
+    lg: 'h-10 sm:h-12 md:h-14',
+    xl: 'h-14 sm:h-18 md:h-20',
   };
 
-  const h = heights[size] || 46;
+  const hClass = heightClasses[size] || 'h-8 sm:h-10 md:h-11';
 
   if (variant === 'badge') {
     return (
       <div 
-        className={`inline-flex items-center justify-center transition-transform hover:scale-105 ${className}`}
-        style={{ height: h }}
+        className={`inline-flex items-center justify-center transition-transform hover:scale-105 ${hClass} ${className}`}
       >
         <img 
           src="/images/lingo_logo_3d_transparent.png" 
@@ -31,8 +30,7 @@ const Logo = ({ size = 'md', variant = 'default', className = '' }) => {
       <img 
         src="/images/lingo_logo_3d_transparent.png" 
         alt="Lingo Toon Logo" 
-        style={{ height: `${h}px` }}
-        className="w-auto object-contain filter drop-shadow-md transition-all duration-500 ease-out"
+        className={`w-auto ${hClass} object-contain filter drop-shadow-md transition-all duration-300 ease-out`}
       />
     </div>
   );

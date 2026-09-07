@@ -92,8 +92,8 @@ const Navbar = () => {
             }}
             className={`pointer-events-auto mx-auto transition-[background-color,border-color,box-shadow,border-radius] duration-500 ease-out ${
               isTransparent
-                ? 'w-full max-w-7xl px-4 sm:px-8 py-3 bg-transparent border-transparent shadow-none rounded-[2rem]'
-                : 'max-w-5xl rounded-full px-5 sm:px-7 py-2 bg-white/70 border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)]'
+                ? 'w-full max-w-7xl px-3 sm:px-8 py-2 sm:py-3 bg-transparent border-transparent shadow-none rounded-[2rem]'
+                : 'max-w-5xl rounded-full px-3.5 sm:px-7 py-1.5 sm:py-2 bg-white/70 border border-white/60 shadow-[0_12px_40px_rgba(80,24,176,0.14)]'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -102,14 +102,14 @@ const Navbar = () => {
               <Link 
                 to="/" 
                 onClick={() => sounds.playPop()}
-                className="flex items-center group relative z-10"
+                className="flex items-center group relative z-10 shrink-0"
               >
                 <motion.div 
                   layout
                   transition={{ layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
                   className={`transform transition-transform duration-500 ease-out ${
                     scrolled 
-                      ? '-my-2.5 sm:-my-3.5 scale-105 sm:scale-115 drop-shadow-md group-hover:scale-120' 
+                      ? '-my-1 sm:-my-3 scale-100 sm:scale-110 drop-shadow-md group-hover:scale-115' 
                       : 'scale-100 group-hover:scale-105'
                   }`}
                 >
@@ -155,11 +155,11 @@ const Navbar = () => {
               </nav>
 
               {/* RIGHT ACTIONS */}
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 {/* Search Button */}
                 <button 
                   onClick={openSearch}
-                  className={`p-2 rounded-full transition-all active:scale-95 ${
+                  className={`p-1.5 sm:p-2 rounded-full transition-all active:scale-95 ${
                     isTransparent 
                       ? 'text-white hover:bg-white/15' 
                       : 'text-neutral-700 hover:text-brand-purple hover:bg-purple-100/60'
@@ -184,7 +184,7 @@ const Navbar = () => {
                 {/* Sign up / Join free pill button */}
                 <button 
                   onClick={openSignUp}
-                  className="px-3.5 sm:px-5 py-1.5 sm:py-2 bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-black text-xs sm:text-sm rounded-full shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                  className="px-2.5 sm:px-5 py-1.5 sm:py-2 bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-black text-xs sm:text-sm rounded-full shadow-sm hover:shadow-md transition-all transform hover:scale-105 active:scale-95 flex items-center gap-1 sm:gap-1.5"
                 >
                   <Sparkles className="w-3 h-3 text-neutral-800" />
                   <span>Join Club</span>
@@ -194,7 +194,7 @@ const Navbar = () => {
                 <Link 
                   to="/progress" 
                   onClick={() => sounds.playPop()}
-                  className="flex items-center gap-1.5 group ml-0.5"
+                  className="flex items-center gap-1 group ml-0.5"
                   title="My Progress"
                 >
                   <Avatar name={user?.name} level={user?.level} size="sm" />

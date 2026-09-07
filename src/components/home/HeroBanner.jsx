@@ -12,16 +12,16 @@ const HeroBanner = () => {
   };
 
   return (
-    <div className="relative w-full select-none bg-[#5018B0]">
-      {/* ================= FULL-SCREEN HERO (100% MATCHING MOCKUP) ================= */}
-      <div className="relative w-full h-screen min-h-[640px] max-h-[1080px] flex flex-col justify-between items-center overflow-hidden">
+    <div className="relative w-full select-none bg-[#591ac0]">
+      {/* ================= HERO BANNER (100% MATCHING MOCKUP & RESPONSIVE) ================= */}
+      <div className="relative w-full h-[66vh] min-h-[480px] sm:h-[72vh] sm:min-h-[560px] md:h-screen md:min-h-[640px] max-h-[1080px] flex flex-col justify-between items-center overflow-hidden">
         
-        {/* Fullscreen Exact 3D Artwork Background matching user mockup */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
+        {/* Responsive Exact 3D Artwork Background */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center">
           <img 
             src="/images/lingo_hero_exact.jpg" 
             alt="LiNGO TOON Learning Adventure" 
-            className="w-full h-full object-cover object-center"
+            className="w-[125%] sm:w-full h-full object-contain md:object-cover object-center max-w-none md:max-w-none"
           />
           {/* Subtle vignette/glow overlay */}
           <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/10 pointer-events-none" />

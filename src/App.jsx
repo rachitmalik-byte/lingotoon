@@ -19,12 +19,13 @@ export default function App() {
   // Hide chrome on immersive and dedicated pages
   const immersiveRoutes = ['/game/play', '/parent']
   const isImmersive = immersiveRoutes.some(r => location.pathname.startsWith(r))
+  const isHome = location.pathname === '/'
 
   return (
     <div className="min-h-screen flex flex-col">
       {!isImmersive && <Navbar />}
 
-      <main className="flex-1">
+      <main className={`flex-1 ${!isHome && !isImmersive ? 'pt-20 sm:pt-24 md:pt-28' : ''}`}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
