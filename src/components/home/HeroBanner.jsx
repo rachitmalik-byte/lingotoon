@@ -52,14 +52,16 @@ const HeroBanner = () => {
 
     let rafId = null;
     let isVisible = true;
+    let smoothTime = video.currentTime || 0;
+    let isSeeking = false;
+
+    // Ensure video is paused for pure non-blocking frame scrubbing
+    video.pause();
 
     // Only run when hero is near or inside the viewport to conserve resources
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        if (!isVisible && !video.paused) {
-          video.pause();
-        }
       },
       { rootMargin: '300px' }
     );
@@ -75,64 +77,49 @@ const HeroBanner = () => {
       setScrollProgress(progress);
 
       const duration = video.duration || videoDuration || 10;
-      // Target time clamped just shy of end to avoid browser 'ended' event freeze
       targetTimeRef.current = progress * Math.max(0, duration - 0.05);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Continuous 60 FPS animation loop that uses native video.play() and adaptive playbackRate
-    const renderLoop = () => {
-      const hasMetadata = video && (video.readyState >= 1 || (video.duration && !isNaN(video.duration)));
-      if (isVisible && hasMetadata) {
-        const targetTime = targetTimeRef.current;
-        const currentTime = video.currentTime;
-        const diff = targetTime - currentTime;
+    // Hardware seek sync
+    const applySeek = () => {
+      if (!video || !isVisible) return;
+      if (isSeeking) return;
 
-        // SCENARIO 1: FORWARD SCROLL - Native 60 FPS Hardware Playback
-        if (diff > 0.035) {
-          if (diff > 1.8) {
-            // Extreme scroll jumps (e.g. scrollbar drag or anchor click)
-            video.currentTime = targetTime;
-          } else {
-            // Unpause and let the browser's hardware video decoder play sequentially
-            if (video.paused) {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise.catch(() => {});
-              }
-            }
+      const delta = targetTimeRef.current - smoothTime;
+      // Damped interpolation for silky liquid movement
+      smoothTime += delta * 0.18;
 
-            // Dynamically modulate playbackRate to smoothly track scroll velocity
-            // Small delta: 0.8x-1.0x (gentle, natural); Large delta: up to 2.8x (smooth catch-up)
-            const adaptiveRate = Math.min(Math.max(0.7 + diff * 1.6, 0.7), 2.8);
-            video.playbackRate = adaptiveRate;
+      if (Math.abs(smoothTime - video.currentTime) > 0.015) {
+        isSeeking = true;
+        if ('fastSeek' in video) {
+          try {
+            video.fastSeek(smoothTime);
+          } catch {
+            video.currentTime = smoothTime;
           }
-        }
-        // SCENARIO 2: BACKWARD SCROLL - Smooth Damped Step
-        else if (diff < -0.055) {
-          if (!video.paused) {
-            video.pause();
-          }
-
-          if (!video.seeking) {
-            if (diff < -1.8) {
-              video.currentTime = targetTime;
-            } else {
-              // Smooth reverse ease without locking the decoder
-              video.currentTime = Math.max(0, currentTime + diff * 0.35);
-            }
-          }
-        }
-        // SCENARIO 3: AT TARGET REST POSITION - Clean Settle
-        else {
-          if (!video.paused) {
-            video.pause();
-          }
+        } else {
+          video.currentTime = smoothTime;
         }
       }
+    };
 
+    const handleSeeked = () => {
+      isSeeking = false;
+      // If user kept scrolling during previous seek, immediately catch up
+      if (Math.abs(targetTimeRef.current - smoothTime) > 0.015) {
+        applySeek();
+      }
+    };
+
+    video.addEventListener('seeked', handleSeeked);
+
+    const renderLoop = () => {
+      if (isVisible && video.readyState >= 1) {
+        applySeek();
+      }
       rafId = requestAnimationFrame(renderLoop);
     };
 
@@ -140,6 +127,7 @@ const HeroBanner = () => {
 
     return () => {
       window.removeEventListener('scroll', onScroll);
+      video.removeEventListener('seeked', handleSeeked);
       if (rafId) cancelAnimationFrame(rafId);
       observer.disconnect();
     };
