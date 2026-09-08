@@ -355,32 +355,8 @@ const HeroBanner = () => {
           {/* Top Spacer for floating transparent navbar */}
           <div className="w-full h-20 relative z-10 pointer-events-none" />
 
-          {/* Center Interactive Anchor / Play Indicator */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-4">
-            {!hasStarted && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: [0, 4, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/30 text-white font-display font-bold text-xs sm:text-base flex items-center gap-2 sm:gap-2.5 shadow-xl pointer-events-none select-none text-center"
-              >
-                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-400 animate-ping shrink-0" />
-                <span>Scroll down to play intro</span>
-                <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 ml-0.5 animate-bounce shrink-0" />
-              </motion.div>
-            )}
-
-            {isPlaying && !isEnded && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/30 text-white font-display font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg pointer-events-none text-center max-w-[90vw]"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span>Playing intro... (scroll unlocks when finished)</span>
-              </motion.div>
-            )}
-          </div>
+          {/* Center Interactive Anchor (Clean, no intrusive popup badges) */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-4" />
 
           {/* Bottom Controls Bar: Audio Mute, Replay, and Explore Button */}
           <div className="relative z-30 pb-16 sm:pb-9 flex flex-col items-center gap-2.5 sm:gap-3 w-full px-4">
