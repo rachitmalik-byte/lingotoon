@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Heart, Shield, Star, Youtube, ExternalLink, Music, BookOpen, Sprout, ToggleLeft, ToggleRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  Sparkles, Youtube, Instagram, Sprout, BookOpen, Shield, Code, Edit3
+} from 'lucide-react';
 import Logo from '../ui/Logo';
 import { sounds } from '../../utils/soundEffects';
+import { useDeveloper } from '../../context/DeveloperContext';
 
-// Vector plant definitions for the minimal soil strip (Google Anti-gravity style)
+// Rich vector plant definitions for the minimal soil strip (Google Anti-gravity style)
 const vectorPlants = [
-  { id: 'p1', left: '4%', height: 42, type: 'twoLeaf', color: '#4ADE80', swayDuration: 3.6, delay: 0 },
-  { id: 'p2', left: '10%', height: 50, type: 'flower', color: '#F472B6', swayDuration: 4.2, delay: 0.4 },
-  { id: 'p3', left: '17%', height: 38, type: 'clover', color: '#22C55E', swayDuration: 3.2, delay: 0.8 },
-  { id: 'p4', left: '24%', height: 48, type: 'twoLeaf', color: '#86EFAC', swayDuration: 4.0, delay: 0.2 },
-  { id: 'p5', left: '31%', height: 54, type: 'fern', color: '#16A34A', swayDuration: 4.5, delay: 0.6 },
-  { id: 'p6', left: '39%', height: 44, type: 'flower', color: '#FBBF24', swayDuration: 3.8, delay: 1.0 },
-  { id: 'p7', left: '46%', height: 36, type: 'twoLeaf', color: '#4ADE80', swayDuration: 3.4, delay: 0.3 },
-  { id: 'p8', left: '53%', height: 52, type: 'clover', color: '#22C55E', swayDuration: 4.3, delay: 0.7 },
-  { id: 'p9', left: '60%', height: 46, type: 'flower', color: '#A78BFA', swayDuration: 3.9, delay: 0.1 },
-  { id: 'p10', left: '67%', height: 50, type: 'fern', color: '#15803D', swayDuration: 4.6, delay: 0.9 },
-  { id: 'p11', left: '74%', height: 40, type: 'twoLeaf', color: '#86EFAC', swayDuration: 3.5, delay: 0.5 },
-  { id: 'p12', left: '81%', height: 54, type: 'flower', color: '#FB923C', swayDuration: 4.1, delay: 0.2 },
-  { id: 'p13', left: '88%', height: 42, type: 'clover', color: '#22C55E', swayDuration: 3.7, delay: 0.8 },
-  { id: 'p14', left: '95%', height: 48, type: 'twoLeaf', color: '#4ADE80', swayDuration: 4.4, delay: 0.4 },
+  { id: 'p1', left: '3%', height: 50, type: 'twoLeaf', color: '#4ADE80', swayDuration: 3.4, delay: 0 },
+  { id: 'p2', left: '9%', height: 58, type: 'flower', color: '#F472B6', swayDuration: 4.0, delay: 0.3 },
+  { id: 'p3', left: '16%', height: 46, type: 'clover', color: '#22C55E', swayDuration: 3.1, delay: 0.7 },
+  { id: 'p4', left: '23%', height: 56, type: 'fern', color: '#10B981', swayDuration: 4.4, delay: 0.2 },
+  { id: 'p5', left: '30%', height: 64, type: 'flower', color: '#FBBF24', swayDuration: 4.2, delay: 0.5 },
+  { id: 'p6', left: '38%', height: 48, type: 'twoLeaf', color: '#86EFAC', swayDuration: 3.6, delay: 0.9 },
+  { id: 'p7', left: '45%', height: 60, type: 'sunflower', color: '#F59E0B', swayDuration: 4.5, delay: 0.1 },
+  { id: 'p8', left: '52%', height: 52, type: 'clover', color: '#22C55E', swayDuration: 3.3, delay: 0.6 },
+  { id: 'p9', left: '59%', height: 58, type: 'flower', color: '#A78BFA', swayDuration: 3.9, delay: 0.4 },
+  { id: 'p10', left: '67%', height: 62, type: 'fern', color: '#059669', swayDuration: 4.6, delay: 0.8 },
+  { id: 'p11', left: '74%', height: 48, type: 'twoLeaf', color: '#4ADE80', swayDuration: 3.5, delay: 0.2 },
+  { id: 'p12', left: '81%', height: 60, type: 'flower', color: '#FB923C', swayDuration: 4.1, delay: 0.5 },
+  { id: 'p13', left: '88%', height: 50, type: 'clover', color: '#22C55E', swayDuration: 3.7, delay: 0.7 },
+  { id: 'p14', left: '94%', height: 54, type: 'twoLeaf', color: '#86EFAC', swayDuration: 4.3, delay: 0.3 },
 ];
 
 const VectorPlantElement = ({ plant }) => {
@@ -32,12 +35,12 @@ const VectorPlantElement = ({ plant }) => {
       style={{ left: plant.left }}
       animate={
         isHovered
-          ? { y: -26, rotate: 12, scale: 1.18, transition: { type: 'spring', stiffness: 300, damping: 15 } }
+          ? { y: -26, rotate: 10, scale: 1.25, transition: { type: 'spring', stiffness: 300, damping: 14 } }
           : {
-              y: [-3, 3, -3],
-              rotate: [-5, 5, -5],
+              y: [-4, 3, -4],
+              rotate: [-7, 7, -7],
               transition: {
-                y: { duration: plant.swayDuration * 0.8, repeat: Infinity, ease: 'easeInOut', delay: plant.delay },
+                y: { duration: plant.swayDuration * 0.85, repeat: Infinity, ease: 'easeInOut', delay: plant.delay },
                 rotate: { duration: plant.swayDuration, repeat: Infinity, ease: 'easeInOut', delay: plant.delay }
               }
             }
@@ -48,18 +51,18 @@ const VectorPlantElement = ({ plant }) => {
       title="Google Anti-gravity Sprout (Hover or tap me!)"
     >
       <svg
-        width={plant.height * 0.8}
+        width={plant.height * 0.85}
         height={plant.height}
-        viewBox="0 0 40 50"
+        viewBox="0 0 44 60"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="overflow-visible filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]"
+        className="overflow-visible filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
       >
-        {/* Plant Stem */}
+        {/* Plant Stem anchored at soil horizon */}
         <path
-          d="M20 50 Q20 30 18 15"
+          d="M22 60 Q22 36 20 18"
           stroke="#15803D"
-          strokeWidth="3.5"
+          strokeWidth="4"
           strokeLinecap="round"
         />
 
@@ -67,58 +70,64 @@ const VectorPlantElement = ({ plant }) => {
           <>
             {/* Left Leaf */}
             <path
-              d="M18 28 C10 26 6 18 10 14 C15 16 18 22 18 28 Z"
+              d="M20 38 C10 34 5 24 10 18 C16 20 20 28 20 38 Z"
               fill={plant.color}
               stroke="#15803D"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
             {/* Right Leaf */}
             <path
-              d="M18 22 C26 20 32 12 28 8 C23 10 19 16 18 22 Z"
+              d="M20 30 C30 26 38 16 33 10 C27 12 21 20 20 30 Z"
               fill={plant.color}
               stroke="#15803D"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
           </>
         )}
 
         {plant.type === 'clover' && (
           <>
-            {/* 3 Clover Leaves */}
-            <circle cx="12" cy="18" r="6.5" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
-            <circle cx="24" cy="16" r="6.5" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
-            <circle cx="18" cy="10" r="7" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
+            <circle cx="12" cy="22" r="8" fill={plant.color} stroke="#15803D" strokeWidth="2" />
+            <circle cx="28" cy="20" r="8" fill={plant.color} stroke="#15803D" strokeWidth="2" />
+            <circle cx="20" cy="12" r="8.5" fill={plant.color} stroke="#15803D" strokeWidth="2" />
           </>
         )}
 
         {plant.type === 'fern' && (
           <>
-            <path d="M19 35 C13 32 11 25 14 23 C17 25 19 30 19 35 Z" fill={plant.color} />
-            <path d="M19 28 C25 25 27 18 24 16 C21 18 19 23 19 28 Z" fill={plant.color} />
-            <path d="M18 20 C13 18 11 12 14 10 C17 12 18 16 18 20 Z" fill={plant.color} />
-            <circle cx="18" cy="8" r="4.5" fill="#4ADE80" />
+            <path d="M21 44 C13 40 10 32 14 29 C18 31 21 37 21 44 Z" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
+            <path d="M21 34 C29 30 32 22 28 19 C24 21 21 27 21 34 Z" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
+            <path d="M20 24 C14 22 11 14 15 12 C18 14 20 19 20 24 Z" fill={plant.color} stroke="#15803D" strokeWidth="1.5" />
+            <circle cx="20" cy="9" r="5" fill="#4ADE80" />
           </>
         )}
 
         {plant.type === 'flower' && (
           <>
-            {/* Leaves on stem */}
-            <path d="M19 32 C12 30 10 24 13 22 C16 24 19 28 19 32 Z" fill="#22C55E" />
-            {/* Flower Petals */}
-            <circle cx="18" cy="12" r="8" fill={plant.color} stroke="#FFF" strokeWidth="1" />
-            <circle cx="18" cy="12" r="3.5" fill="#FFD233" />
+            <path d="M21 40 C12 38 10 30 14 27 C18 29 21 34 21 40 Z" fill="#22C55E" stroke="#15803D" strokeWidth="1.5" />
+            {/* Flower Blossom Petals */}
+            <circle cx="20" cy="14" r="9.5" fill={plant.color} stroke="#FFF" strokeWidth="1.5" />
+            <circle cx="20" cy="14" r="4.5" fill="#FBBF24" />
           </>
         )}
 
-        {/* Floating Dew/Sparkle dot (Anti-gravity aesthetic) */}
+        {plant.type === 'sunflower' && (
+          <>
+            <path d="M21 42 C30 40 33 32 29 28 C25 30 21 36 21 42 Z" fill="#22C55E" stroke="#15803D" strokeWidth="1.5" />
+            <circle cx="20" cy="14" r="11" fill="#FBBF24" stroke="#FFF" strokeWidth="1.5" />
+            <circle cx="20" cy="14" r="5" fill="#78350F" />
+          </>
+        )}
+
+        {/* Floating Dew/Sparkle dot (Anti-gravity floating aesthetic) */}
         <motion.circle
-          cx="24"
-          cy="6"
-          r="1.8"
+          cx="28"
+          cy="7"
+          r="2.2"
           fill="#FFF"
-          opacity={0.8}
-          animate={{ y: [-2, 2, -2], opacity: [0.4, 0.9, 0.4] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          opacity={0.85}
+          animate={{ y: [-3, 3, -3], opacity: [0.4, 0.95, 0.4] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
         />
       </svg>
     </motion.div>
@@ -126,9 +135,9 @@ const VectorPlantElement = ({ plant }) => {
 };
 
 const Footer = () => {
-  // A/B Test Toggle: Default state MUST be OFF (false), keeping the standard footer until switched on.
-  const [isSoilStyle, setIsSoilStyle] = useState(false);
-  const [sparkleCount, setSparkleCount] = useState(0);
+  const { settings } = useDeveloper() || {};
+  // A/B Test Toggle: Default state is OFF (false), keeping standard footer until toggled ON
+  const [isSoilStyle, setIsSoilStyle] = useState(settings?.soilFooterDefault || false);
 
   const toggleSoilStyle = () => {
     sounds.playPop();
@@ -193,18 +202,18 @@ const Footer = () => {
           - Vector plants sprouting along top edge animated with airy Google Anti-gravity sway & float
          ========================================================================= */}
       {isSoilStyle ? (
-        <footer className="relative bg-[#3D2314] text-white pt-16 pb-24 md:pb-12 select-none overflow-hidden border-t-4 border-[#5A351D] shadow-[0_-12px_40px_rgba(0,0,0,0.18)]">
+        <footer className="relative bg-[#381F10] text-white pt-20 pb-24 md:pb-12 select-none overflow-visible border-t-4 border-[#5A351D] shadow-[0_-12px_40px_rgba(0,0,0,0.18)]">
           
           {/* SPROUTING VECTOR PLANTS STRIP ALONG TOP EDGE (Google Anti-Gravity Sway & Float) */}
-          <div className="absolute -top-12 left-0 right-0 h-16 pointer-events-none overflow-visible">
+          <div className="absolute -top-14 left-0 right-0 h-16 pointer-events-none overflow-visible z-20">
             {vectorPlants.map((plant) => (
               <VectorPlantElement key={plant.id} plant={plant} />
             ))}
           </div>
 
-          {/* Minimal Soil Horizon Texture & Subtle Earth Vector Grain */}
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#5A351D] opacity-90" />
-          <div className="absolute top-2 left-0 right-0 h-1 bg-[#4A2B18] opacity-60" />
+          {/* Minimal Soil Horizon Layers */}
+          <div className="absolute top-0 left-0 right-0 h-2.5 bg-[#5A351D] opacity-95" />
+          <div className="absolute top-2.5 left-0 right-0 h-1.5 bg-[#4A2B18] opacity-75" />
           
           {/* Subtle Organic Soil Particle Specks */}
           <div className="absolute inset-0 pointer-events-none opacity-10" style={{
@@ -234,7 +243,7 @@ const Footer = () => {
               </div>
 
               {/* Center: Clean Minimal Navigation Links */}
-              <nav className="flex flex-wrap justify-center items-center gap-5 sm:gap-7 text-xs font-display font-bold text-amber-100/80">
+              <nav className="flex flex-wrap justify-center items-center gap-5 sm:gap-6 text-xs font-display font-bold text-amber-100/80">
                 <Link to="/" className="hover:text-white transition-colors">Home</Link>
                 <Link to="/learn" className="hover:text-white transition-colors">Lessons</Link>
                 <Link to="/videos" className="hover:text-white transition-colors">Videos</Link>
@@ -246,36 +255,59 @@ const Footer = () => {
                 <Link to="/parent" className="hover:text-white transition-colors">Parent Portal</Link>
               </nav>
 
-              {/* Right: Shrunk Minimal YouTube Logo Capsule */}
+              {/* Right: Social Media Connections (YouTube & Instagram) */}
               <div className="flex items-center gap-3">
+                {/* YouTube Link */}
                 <a
                   href="https://youtube.com/@lingotoon-x2m"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sounds.playPop()}
-                  className="w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer"
                   title="Official LiNGO TOON YouTube Channel (@lingotoon-x2m)"
                   aria-label="YouTube Channel"
                 >
-                  <Youtube className="w-5 h-5 fill-current" />
+                  <Youtube className="w-4 h-4 fill-current" />
                 </a>
+
+                {/* Instagram Link */}
+                <a
+                  href="https://www.instagram.com/lingotoons_eng/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => sounds.playPop()}
+                  className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-90 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer"
+                  title="Official LiNGO TOON Instagram (@lingotoons_eng)"
+                  aria-label="Instagram Profile"
+                >
+                  <Instagram className="w-4 h-4 stroke-[2.5]" />
+                </a>
+
                 <div className="text-left hidden sm:block">
-                  <span className="text-[11px] font-display font-bold text-white block">Official Channel</span>
-                  <span className="text-[10px] text-amber-200/60 block">@lingotoon-x2m</span>
+                  <span className="text-[11px] font-display font-bold text-white block">Official Socials</span>
+                  <span className="text-[10px] text-amber-200/60 block">@lingotoon-x2m • @lingotoons_eng</span>
                 </div>
               </div>
 
             </div>
 
-            {/* Bottom Minimal Copyright Bar */}
+            {/* Bottom Minimal Copyright Bar with discreet Admin / Creator shortcuts */}
             <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] font-body text-amber-100/60">
               <p>© 2024 Lingo Toon. Minimal Vector Soil Edition. Crafted for curious young minds.</p>
-              <div className="flex items-center gap-5">
+              <div className="flex flex-wrap items-center gap-4">
+                <Link to="/semi-admin" className="hover:text-amber-200 flex items-center gap-1 transition-colors">
+                  <Edit3 className="w-3 h-3 text-amber-300" />
+                  <span>Creator Studio</span>
+                </Link>
+                <span>•</span>
+                <Link to="/admin" className="hover:text-amber-200 flex items-center gap-1 transition-colors">
+                  <Code className="w-3 h-3 text-amber-300" />
+                  <span>Dev Admin</span>
+                </Link>
+                <span>•</span>
                 <span className="hover:text-white transition-colors cursor-pointer">Child Safety</span>
                 <span>•</span>
                 <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-                <span>•</span>
-                <span className="hover:text-white transition-colors cursor-pointer">Terms of Use</span>
               </div>
             </div>
 
@@ -285,7 +317,6 @@ const Footer = () => {
 
         /* =========================================================================
             VARIANT A: STANDARD PURPLE WAVE FOOTER (Default State - Toggle is OFF)
-            - With YouTube element SHRUNK to minimal capsule as requested
            ========================================================================= */
         <footer className="relative bg-[#4A149E] text-white pt-6 pb-28 md:pb-14 select-none overflow-hidden">
           
@@ -323,22 +354,35 @@ const Footer = () => {
                   Where language learning meets animated wonder. Empowering young explorers to discover words, phonics, and stories every day!
                 </p>
 
-                {/* SHRUNK MINIMAL YOUTUBE LOGO CAPSULE (With link hidden under it as requested) */}
-                <div className="pt-1 flex items-center gap-3">
+                {/* SOCIAL MEDIA CONNECTIONS (YOUTUBE & INSTAGRAM CAPSULES) */}
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  {/* YouTube Button */}
                   <a
                     href="https://youtube.com/@lingotoon-x2m"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => sounds.playPop()}
-                    className="w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer"
+                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer text-xs font-display font-bold"
                     title="Watch LiNGO TOON on YouTube (@lingotoon-x2m)"
                     aria-label="YouTube Channel"
                   >
-                    <Youtube className="w-5 h-5 fill-current" />
+                    <Youtube className="w-4 h-4 fill-current" />
+                    <span>YouTube</span>
                   </a>
-                  <span className="text-xs font-display font-bold text-white/80">
-                    Watch on YouTube
-                  </span>
+
+                  {/* Instagram Button */}
+                  <a
+                    href="https://www.instagram.com/lingotoons_eng/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => sounds.playPop()}
+                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-90 text-white shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer text-xs font-display font-bold"
+                    title="Follow LiNGO TOON on Instagram (@lingotoons_eng)"
+                    aria-label="Instagram Profile"
+                  >
+                    <Instagram className="w-4 h-4 stroke-[2.5]" />
+                    <span>@lingotoons_eng</span>
+                  </a>
                 </div>
 
                 {/* Interactive Musical Easter Egg Chimes */}
@@ -390,21 +434,27 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Links Column 3: Parents & Safety */}
+              {/* Links Column 3: Parents & Admin Hub */}
               <div className="md:col-span-3 space-y-3">
-                <h4 className="font-display font-bold text-lg text-white">Parents Hub</h4>
+                <h4 className="font-display font-bold text-lg text-white">Parents & Studio</h4>
                 <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/15 space-y-3">
                   <p className="text-xs text-white/80 font-body leading-relaxed">
-                    Track your child’s vocabulary growth and customize screen time limits in the Parent Portal.
+                    Track your child’s vocabulary growth, post content in Semi-Admin, or access Developer Controls.
                   </p>
                   <div className="flex flex-col gap-2">
                     <Link to="/parent" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-bold text-xs rounded-full shadow-md transition-all transform hover:scale-105">
                       <span>Parent Dashboard &rarr;</span>
                     </Link>
-                    <Link to="/blog" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-white/15 hover:bg-white/25 text-white font-display font-bold text-xs rounded-full transition-all">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>Parenting & Literacy Blog</span>
-                    </Link>
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      <Link to="/semi-admin" className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-white/15 hover:bg-white/25 text-white font-display font-bold text-[11px] rounded-xl transition-all">
+                        <Edit3 className="w-3 h-3 text-yellow-300" />
+                        <span>Creator Studio</span>
+                      </Link>
+                      <Link to="/admin" className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-white/15 hover:bg-white/25 text-white font-display font-bold text-[11px] rounded-xl transition-all">
+                        <Code className="w-3 h-3 text-cyan-300" />
+                        <span>Dev Admin</span>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -430,7 +480,16 @@ const Footer = () => {
                   className="text-white/80 hover:text-white flex items-center gap-1.5 transition-colors"
                 >
                   <Youtube className="w-3.5 h-3.5 text-red-400" />
-                  <span>YouTube Channel</span>
+                  <span>YouTube</span>
+                </a>
+                <a 
+                  href="https://www.instagram.com/lingotoons_eng/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-white/80 hover:text-white flex items-center gap-1.5 transition-colors"
+                >
+                  <Instagram className="w-3.5 h-3.5 text-pink-400" />
+                  <span>Instagram</span>
                 </a>
                 <span className="hover:text-white transition-colors cursor-pointer">Child Safety</span>
                 <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>

@@ -4,8 +4,12 @@ import { BookOpen, Clock, Calendar, User, ArrowRight, Sparkles, Tag, ChevronRigh
 import { blogPosts } from '../data/blogs';
 import { sounds } from '../utils/soundEffects';
 import { Link } from 'react-router-dom';
+import { useContent } from '../context/ContentContext';
 
 const BlogPage = () => {
+  const { blogs } = useContent();
+  const allPosts = blogs && blogs.length > 0 ? blogs : blogPosts;
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activePost, setActivePost] = useState(null);
   const [copiedSlug, setCopiedSlug] = useState(null);
@@ -13,8 +17,8 @@ const BlogPage = () => {
   const categories = ['All', 'Early Phonics', 'Healthy Habits', 'Math & STEM'];
 
   const filteredPosts = selectedCategory === 'All'
-    ? blogPosts
-    : blogPosts.filter(p => p.category === selectedCategory);
+    ? allPosts
+    : allPosts.filter(p => p.category === selectedCategory);
 
   const handleCopyLink = (slug) => {
     sounds.playPop();

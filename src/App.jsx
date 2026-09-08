@@ -1,4 +1,5 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route, useLocation, Link } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import MobileNav from './components/layout/MobileNav'
@@ -13,19 +14,43 @@ import LearnPage from './pages/LearnPage'
 import ProgressPage from './pages/ProgressPage'
 import ParentDashboard from './pages/ParentDashboard'
 import BlogPage from './pages/BlogPage'
+import SemiAdminPage from './pages/SemiAdminPage'
+import AdminPage from './pages/AdminPage'
 import ScrollToTop from './components/layout/ScrollToTop'
+import { initSmoothScroll } from './utils/smoothScroll'
+import { useDeveloper } from './context/DeveloperContext'
 
 export default function App() {
   const location = useLocation()
+  const { settings } = useDeveloper()
+
+  // Initialize lowered sensitivity buttery smooth scroll
+  useEffect(() => {
+    const cleanup = initSmoothScroll()
+    return cleanup
+  }, [])
 
   // Hide chrome on immersive and dedicated pages
-  const immersiveRoutes = ['/game/play', '/parent']
+  const immersiveRoutes = ['/game/play', '/parent', '/admin', '/semi-admin']
   const isImmersive = immersiveRoutes.some(r => location.pathname.startsWith(r))
   const isHome = location.pathname === '/'
 
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
+
+      {/* Global Developer Announcement Banner (when enabled in Admin) */}
+      {!isImmersive && settings?.announcementBanner?.enabled && (
+        <div className={`w-full py-2 px-4 ${settings.announcementBanner.bg} text-white text-xs sm:text-sm font-display font-bold text-center flex items-center justify-center gap-3 relative z-50 shadow-sm`}>
+          <span>{settings.announcementBanner.text}</span>
+          {settings.announcementBanner.link && (
+            <Link to={settings.announcementBanner.link} className="underline text-brand-yellow font-extrabold shrink-0">
+              {settings.announcementBanner.linkLabel || 'Learn More →'}
+            </Link>
+          )}
+        </div>
+      )}
+
       {!isImmersive && <Navbar />}
 
       <main className={`flex-1 ${!isHome && !isImmersive ? 'pt-24 sm:pt-28 md:pt-32' : ''}`}>
@@ -40,6 +65,8 @@ export default function App() {
             <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
             <Route path="/progress" element={<PageTransition><ProgressPage /></PageTransition>} />
             <Route path="/parent" element={<PageTransition><ParentDashboard /></PageTransition>} />
+            <Route path="/semi-admin" element={<SemiAdminPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </AnimatePresence>
       </main>
@@ -49,3 +76,4 @@ export default function App() {
     </div>
   )
 }
+

@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Sparkles, Film } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { videos, videoThumbnailColors } from '../data/videos';
+import { videos as initialVideos, videoThumbnailColors } from '../data/videos';
 import VideoCard from '../components/content/VideoCard';
 import Badge from '../components/ui/Badge';
 import { staggerContainer, staggerItem, fadeIn } from '../hooks/useAnimation';
+import { useContent } from '../context/ContentContext';
 
 const VideosPage = () => {
+  const { videos } = useContent();
+  const allVideos = videos && videos.length > 0 ? videos : initialVideos;
+
   const [activeCategory, setActiveCategory] = useState('All');
   const categories = ['All', 'English', 'Math', 'Science', 'General Knowledge'];
 
-  const featuredVideo = videos.find(v => v.featured) || videos[0];
+  const featuredVideo = allVideos.find(v => v.featured) || allVideos[0];
   const featuredColor = videoThumbnailColors[featuredVideo?.thumbnail] || { bg: '#7C3AED', icon: '🎬' };
 
   const filteredVideos = activeCategory === 'All' 
-    ? videos 
-    : videos.filter(v => v.subject === activeCategory);
+    ? allVideos 
+    : allVideos.filter(v => v.subject === activeCategory);
 
   return (
     <div className="container-app py-8 md:py-12">

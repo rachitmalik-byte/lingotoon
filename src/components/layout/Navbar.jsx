@@ -33,20 +33,8 @@ const Navbar = () => {
         window.requestAnimationFrame(() => {
           const currentY = window.scrollY;
           setScrolled(currentY > 35);
-
-          // Always show navbar near the top of the page
-          if (currentY <= 60) {
-            setNavVisible(true);
-          } else {
-            const diff = currentY - lastScrollY.current;
-            // Scroll down -> hide navbar so it never obstructs or traps elements
-            if (diff > 8) {
-              setNavVisible(false);
-            } else if (diff < -8) {
-              // Scroll up -> reveal navbar immediately for quick navigation
-              setNavVisible(true);
-            }
-          }
+          // Keep navbar always visible so it never disappears on scroll down
+          setNavVisible(true);
 
           lastScrollY.current = currentY;
           ticking = false;
