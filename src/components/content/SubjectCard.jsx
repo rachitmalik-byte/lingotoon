@@ -177,7 +177,7 @@ const SubjectCard = ({ subject }) => {
             <SubjectVectorEmblem subjectId={subject.id} />
           </div>
 
-          <span className="font-display font-black text-xs px-3.5 py-1.5 rounded-full bg-black/20 backdrop-blur-md text-white border border-white/20 shadow-xs">
+          <span className="clay-pill-dark font-display font-black text-xs px-3.5 py-1 text-white">
             {theme.count}
           </span>
         </div>

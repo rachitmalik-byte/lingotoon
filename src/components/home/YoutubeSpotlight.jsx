@@ -76,8 +76,8 @@ const YoutubeSpotlight = () => {
                     </button>
 
                     {/* Duration Badge */}
-                    <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-xs text-white font-display font-bold text-xs px-3 py-1 rounded-full">
-                      Full Episode
+                    <div className="absolute bottom-4 right-4 clay-pill-dark text-white font-display font-bold text-xs px-3 py-1">
+                      Featured Episode
                     </div>
                   </>
                 )}
@@ -86,12 +86,13 @@ const YoutubeSpotlight = () => {
 
             {/* Right: Channel Details & Subscribe Actions */}
             <div className="lg:col-span-5 space-y-5">
-              <div className="space-y-2">
-                <span className="text-xs font-display font-bold text-red-600 uppercase tracking-wider block">
-                  Featured Episode
-                </span>
-                <h3 className="font-display font-black text-2xl sm:text-3xl text-neutral-900 leading-snug">
-                  Healthy Habits with Kids
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100/80 text-red-600 text-xs font-display font-bold">
+                  <Play className="w-3 h-3 fill-current" />
+                  <span>Now Streaming Free</span>
+                </div>
+                <h3 className="font-display font-black text-2xl sm:text-3xl text-neutral-900 leading-tight">
+                  Healthy Habits & Fun Nursery Rhymes for Kids!
                 </h3>
                 <p className="font-body text-sm sm:text-base text-neutral-600 font-medium leading-relaxed">
                   Join our animated buddies in a fun musical lesson about washing hands, eating colorful veggies, sleeping well, and staying energetic every day!
@@ -99,7 +100,7 @@ const YoutubeSpotlight = () => {
               </div>
 
               {/* Channel Stats / Trust Seal */}
-              <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-red-100 space-y-2">
+              <div className="clay-card-white p-4 rounded-2xl border border-red-100/60 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-display font-bold text-neutral-800">
                   <Award className="w-4 h-4 text-brand-yellow" />
                   <span>Verified Creator Channel: @lingotoon-x2m</span>

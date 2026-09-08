@@ -78,10 +78,10 @@ const HeroBanner = () => {
               opacity: { delay: 0.6, duration: 0.5 },
               y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
             }}
-            className="px-6 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-display font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-xl hover:scale-105 active:scale-95"
+            className="px-6 py-2.5 clay-pill text-brand-purple font-display font-bold text-sm sm:text-base flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer"
           >
             <span>Explore Courses</span>
-            <ArrowDown className="w-4 h-4 text-brand-yellow" />
+            <ArrowDown className="w-4 h-4 text-brand-orange" />
           </motion.button>
         </div>
 

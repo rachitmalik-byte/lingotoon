@@ -54,8 +54,8 @@ const PhysicalAndMobileShowcase = () => {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 border border-white">
-                <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-brand-orange shrink-0">
+              <div className="absolute bottom-4 left-4 clay-card-white px-4 py-2.5 rounded-2xl flex items-center gap-2.5 border border-white">
+                <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-brand-orange shrink-0 shadow-inner">
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
@@ -193,7 +193,7 @@ const PhysicalAndMobileShowcase = () => {
               <motion.div 
                 animate={{ y: [0, -4, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-lg flex items-center gap-2 border border-white"
+                className="absolute top-4 right-4 clay-pill px-4 py-2 flex items-center gap-2 border border-white"
               >
                 <span className="w-2.5 h-2.5 rounded-full bg-brand-green animate-pulse" />
                 <span className="font-display font-bold text-xs text-neutral-800">

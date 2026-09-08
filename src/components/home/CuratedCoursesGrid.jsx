@@ -152,12 +152,12 @@ const CuratedCoursesGrid = () => {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {/* Age Badge */}
-                    <div className="absolute top-3 right-3 bg-black/75 text-white text-xs font-display font-bold px-3 py-1 rounded-full backdrop-blur-md shadow-md">
+                    <div className="absolute top-3 right-3 clay-pill-dark text-white text-xs font-display font-bold px-3 py-1">
                       {course.age}
                     </div>
 
                     {/* XP Tag */}
-                    <div className="absolute bottom-3 left-3 bg-white/95 text-neutral-900 text-xs font-display font-bold px-3 py-1 rounded-full backdrop-blur-md shadow-md flex items-center gap-1">
+                    <div className="absolute bottom-3 left-3 clay-pill text-neutral-900 text-xs font-display font-bold px-3 py-1 flex items-center gap-1">
                       <Star className="w-3 h-3 text-brand-yellow fill-current" />
                       <span>+{course.xpReward} XP</span>
                     </div>

@@ -54,9 +54,9 @@ const PinnedLearningJourney = () => {
       hook: 'Children absorb letter sounds and vocabulary naturally through animated musical episodes and singing characters.',
       bgGradient: 'from-[#1E0B4B] via-[#3B0764] to-[#4C1D95]',
       accentColor: '#A855F7',
-      tabActive: 'bg-white text-purple-950 font-black shadow-lg shadow-purple-500/30 scale-105',
-      tabInactive: 'bg-white/10 text-purple-200 hover:bg-white/20 border border-white/10',
-      badgeStyle: 'bg-purple-500/20 text-purple-200 border-purple-400/30',
+      tabActive: 'bg-white text-purple-950 font-black shadow-[0_8px_20px_rgba(255,255,255,0.35),inset_2px_2px_4px_rgba(255,255,255,0.9),inset_-2px_-2px_4px_rgba(0,0,0,0.1)] scale-105',
+      tabInactive: 'bg-white/15 text-purple-200 hover:bg-white/25 border-2 border-white/20',
+      badgeStyle: 'bg-purple-500/30 text-purple-100 border-2 border-purple-300/40 shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_1.5px_1.5px_3px_rgba(255,255,255,0.3)]',
       perks: [
         { icon: Music, title: 'Catchy Rhyme Earworms', desc: 'Musical tunes turn vowel and consonant sounds into songs kids sing by heart.' },
         { icon: Sparkles, title: 'Living 3D Letters', desc: 'Animated character letters dance and visually connect shapes to phonetic sounds.' },
@@ -74,9 +74,9 @@ const PinnedLearningJourney = () => {
       hook: 'Learning is active, not passive. Kids piece together letter tiles, hear instant audio chimes, and build real spelling triumph.',
       bgGradient: 'from-[#431407] via-[#9A3412] to-[#C2410C]',
       accentColor: '#FB923C',
-      tabActive: 'bg-white text-orange-950 font-black shadow-lg shadow-orange-500/30 scale-105',
-      tabInactive: 'bg-white/10 text-orange-200 hover:bg-white/20 border border-white/10',
-      badgeStyle: 'bg-orange-500/20 text-orange-200 border-orange-400/30',
+      tabActive: 'bg-white text-orange-950 font-black shadow-[0_8px_20px_rgba(255,255,255,0.35),inset_2px_2px_4px_rgba(255,255,255,0.9),inset_-2px_-2px_4px_rgba(0,0,0,0.1)] scale-105',
+      tabInactive: 'bg-white/15 text-orange-200 hover:bg-white/25 border-2 border-white/20',
+      badgeStyle: 'bg-orange-500/30 text-orange-100 border-2 border-orange-300/40 shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_1.5px_1.5px_3px_rgba(255,255,255,0.3)]',
       perks: [
         { icon: Gamepad2, title: 'Hands-On Tile Arranging', desc: 'Chunky, tactile letter blocks make spelling words as intuitive as building blocks.' },
         { icon: Zap, title: 'Instant Sound Feedback', desc: 'Every placed tile speaks its phonetic sound in real time with delightful chimes.' },
@@ -94,9 +94,9 @@ const PinnedLearningJourney = () => {
       hook: 'Short daily micro-adventures foster a lifelong love of learning. Kids celebrate real milestones and build unstoppable confidence.',
       bgGradient: 'from-[#022C22] via-[#065F46] to-[#0D9488]',
       accentColor: '#34D399',
-      tabActive: 'bg-white text-emerald-950 font-black shadow-lg shadow-emerald-500/30 scale-105',
-      tabInactive: 'bg-white/10 text-emerald-200 hover:bg-white/20 border border-white/10',
-      badgeStyle: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
+      tabActive: 'bg-white text-emerald-950 font-black shadow-[0_8px_20px_rgba(255,255,255,0.35),inset_2px_2px_4px_rgba(255,255,255,0.9),inset_-2px_-2px_4px_rgba(0,0,0,0.1)] scale-105',
+      tabInactive: 'bg-white/15 text-emerald-200 hover:bg-white/25 border-2 border-white/20',
+      badgeStyle: 'bg-emerald-500/30 text-emerald-100 border-2 border-emerald-300/40 shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_1.5px_1.5px_3px_rgba(255,255,255,0.3)]',
       perks: [
         { icon: Trophy, title: '24 Explorer Badges', desc: 'Unlock vibrant collectible badges from Phonics Pioneer to Word Wizard.' },
         { icon: Flame, title: 'Daily Habit Streaks', desc: 'A friendly flame counter encourages just 10 joyful minutes of practice each day.' },
@@ -153,7 +153,7 @@ const PinnedLearningJourney = () => {
       className="relative h-[250vh] transition-colors duration-700 select-none"
     >
       {/* 
-        SET IT FREE: FULL-BLEED STICKY VIEWPORT CANVAS WITH DYNAMIC GRADIENTS
+        SET IT FREE: FULL-BLEED STICKY VIEWPORT CANVAS WITH DYNAMIC GRADIENTS & CLAYMORPHISM
         No confining card box! The entire canvas breathes with vivid, dynamic theme colors.
       */}
       <div 
@@ -194,7 +194,7 @@ const PinnedLearningJourney = () => {
           
           {/* Brand/Machine Label */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center shadow-lg text-white">
+            <div className="w-11 h-11 rounded-2xl bg-white/20 border-2 border-white/35 flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.2),inset_2px_2px_4px_rgba(255,255,255,0.4)] text-white">
               <Sparkles className="w-5 h-5 text-yellow-300 animate-spin-slow" />
             </div>
             <div>
@@ -207,8 +207,8 @@ const PinnedLearningJourney = () => {
             </div>
           </div>
 
-          {/* Interactive Phase Selector Pills */}
-          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-md p-1.5 rounded-full border border-white/15 shadow-xl">
+          {/* Interactive Phase Selector Pills (Clay Style) */}
+          <div className="flex items-center gap-2 bg-black/25 p-1.5 rounded-full border-2 border-white/20 shadow-[0_8px_20px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.15)]">
             {steps.map((step, idx) => {
               const isCurrent = activeStep === idx;
               return (
@@ -236,10 +236,10 @@ const PinnedLearningJourney = () => {
             
             {/* Phase Badge & Step Count */}
             <div className="flex items-center gap-3">
-              <span className={`text-xs font-display font-black tracking-wider px-3.5 py-1 rounded-full border shadow-sm backdrop-blur-md ${current.badgeStyle}`}>
+              <span className={`text-xs font-display font-black tracking-wider px-3.5 py-1 rounded-full ${current.badgeStyle}`}>
                 {current.badge}
               </span>
-              <span className="text-xs font-display font-bold px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90">
+              <span className="text-xs font-display font-black px-3.5 py-1 rounded-full bg-white/20 border-2 border-white/30 text-white shadow-[0_4px_10px_rgba(0,0,0,0.15),inset_1.5px_1.5px_3px_rgba(255,255,255,0.35)]">
                 Step {current.id + 1} of 3
               </span>
             </div>
@@ -249,28 +249,28 @@ const PinnedLearningJourney = () => {
               <h2 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-white leading-tight drop-shadow-md">
                 {current.headline}
               </h2>
-              <p className="font-body text-sm sm:text-base text-white/85 font-medium mt-2 leading-relaxed max-w-xl">
+              <p className="font-body text-sm sm:text-base text-white/90 font-medium mt-2 leading-relaxed max-w-xl">
                 {current.hook}
               </p>
             </div>
 
-            {/* 3 Translucent Story Feature Cards */}
+            {/* 3 Tactile Clay Story Feature Cards */}
             <div className="space-y-2.5 pt-1">
               {current.perks.map((perk, pIdx) => {
                 const Icon = perk.icon;
                 return (
                   <div 
                     key={pIdx} 
-                    className="p-3 sm:p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 shadow-md transition-all flex items-start gap-3.5 group transform hover:translate-x-1 duration-200"
+                    className="p-3.5 sm:p-4 rounded-3xl bg-white/15 hover:bg-white/25 border-2 border-white/30 shadow-[0_10px_24px_rgba(0,0,0,0.2),inset_2px_2px_5px_rgba(255,255,255,0.35),inset_-3px_-3px_6px_rgba(0,0,0,0.15)] transition-all flex items-start gap-4 group transform hover:translate-x-1.5 duration-200"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 group-hover:scale-110 shadow-sm transition-transform">
-                      <Icon className="w-4 h-4 text-yellow-300" />
+                    <div className="w-10 h-10 rounded-2xl bg-white/25 border-2 border-white/40 text-white flex items-center justify-center shrink-0 group-hover:scale-110 shadow-[0_4px_10px_rgba(0,0,0,0.15),inset_1.5px_1.5px_3px_rgba(255,255,255,0.4)] transition-transform">
+                      <Icon className="w-5 h-5 text-yellow-300" />
                     </div>
                     <div>
-                      <h4 className="font-display font-bold text-sm text-white">
+                      <h4 className="font-display font-bold text-sm sm:text-base text-white">
                         {perk.title}
                       </h4>
-                      <p className="font-body text-xs text-white/80 leading-snug mt-0.5">
+                      <p className="font-body text-xs sm:text-sm text-white/80 leading-snug mt-0.5">
                         {perk.desc}
                       </p>
                     </div>
@@ -279,9 +279,9 @@ const PinnedLearningJourney = () => {
               })}
             </div>
 
-            {/* Mascot Tip Speech Balloon */}
-            <div className="p-3 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs sm:text-sm font-body flex items-center gap-3 shadow-md">
-              <span className="font-display font-black text-xs shrink-0 px-2.5 py-1 rounded-lg bg-yellow-400 text-neutral-900 shadow-sm">
+            {/* Mascot Tip Speech Balloon (Clay) */}
+            <div className="p-3.5 rounded-3xl bg-white/20 border-2 border-white/35 text-white text-xs sm:text-sm font-body flex items-center gap-3 shadow-[0_8px_20px_rgba(0,0,0,0.18),inset_2px_2px_4px_rgba(255,255,255,0.35)]">
+              <span className="font-display font-black text-xs shrink-0 px-2.5 py-1 rounded-xl bg-yellow-400 text-neutral-900 shadow-md">
                 🦉 Lingo Mascot
               </span>
               <span className="font-semibold text-white/95">{current.mascotTip}</span>
@@ -290,7 +290,7 @@ const PinnedLearningJourney = () => {
             {/* CTA & Next/Prev Controls */}
             <div className="pt-2 flex items-center justify-between gap-4">
               <Link to={current.link} onClick={() => sounds.playPop()}>
-                <button className="px-7 py-3 rounded-full bg-white hover:bg-yellow-300 text-neutral-900 font-display font-black text-sm shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 active:translate-y-0.5 flex items-center gap-2.5 cursor-pointer">
+                <button className="px-8 py-3.5 rounded-full bg-white hover:bg-yellow-300 text-neutral-900 font-display font-black text-sm shadow-[0_12px_24px_rgba(0,0,0,0.25),inset_0_3px_2px_rgba(255,255,255,0.9),inset_0_-3px_3px_rgba(0,0,0,0.12)] hover:shadow-2xl transition-all transform hover:-translate-y-0.5 active:translate-y-0.5 flex items-center gap-2.5 cursor-pointer">
                   <span>{current.cta}</span>
                   <ArrowRight className="w-4 h-4 text-neutral-900 stroke-[3]" />
                 </button>
@@ -299,14 +299,14 @@ const PinnedLearningJourney = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={goToPrev}
-                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 flex items-center justify-center text-white transition-all cursor-pointer shadow-md active:scale-95"
+                  className="w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 border-2 border-white/35 flex items-center justify-center text-white transition-all cursor-pointer shadow-[0_6px_16px_rgba(0,0,0,0.2),inset_1.5px_1.5px_3px_rgba(255,255,255,0.4)] active:scale-95"
                   title="Previous Step"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={goToNext}
-                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 flex items-center justify-center text-white transition-all cursor-pointer shadow-md active:scale-95"
+                  className="w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 border-2 border-white/35 flex items-center justify-center text-white transition-all cursor-pointer shadow-[0_6px_16px_rgba(0,0,0,0.2),inset_1.5px_1.5px_3px_rgba(255,255,255,0.4)] active:scale-95"
                   title="Next Step"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -328,7 +328,7 @@ const PinnedLearningJourney = () => {
                 transition={{ duration: 0.35 }}
                 className="w-full max-w-lg text-center text-white relative py-2"
               >
-                <div className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-yellow-300 font-display font-black text-xs mb-4 shadow-lg">
+                <div className="inline-block px-5 py-2 rounded-full bg-white/25 border-2 border-white/40 text-yellow-300 font-display font-black text-xs mb-4 shadow-[0_6px_16px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.45)]">
                   🎹 Interactive Phonics Stage
                 </div>
 
@@ -351,12 +351,12 @@ const PinnedLearningJourney = () => {
                       whileHover={{ scale: 1.14, rotate: i % 2 === 0 ? 6 : -6, y: -6 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => sounds.playTone(item.freq, 0.35)}
-                      className={`w-24 sm:w-28 h-30 sm:h-34 rounded-3xl ${item.bg} text-white shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-transform border-4 border-white select-none`}
+                      className={`w-24 sm:w-28 h-30 sm:h-34 rounded-3xl ${item.bg} text-white shadow-[0_15px_35px_rgba(0,0,0,0.35),inset_3px_3px_6px_rgba(255,255,255,0.45),inset_-3px_-3px_6px_rgba(0,0,0,0.2)] flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-transform border-4 border-white select-none`}
                     >
                       <span className="font-display font-black text-4xl sm:text-5xl leading-none drop-shadow-md">
                         {item.letter}
                       </span>
-                      <span className="text-[11px] font-display font-bold bg-white/25 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+                      <span className="text-[11px] font-display font-bold bg-white/30 px-2.5 py-0.5 rounded-full shadow-inner">
                         {item.label}
                       </span>
                     </motion.button>
@@ -366,7 +366,7 @@ const PinnedLearningJourney = () => {
                 {/* Play Catchy Chime Button */}
                 <button
                   onClick={playMusicalChime}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-yellow-400 hover:bg-yellow-300 text-neutral-900 font-display font-black text-xs sm:text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-yellow-400 hover:bg-yellow-300 text-neutral-900 font-display font-black text-xs sm:text-sm shadow-[0_10px_20px_rgba(0,0,0,0.25),inset_0_2px_2px_rgba(255,255,255,0.8),inset_0_-3px_2px_rgba(180,83,9,0.3)] transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <Volume2 className="w-4 h-4 text-purple-900 stroke-[3]" />
                   <span>Play Catchy Chime 🎶</span>
@@ -383,7 +383,7 @@ const PinnedLearningJourney = () => {
                 transition={{ duration: 0.35 }}
                 className="w-full max-w-lg text-center text-white relative py-2"
               >
-                <div className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-yellow-300 font-display font-black text-xs mb-4 shadow-lg">
+                <div className="inline-block px-5 py-2 rounded-full bg-white/25 border-2 border-white/40 text-yellow-300 font-display font-black text-xs mb-4 shadow-[0_6px_16px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.45)]">
                   🎮 Playable Word Builder
                 </div>
 
@@ -403,7 +403,7 @@ const PinnedLearningJourney = () => {
                         key={idx}
                         className={`w-20 h-22 sm:w-24 sm:h-26 rounded-3xl flex items-center justify-center font-display font-black text-3xl sm:text-4xl border-4 transition-all ${
                           isPlaced
-                            ? 'bg-yellow-400 text-neutral-900 border-white shadow-2xl scale-105'
+                            ? 'bg-yellow-400 text-neutral-900 border-white shadow-[0_15px_30px_rgba(0,0,0,0.3),inset_3px_3px_6px_rgba(255,255,255,0.8),inset_-3px_-3px_6px_rgba(180,83,9,0.3)] scale-105'
                             : 'bg-white/10 border-dashed border-white/40 text-white/30 shadow-inner'
                         }`}
                       >
@@ -443,7 +443,7 @@ const PinnedLearningJourney = () => {
                         whileHover={{ scale: 1.15, y: -6 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleLetterClick(letter)}
-                        className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white hover:bg-yellow-300 border-3 border-white text-neutral-900 font-display font-black text-2xl sm:text-3xl shadow-xl flex items-center justify-center cursor-pointer transition-colors"
+                        className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white hover:bg-yellow-300 border-3 border-white text-neutral-900 font-display font-black text-2xl sm:text-3xl shadow-[0_10px_20px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.9),inset_-2px_-2px_4px_rgba(0,0,0,0.08)] flex items-center justify-center cursor-pointer transition-colors"
                       >
                         {letter}
                       </motion.button>
@@ -462,7 +462,7 @@ const PinnedLearningJourney = () => {
                 transition={{ duration: 0.35 }}
                 className="w-full max-w-lg text-center text-white relative py-2"
               >
-                <div className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-yellow-300 font-display font-black text-xs mb-4 shadow-lg">
+                <div className="inline-block px-5 py-2 rounded-full bg-white/25 border-2 border-white/40 text-yellow-300 font-display font-black text-xs mb-4 shadow-[0_6px_16px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.45)]">
                   🏆 Explorer Trophy Vault
                 </div>
 
@@ -487,7 +487,7 @@ const PinnedLearningJourney = () => {
                         whileHover={{ scale: 1.12, y: -6 }}
                         whileTap={{ scale: 0.92 }}
                         onClick={() => sounds.playFanfare()}
-                        className="p-4 rounded-3xl bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 shadow-xl flex flex-col items-center justify-center gap-2 cursor-pointer select-none group transition-all"
+                        className="p-4 rounded-3xl bg-white/20 hover:bg-white/30 border-2 border-white/35 shadow-[0_12px_24px_rgba(0,0,0,0.25),inset_2px_2px_5px_rgba(255,255,255,0.4),inset_-2px_-2px_4px_rgba(0,0,0,0.15)] flex flex-col items-center justify-center gap-2 cursor-pointer select-none group transition-all"
                       >
                         <div className={`w-13 h-13 rounded-2xl ${b.color} flex items-center justify-center shadow-md group-hover:rotate-6 transition-transform`}>
                           <BIcon className="w-7 h-7" />
@@ -503,7 +503,7 @@ const PinnedLearningJourney = () => {
                   })}
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-between text-xs font-display font-bold text-white">
+                <div className="p-3 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-between text-xs font-display font-bold text-white shadow-md">
                   <span>Explorer Rank: <strong className="text-yellow-300">Level 4 Master</strong></span>
                   <span className="text-emerald-300">100% Kid Safe & Ad-Free</span>
                 </div>
@@ -515,19 +515,19 @@ const PinnedLearningJourney = () => {
         </div>
 
         {/* BOTTOM HUD: SMOOTH SCROLL PROGRESS METER */}
-        <div className="w-full max-w-6xl mx-auto pt-2 pb-1 relative z-10 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-display font-bold text-white/80">
+        <div className="w-full max-w-6xl mx-auto pt-2 pb-1 relative z-10 border-t-2 border-white/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-display font-bold text-white/80">
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>Interactive Journey Stop-Scroll:</span>
-            <span className="px-3 py-0.5 bg-white/20 rounded-full text-white font-black border border-white/30">
+            <span className="px-3 py-0.5 bg-white/20 rounded-full text-white font-black border border-white/30 shadow-xs">
               {activeStep === 0 ? 'Phase 1: Sing' : activeStep === 1 ? 'Phase 2: Spell' : 'Phase 3: Celebrate! 🎉'}
             </span>
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-72">
-            <div className="relative w-full h-3 bg-white/20 rounded-full overflow-hidden border border-white/25">
+            <div className="relative w-full h-3.5 bg-white/20 rounded-full overflow-hidden border-2 border-white/30 shadow-inner">
               <motion.div 
-                className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-emerald-300 rounded-full"
+                className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-emerald-300 rounded-full shadow-md"
                 style={{ 
                   width: `${Math.max(15, Math.min(100, (activeStep + 1) * 33.3))}%` 
                 }}

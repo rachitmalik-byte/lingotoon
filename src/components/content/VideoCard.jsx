@@ -46,23 +46,23 @@ const VideoCard = ({ video, compact = false, className = '' }) => {
             </div>
           )}
 
-          {/* Interactive Play Button with Pulse on Hover */}
+          {/* Interactive Play Button with Clay 3D styling */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-110 transition-transform duration-300 relative">
+            <div className="w-13 h-13 bg-white rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.25),inset_2px_2px_4px_rgba(255,255,255,0.95),inset_-2px_-2px_4px_rgba(0,0,0,0.12)] border-2 border-white transform scale-95 group-hover:scale-115 transition-transform duration-300 relative">
               <span className="absolute inset-0 rounded-full bg-brand-yellow/40 animate-ping opacity-0 group-hover:opacity-100" />
               <Play className="w-5 h-5 text-brand-purple ml-0.5 fill-current" />
             </div>
           </div>
 
-          {/* Clean Glass Duration Chip */}
-          <div className="absolute bottom-2.5 right-2.5 bg-black/75 backdrop-blur-md text-white font-display font-black text-[11px] px-2.5 py-0.5 rounded-lg shadow-sm border border-white/15 flex items-center gap-1">
+          {/* Clay Duration Chip */}
+          <div className="absolute bottom-2.5 right-2.5 bg-neutral-900/90 text-white font-display font-black text-[11px] px-3 py-0.5 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.3),inset_1px_1px_2px_rgba(255,255,255,0.25)] border border-white/20 flex items-center gap-1.5">
             <Clock className="w-3 h-3 text-brand-yellow" />
             <span>{video.duration}</span>
           </div>
 
-          {/* Optional Featured Indicator */}
+          {/* Featured Clay Indicator */}
           {video.featured && (
-            <div className="absolute top-2.5 left-2.5 bg-brand-purple/90 backdrop-blur-md text-white font-display font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md shadow-sm border border-white/20 flex items-center gap-1">
+            <div className="absolute top-2.5 left-2.5 bg-brand-purple text-white font-display font-black text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-[0_4px_10px_rgba(124,58,237,0.35),inset_1px_1px_2px_rgba(255,255,255,0.3)] border border-white/30 flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5 text-brand-yellow fill-current" />
               <span>Featured</span>
             </div>

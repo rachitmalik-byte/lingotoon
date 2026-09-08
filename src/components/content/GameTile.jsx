@@ -56,16 +56,16 @@ const GameTile = ({ game, className = '' }) => {
               </div>
             </div>
 
-            {/* Difficulty Badge */}
+            {/* Clay Difficulty Badge */}
             <div className="absolute top-2.5 left-2.5">
-              <span className="bg-white/95 text-neutral-800 font-display font-extrabold text-[11px] px-2.5 py-1 rounded-full backdrop-blur-md shadow-xs flex items-center gap-1">
+              <span className="clay-pill text-neutral-800 font-display font-extrabold text-[11px] px-3 py-1 flex items-center gap-1.5 shadow-sm">
                 <Star className="w-3 h-3 text-amber-500 fill-current" />
                 <span>{game.difficulty || 'Easy'}</span>
               </span>
             </div>
 
-            {/* Duration Tag */}
-            <div className="absolute bottom-2.5 right-2.5 bg-black/75 text-white font-display font-bold text-[11px] px-2.5 py-0.5 rounded-lg backdrop-blur-sm flex items-center gap-1">
+            {/* Clay Duration Tag */}
+            <div className="absolute bottom-2.5 right-2.5 bg-neutral-900/90 text-white font-display font-bold text-[11px] px-3 py-0.5 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.3),inset_1px_1px_2px_rgba(255,255,255,0.25)] border border-white/20 flex items-center gap-1.5">
               <Clock className="w-3 h-3 text-brand-yellow" />
               <span>{game.playTime || '5 min'}</span>
             </div>

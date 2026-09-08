@@ -117,8 +117,8 @@ const ChallengeCard = ({ challenge }) => {
             </p>
           </div>
 
-          {/* Fluid Milestone Tracker Capsule */}
-          <div className="bg-white/85 backdrop-blur-md rounded-[1.8rem] p-5 border border-amber-200/90 shadow-sm max-w-xl">
+          {/* Clay Milestone Tracker Capsule */}
+          <div className="bg-white rounded-[2rem] p-5 border-2 border-amber-200/80 shadow-[0_12px_28px_rgba(245,158,11,0.12),inset_3px_3px_6px_rgba(255,255,255,0.95),inset_-4px_-4px_8px_rgba(245,158,11,0.06)] max-w-xl">
             <div className="flex justify-between items-center mb-2.5 font-display font-black text-xs sm:text-sm">
               <span className="text-neutral-700 flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-orange-500" />
@@ -162,7 +162,7 @@ const ChallengeCard = ({ challenge }) => {
             </div>
           </div>
 
-          {/* Interactive Action Buttons (Zero Emojis) */}
+          {/* Interactive Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-1">
             <Link 
               to="/game/play/word-builder" 
@@ -172,15 +172,15 @@ const ChallengeCard = ({ challenge }) => {
               <motion.button 
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                className="w-full sm:w-auto px-9 py-4 bg-gradient-to-r from-[#FF8800] via-[#FF6A00] to-[#FF8800] hover:from-[#E67A00] hover:to-[#E65F00] text-white font-display font-black text-base rounded-full shadow-[0_12px_28px_rgba(255,106,0,0.35)] hover:shadow-[0_16px_32px_rgba(255,106,0,0.45)] transition-all flex items-center justify-center gap-2.5"
+                className="clay-btn-orange w-full sm:w-auto px-9 py-4 text-white font-display font-black text-base flex items-center justify-center gap-2.5 cursor-pointer uppercase tracking-wider"
               >
                 <span>ACCEPT QUEST</span>
-                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform stroke-[3]" />
               </motion.button>
             </Link>
             
-            {/* Reward Badge with Lucide Vector Award (Zero Emojis) */}
-            <div className="w-full sm:w-auto bg-white/90 backdrop-blur-md text-amber-900 font-display font-black text-xs sm:text-sm px-5 py-3.5 rounded-full inline-flex items-center justify-center gap-2 border border-amber-300 shadow-xs">
+            {/* Clay Reward Badge */}
+            <div className="clay-pill text-amber-950 font-display font-black text-xs sm:text-sm px-5 py-3.5 inline-flex items-center justify-center gap-2 border-2 border-amber-200 shadow-[0_6px_16px_rgba(245,158,11,0.12),inset_2px_2px_4px_rgba(255,255,255,0.95)]">
               <Award className="w-4 h-4 text-amber-600" />
               <span>Reward: +50 XP & Golden Explorer Badge</span>
             </div>
