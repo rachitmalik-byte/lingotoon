@@ -30,6 +30,15 @@ const HeroBanner = () => {
       setIsPlaying(false);
       setIsEnded(true);
       isEndedRef.current = true;
+      document.body.style.overflow = '';
+      
+      // Gentle auto-scroll to courses section once video finishes
+      setTimeout(() => {
+        const el = document.getElementById('explore-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 700);
     };
 
     const handlePlay = () => setIsPlaying(true);
@@ -45,6 +54,48 @@ const HeroBanner = () => {
       video.removeEventListener('pause', handlePause);
     };
   }, [heroMediaType, isMuted]);
+
+  // Stop-scroll lock: locks page scrolling while video is playing, re-enables only when ended
+  useEffect(() => {
+    if (heroMediaType !== 'video' || !isPlaying || isEnded) {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    // Keep top of page aligned during playback
+    if (window.scrollY > 0 && window.scrollY < window.innerHeight * 0.8) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    const preventScroll = (e) => {
+      // Intercept mouse wheel and touch gestures while video is playing
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+
+    const preventKeys = (e) => {
+      // Prevent keyboard navigation keys from scrolling away
+      if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Space', ' '].includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('keydown', preventKeys, { passive: false });
+
+    // Lock body overflow
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('keydown', preventKeys);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [heroMediaType, isPlaying, isEnded]);
 
   // Smooth single-scroll play trigger
   const startPlayback = () => {
@@ -79,6 +130,7 @@ const HeroBanner = () => {
     e?.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     video.currentTime = 0;
     video.play().then(() => {
       setIsPlaying(true);
@@ -147,6 +199,15 @@ const HeroBanner = () => {
   }, [heroMediaType, isMuted]);
 
   const scrollToContent = () => {
+    // Release scroll lock immediately if video was still running
+    if (videoRef.current && !videoRef.current.ended) {
+      videoRef.current.pause();
+    }
+    setIsPlaying(false);
+    setIsEnded(true);
+    isEndedRef.current = true;
+    document.body.style.overflow = '';
+
     const el = document.getElementById('explore-section');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -245,51 +306,58 @@ const HeroBanner = () => {
           className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0] cursor-pointer"
         >
           
-          {/* Hardware-Accelerated 60FPS Native Video */}
+          {/* Hardware-Accelerated 60FPS Native Video (Optimized WebM + Fastdecode MP4 for Lite Devices) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
             <video
               ref={videoRef}
-              src="/videos/lingotoon_animated_logo.mp4"
               playsInline
               muted={isMuted}
               preload="auto"
               disablePictureInPicture
               disableRemotePlayback
-              className="w-full h-full object-contain md:object-cover object-center"
-            />
+              className="w-full h-full object-contain md:object-cover object-center transform-gpu will-change-transform"
+              style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
+            >
+              <source src="/videos/lingotoon_animated_logo.webm" type="video/webm" />
+              <source src="/videos/lingotoon_animated_logo.mp4" type="video/mp4" />
+            </video>
             {/* Ambient Lighting Vignette */}
             <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/15 pointer-events-none" />
           </div>
 
-          {/* Floating Twinkling Star Sparkles */}
-          <motion.div 
-            animate={{ scale: [0.8, 1.25, 0.8], rotate: [0, 15, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-24 left-[28%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-          >
-            ✦
-          </motion.div>
-          <motion.div 
-            animate={{ scale: [1, 1.3, 1], rotate: [0, -20, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            className="absolute top-20 right-[28%] text-brand-yellow font-black text-3xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-          >
-            ✦
-          </motion.div>
-          <motion.div 
-            animate={{ scale: [0.7, 1.15, 0.7] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-28 left-[24%] text-brand-yellow font-black text-xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-          >
-            ✦
-          </motion.div>
-          <motion.div 
-            animate={{ scale: [0.9, 1.25, 0.9] }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-            className="absolute bottom-24 right-[25%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-          >
-            ✦
-          </motion.div>
+          {/* Floating Twinkling Star Sparkles (Paused during playback to maximize GPU decoder performance on lite devices) */}
+          {!isPlaying && (
+            <>
+              <motion.div 
+                animate={{ scale: [0.8, 1.25, 0.8], rotate: [0, 15, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-24 left-[28%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+              >
+                ✦
+              </motion.div>
+              <motion.div 
+                animate={{ scale: [1, 1.3, 1], rotate: [0, -20, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute top-20 right-[28%] text-brand-yellow font-black text-3xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+              >
+                ✦
+              </motion.div>
+              <motion.div 
+                animate={{ scale: [0.7, 1.15, 0.7] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-28 left-[24%] text-brand-yellow font-black text-xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+              >
+                ✦
+              </motion.div>
+              <motion.div 
+                animate={{ scale: [0.9, 1.25, 0.9] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                className="absolute bottom-24 right-[25%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+              >
+                ✦
+              </motion.div>
+            </>
+          )}
 
           {/* Top Spacer for floating transparent navbar */}
           <div className="w-full h-20 relative z-10 pointer-events-none" />
@@ -307,6 +375,17 @@ const HeroBanner = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
                 <span>Scroll or click to play intro</span>
                 <Play className="w-4 h-4 fill-amber-300 text-amber-300 ml-0.5" />
+              </motion.div>
+            )}
+
+            {isPlaying && !isEnded && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="px-4 py-2 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg pointer-events-none"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Playing intro... (scroll unlocks when finished)</span>
               </motion.div>
             )}
           </div>
