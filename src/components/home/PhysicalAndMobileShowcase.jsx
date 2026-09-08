@@ -54,13 +54,13 @@ const PhysicalAndMobileShowcase = () => {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute bottom-4 left-4 clay-card-white px-4 py-2.5 rounded-2xl flex items-center gap-2.5 border border-white">
+              <div className="absolute bottom-4 left-4 clay-card-white px-4 py-2.5 rounded-2xl flex items-center gap-2.5 border border-white shadow-lg">
                 <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-brand-orange shrink-0 shadow-inner">
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="block font-display font-bold text-sm text-neutral-900">Official Activity Kit</span>
-                  <span className="text-xs text-neutral-500 font-medium">Activity Sheets, Stickers & Flashcards</span>
+                  <span className="block font-display font-bold text-sm text-neutral-900">Official 10-Page Activity Kit</span>
+                  <span className="text-xs text-neutral-500 font-medium">Free Printable Student Workbook (PDF)</span>
                 </div>
               </div>
             </div>
@@ -79,9 +79,9 @@ const PhysicalAndMobileShowcase = () => {
             {/* Feature Checkpoints */}
             <div className="space-y-3.5 pt-1">
               {[
-                { title: "Wipe-Clean Reusable Pages", desc: "Practice tracing letters again and again without waste." },
-                { title: "100+ Reward Stickers Included", desc: "Kids earn stickers after each completed activity chapter." },
-                { title: "Pocket Phonics Flashcards", desc: "Fun travel flashcards to play vocabulary games on road trips." }
+                { title: "10 Full Activity Pages Included", desc: "Alphabet safari, phonics tracing, vocabulary matching & word games." },
+                { title: "Printable Anytime at Home", desc: "Easy to print on standard A4 or Letter paper for screen-free play." },
+                { title: "Star Reward Trackers Included", desc: "Kids earn stars and completion stamps as they finish each page." }
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 bg-[#FAF9F6] p-3.5 rounded-2xl border border-neutral-200/60">
                   <CheckCircle2 className="w-5 h-5 text-brand-green flex-shrink-0 mt-0.5" />
@@ -94,18 +94,22 @@ const PhysicalAndMobileShowcase = () => {
             </div>
 
             <div className="pt-2 flex flex-wrap gap-3">
+              <a
+                href="/downloads/LingoToon_Activity_Workbook.pdf"
+                download="LingoToon_Activity_Workbook.pdf"
+                onClick={() => sounds.playCorrect()}
+                className="px-6 sm:px-7 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-display font-bold text-sm sm:text-base rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Workbook (PDF)</span>
+              </a>
               <button 
                 onClick={() => { sounds.playPop(); setWorksheetModalOpen(true); }}
-                className="px-7 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-display font-bold text-base rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                className="px-5 sm:px-6 py-3.5 bg-white hover:bg-neutral-100 text-neutral-700 font-display font-bold text-sm sm:text-base rounded-full border border-neutral-300 transition-all flex items-center gap-2 cursor-pointer"
               >
-                <span>Preview Workbook Sheets</span>
-                <Eye className="w-4 h-4" />
+                <Eye className="w-4 h-4 text-brand-orange" />
+                <span>Preview Sheets</span>
               </button>
-              <Link to="/learn" onClick={() => sounds.playPop()}>
-                <button className="px-6 py-3.5 bg-white hover:bg-neutral-100 text-neutral-700 font-display font-bold text-base rounded-full border border-neutral-300 transition-all">
-                  All Courses
-                </button>
-              </Link>
             </div>
           </div>
         </div>

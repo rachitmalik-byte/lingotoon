@@ -166,15 +166,15 @@ const Navbar = () => {
                           sounds.playPop();
                           setHeroMediaType('image');
                         }}
-                        className={`px-2.5 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                        className={`px-2 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                           heroMediaType === 'image'
                             ? 'bg-white text-brand-purple shadow-sm'
                             : 'text-white/85 hover:text-white'
                         }`}
-                        title="Image Header Mode (Clean, fast, no stop-scroll)"
+                        title="Image Header Mode"
                       >
                         <Image className="w-3.5 h-3.5" />
-                        <span>Image</span>
+                        <span className="hidden sm:inline">Image</span>
                       </button>
 
                       <button
@@ -182,15 +182,15 @@ const Navbar = () => {
                           sounds.playPop();
                           setHeroMediaType('video');
                         }}
-                        className={`px-2.5 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                        className={`px-2 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                           heroMediaType === 'video'
                             ? 'bg-white text-brand-purple shadow-sm'
                             : 'text-white/85 hover:text-white'
                         }`}
-                        title="Video Header Mode (Interactive stop-scroll)"
+                        title="Video Header Mode"
                       >
                         <Video className="w-3.5 h-3.5" />
-                        <span>Video</span>
+                        <span className="hidden sm:inline">Video</span>
                       </button>
                     </motion.div>
                   )}
@@ -276,7 +276,7 @@ const Navbar = () => {
                 ) : (
                   <button
                     onClick={openSignUp}
-                    className={`font-display font-black text-xs sm:text-sm px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+                    className={`hidden md:inline-block font-display font-black text-xs sm:text-sm px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
                       isTransparent ? 'text-white hover:text-yellow-200' : 'text-neutral-700 hover:text-brand-purple'
                     }`}
                   >

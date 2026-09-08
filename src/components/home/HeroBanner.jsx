@@ -213,14 +213,14 @@ const HeroBanner = () => {
       {/* ================= CONDITIONAL HERO HEADER: IMAGE (NO STOPSCROLL) vs VIDEO (STOPSCROLL) ================= */}
       {heroMediaType === 'image' ? (
         /* STATIC IMAGE HERO SECTION (100% Free Scroll, ZERO Stop-Scroll Pinning, Edge-to-Edge Full Layout) */
-        <div className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
+        <div className="relative w-full h-[62vh] min-h-[440px] max-h-[580px] md:h-screen md:min-h-[600px] md:max-h-none flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
           
-          {/* Edge-to-Edge Hero Artwork Image (Fills the entire purple layout, NO inner box) */}
+          {/* Edge-to-Edge Hero Artwork Image (Fills the entire purple layout, NO inner box or letterbox slivers) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
             <img
               src="/images/lingo_hero_exact.jpg"
               alt="Lingo Toon - Learn. Play. Explore."
-              className="w-full h-full object-contain md:object-cover object-center select-none pointer-events-none"
+              className="w-full h-full object-cover object-center select-none pointer-events-none"
             />
             {/* Subtle ambient lighting vignette */}
             <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/15 pointer-events-none" />
@@ -263,7 +263,7 @@ const HeroBanner = () => {
           <div className="relative z-10 flex-1 flex items-center justify-center pointer-events-none" />
 
           {/* Bottom Gentle Explore Button */}
-          <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-2">
+          <div className="relative z-30 pb-16 sm:pb-9 flex flex-col items-center gap-2">
             <motion.button
               onClick={scrollToContent}
               initial={{ opacity: 0, y: 10 }}
@@ -296,7 +296,7 @@ const HeroBanner = () => {
         /* ================= SINGLE-SCROLL 60FPS VIDEO ANIMATION SECTION ================= */
         <div 
           ref={trackRef} 
-          className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]"
+          className="relative w-full h-[62vh] min-h-[440px] max-h-[580px] md:h-screen md:min-h-[600px] md:max-h-none flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]"
         >
           
           {/* Hardware-Accelerated 60FPS Native Video (Optimized WebM + Fastdecode MP4 for Lite Devices) */}
@@ -308,7 +308,7 @@ const HeroBanner = () => {
               preload="auto"
               disablePictureInPicture
               disableRemotePlayback
-              className="w-full h-full object-contain md:object-cover object-center transform-gpu will-change-transform"
+              className="w-full h-full object-cover object-center transform-gpu will-change-transform"
               style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
             >
               <source src="/videos/lingotoon_animated_logo.webm" type="video/webm" />
@@ -356,17 +356,17 @@ const HeroBanner = () => {
           <div className="w-full h-20 relative z-10 pointer-events-none" />
 
           {/* Center Interactive Anchor / Play Indicator */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none">
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-4">
             {!hasStarted && (
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: [0, 4, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="px-5 py-2.5 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl pointer-events-none select-none"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/30 text-white font-display font-bold text-xs sm:text-base flex items-center gap-2 sm:gap-2.5 shadow-xl pointer-events-none select-none text-center"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-400 animate-ping shrink-0" />
                 <span>Scroll down to play intro</span>
-                <ArrowDown className="w-4 h-4 text-amber-300 ml-0.5 animate-bounce" />
+                <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 ml-0.5 animate-bounce shrink-0" />
               </motion.div>
             )}
 
@@ -374,16 +374,16 @@ const HeroBanner = () => {
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="px-4 py-2 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg pointer-events-none"
+                className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/30 text-white font-display font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg pointer-events-none text-center max-w-[90vw]"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 <span>Playing intro... (scroll unlocks when finished)</span>
               </motion.div>
             )}
           </div>
 
           {/* Bottom Controls Bar: Audio Mute, Replay, and Explore Button */}
-          <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-3 w-full px-4">
+          <div className="relative z-30 pb-16 sm:pb-9 flex flex-col items-center gap-2.5 sm:gap-3 w-full px-4">
             
             {/* Utility Row: Sound toggle & Replay */}
             <div className="flex items-center gap-2.5 pointer-events-auto">

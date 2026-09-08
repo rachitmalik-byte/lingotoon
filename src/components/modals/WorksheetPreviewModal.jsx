@@ -53,9 +53,10 @@ const WorksheetPreviewModal = ({ isOpen, onClose }) => {
               alt="Workbook preview" 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-              <span className="text-white text-xs font-bold bg-brand-orange px-2.5 py-1 rounded-full">
-                Pack #1: Alphabet Safari & Tracing
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent flex items-end p-4">
+              <span className="text-white text-xs font-bold bg-brand-orange px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Official 10-Page Student Workbook (PDF)</span>
               </span>
             </div>
           </div>
@@ -63,26 +64,32 @@ const WorksheetPreviewModal = ({ isOpen, onClose }) => {
           <div className="space-y-2 text-neutral-600 text-xs sm:text-sm">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-brand-green shrink-0" />
-              <span>Includes 12 wipe-clean reusable letter tracing sheets</span>
+              <span>10 complete pages of phonics, letter tracing & vocabulary puzzles</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-brand-green shrink-0" />
-              <span>Full sheet of colorful rewards and completion stars</span>
+              <span>Printable at home on any standard A4 or Letter printer</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-brand-green shrink-0" />
+              <span>Includes star reward tracker and fun coloring challenges</span>
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <button
+            <a
+              href="/downloads/LingoToon_Activity_Workbook.pdf"
+              download="LingoToon_Activity_Workbook.pdf"
               onClick={handleDownload}
-              className="flex-1 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-display font-bold text-sm rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-display font-bold text-sm rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-center cursor-pointer"
             >
               <Download className="w-4 h-4" />
-              <span>{downloaded ? 'Sample Saved! 🎉' : 'Download Sample Sheet'}</span>
-            </button>
+              <span>{downloaded ? 'Downloading Workbook... 🎉' : 'Download Free Workbook (PDF)'}</span>
+            </a>
             <button
               onClick={() => { sounds.playPop(); onClose(); }}
-              className="py-3.5 px-6 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-display font-bold text-sm rounded-full transition-colors"
+              className="py-3.5 px-6 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-display font-bold text-sm rounded-full transition-colors cursor-pointer"
             >
               Close
             </button>
