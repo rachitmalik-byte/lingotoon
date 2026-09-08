@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const DeveloperContext = createContext(null);
-const STORAGE_KEY = 'lingotoon_developer_settings_v1';
+const STORAGE_KEY = 'lingotoon_developer_settings_v2';
 
 const defaultSettings = {
   announcementBanner: {
@@ -17,7 +17,7 @@ const defaultSettings = {
   strictKidSafety: true,
   easterEggSensitivity: 'normal',
   stopScrollTrackHeight: '200vh',
-  heroMediaType: 'image' // 'image' by default as requested, toggleable to 'video'
+  heroMediaType: 'video' // 'video' by default, toggleable to 'image'
 };
 
 export const DeveloperProvider = ({ children }) => {
@@ -29,7 +29,7 @@ export const DeveloperProvider = ({ children }) => {
         return {
           ...defaultSettings,
           ...parsed,
-          heroMediaType: parsed.heroMediaType || 'image'
+          heroMediaType: parsed.heroMediaType || 'video'
         };
       }
       return defaultSettings;
@@ -94,7 +94,7 @@ export const DeveloperProvider = ({ children }) => {
   return (
     <DeveloperContext.Provider value={{
       settings,
-      heroMediaType: settings.heroMediaType || 'image',
+      heroMediaType: settings.heroMediaType || 'video',
       setHeroMediaType: (mode) => updateSetting('heroMediaType', mode),
       updateSetting,
       updateAnnouncement,
