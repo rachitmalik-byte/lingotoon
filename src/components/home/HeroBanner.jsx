@@ -7,13 +7,17 @@ const HeroBanner = () => {
   const trackRef = useRef(null);
   const videoRef = useRef(null);
   const [videoDuration, setVideoDuration] = useState(0);
+  const targetTimeRef = useRef(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Initialize and pause the video so scroll exclusively drives progress
+  // Initialize video and load metadata
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     video.pause();
+    video.muted = true;
+    video.playsInline = true;
 
     const handleLoadedMetadata = () => {
       if (video.duration && !isNaN(video.duration)) {
@@ -22,51 +26,118 @@ const HeroBanner = () => {
     };
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('canplay', handleLoadedMetadata);
+
     if (video.readyState >= 1 && video.duration) {
       setVideoDuration(video.duration);
+    } else {
+      video.load();
     }
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('canplay', handleLoadedMetadata);
     };
   }, []);
 
-  // Frame-by-frame scrub tied directly to scroll progress
+  // Continuous Silky-Smooth Hardware-Accelerated Playback Engine
   useEffect(() => {
     const track = trackRef.current;
     const video = videoRef.current;
     if (!track || !video) return;
 
     let rafId = null;
+    let isVisible = true;
 
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        const rect = track.getBoundingClientRect();
-        const totalScrollable = rect.height - window.innerHeight;
-        if (totalScrollable <= 0) return;
-
-        // Progress from 0.0 (top) to 1.0 (end of video scroll track)
-        const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-
-        const duration = video.duration || videoDuration;
-        if (duration && isFinite(duration)) {
-          const targetTime = progress * duration;
-          // Apply currentTime smoothly without jitter
-          if (Math.abs(video.currentTime - targetTime) > 0.02) {
-            video.currentTime = targetTime;
-          }
+    // Only run when hero is near or inside the viewport to conserve resources
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (!isVisible && !video.paused) {
+          video.pause();
         }
-      });
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(track);
+
+    // Scroll listener updates the target playback time with sub-pixel precision
+    const onScroll = () => {
+      const rect = track.getBoundingClientRect();
+      const totalScrollable = rect.height - window.innerHeight;
+      if (totalScrollable <= 0) return;
+
+      const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
+      setScrollProgress(progress);
+
+      const duration = video.duration || videoDuration || 10;
+      // Target time clamped just shy of end to avoid browser 'ended' event freeze
+      targetTimeRef.current = progress * Math.max(0, duration - 0.05);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    // Continuous 60 FPS animation loop that uses native video.play() and adaptive playbackRate
+    const renderLoop = () => {
+      const hasMetadata = video && (video.readyState >= 1 || (video.duration && !isNaN(video.duration)));
+      if (isVisible && hasMetadata) {
+        const targetTime = targetTimeRef.current;
+        const currentTime = video.currentTime;
+        const diff = targetTime - currentTime;
+
+        // SCENARIO 1: FORWARD SCROLL - Native 60 FPS Hardware Playback
+        if (diff > 0.035) {
+          if (diff > 1.8) {
+            // Extreme scroll jumps (e.g. scrollbar drag or anchor click)
+            video.currentTime = targetTime;
+          } else {
+            // Unpause and let the browser's hardware video decoder play sequentially
+            if (video.paused) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(() => {});
+              }
+            }
+
+            // Dynamically modulate playbackRate to smoothly track scroll velocity
+            // Small delta: 0.8x-1.0x (gentle, natural); Large delta: up to 2.8x (smooth catch-up)
+            const adaptiveRate = Math.min(Math.max(0.7 + diff * 1.6, 0.7), 2.8);
+            video.playbackRate = adaptiveRate;
+          }
+        }
+        // SCENARIO 2: BACKWARD SCROLL - Smooth Damped Step
+        else if (diff < -0.055) {
+          if (!video.paused) {
+            video.pause();
+          }
+
+          if (!video.seeking) {
+            if (diff < -1.8) {
+              video.currentTime = targetTime;
+            } else {
+              // Smooth reverse ease without locking the decoder
+              video.currentTime = Math.max(0, currentTime + diff * 0.35);
+            }
+          }
+        }
+        // SCENARIO 3: AT TARGET REST POSITION - Clean Settle
+        else {
+          if (!video.paused) {
+            video.pause();
+          }
+        }
+      }
+
+      rafId = requestAnimationFrame(renderLoop);
+    };
+
+    rafId = requestAnimationFrame(renderLoop);
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (rafId) cancelAnimationFrame(rafId);
+      observer.disconnect();
     };
   }, [videoDuration]);
 
@@ -79,8 +150,8 @@ const HeroBanner = () => {
 
   return (
     <div className="relative w-full select-none bg-[#591ac0]">
-      {/* ================= STOP-SCROLL VIDEO SCRUB TRACK (220vh) ================= */}
-      <div ref={trackRef} className="relative w-full h-[220vh]">
+      {/* ================= STOP-SCROLL VIDEO SCRUB TRACK (250vh) ================= */}
+      <div ref={trackRef} className="relative w-full h-[250vh]">
         {/* Sticky Fullscreen Frame pinned while scrolling through track */}
         <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
           
@@ -93,6 +164,8 @@ const HeroBanner = () => {
               playsInline
               muted
               preload="auto"
+              disablePictureInPicture
+              disableRemotePlayback
               className="w-full h-full object-contain md:object-cover object-center"
             />
             {/* Subtle ambient lighting vignette */}
@@ -135,16 +208,26 @@ const HeroBanner = () => {
           {/* Center Interactive Anchor */}
           <div className="relative z-10 flex-1 flex items-center justify-center pointer-events-none" />
 
-          {/* Bottom Gentle Explore Button */}
+          {/* Bottom Gentle Explore Button & Interactive Scroll Indicator */}
           <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-2">
+            {scrollProgress < 0.1 && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: [0, 4, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/30 text-white font-display font-bold text-xs flex items-center gap-2 shadow-lg mb-1 pointer-events-none"
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <span>Scroll down to play animated intro</span>
+                <ArrowDown className="w-3.5 h-3.5 text-amber-300" />
+              </motion.div>
+            )}
+
             <motion.button
               onClick={scrollToContent}
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: [0, 6, 0] }}
-              transition={{ 
-                opacity: { delay: 0.4, duration: 0.5 },
-                y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-              }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
               className="px-6 py-2.5 clay-pill text-brand-purple font-display font-bold text-sm sm:text-base flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer pointer-events-auto"
             >
               <span>Explore Courses</span>
