@@ -5,8 +5,7 @@ export const achievements = [
     description: 'Complete your very first lesson',
     icon: '🎓',
     color: '#7C3AED',
-    unlocked: true,
-    unlockedAt: '2024-01-15',
+    unlocked: false,
   },
   {
     id: 'a2',
@@ -14,8 +13,7 @@ export const achievements = [
     description: 'Learn for 7 days in a row',
     icon: '🔥',
     color: '#F97316',
-    unlocked: true,
-    unlockedAt: '2024-01-22',
+    unlocked: false,
   },
   {
     id: 'a3',
@@ -23,8 +21,7 @@ export const achievements = [
     description: 'Build 50 words in Word Builder',
     icon: '⭐',
     color: '#FACC15',
-    unlocked: true,
-    unlockedAt: '2024-02-01',
+    unlocked: false,
   },
   {
     id: 'a4',

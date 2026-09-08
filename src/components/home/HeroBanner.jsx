@@ -22,7 +22,7 @@ const HeroBanner = () => {
             src="/images/lingo_hero_exact.jpg" 
             alt="LiNGO TOON Learning Adventure" 
             loading="eager"
-            fetchPriority="high"
+            fetchpriority="high"
             decoding="async"
             className="w-[125%] sm:w-full h-full object-contain md:object-cover object-center max-w-none md:max-w-none"
           />

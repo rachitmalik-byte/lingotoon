@@ -231,7 +231,7 @@ const Navbar = () => {
                       isTransparent ? 'text-white hover:text-yellow-200' : 'text-neutral-700 hover:text-brand-purple'
                     }`}
                   >
-                    Sign In
+                    Create ID
                   </button>
                 )}
 

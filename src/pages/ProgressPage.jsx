@@ -17,14 +17,18 @@ const ProgressPage = () => {
   const { user, progress } = useUser();
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  // When guest (no user logged in), do NOT show fake progress!
-  const lessonsCount = user ? (progress?.lessonsCompleted?.length || 12) : 0;
-  const videosCount = user ? (progress?.videosWatched?.length || 18) : 0;
-  const gamesCount = user ? (progress?.gamesPlayed || 8) : 0;
-  const currentStreak = user ? (userProgress?.currentStreak || 1) : 0;
-  const longestStreak = user ? (userProgress?.longestStreak || 1) : 0;
+  // When guest (no user logged in), strictly 0 progress!
+  const lessonsCount = user ? (progress?.lessonsCompleted?.length || 0) : 0;
+  const videosCount = user ? (progress?.videosWatched?.length || 0) : 0;
+  const gamesCount = user ? (progress?.gamesPlayed || 0) : 0;
+  const currentStreak = user ? (progress?.currentStreak || 0) : 0;
+  const longestStreak = user ? (progress?.longestStreak || 0) : 0;
 
-  const levels = user ? (userProgress?.levelProgression || [
+  const mathSkill = user ? (progress?.subjectSkills?.math || 0) : 0;
+  const scienceSkill = user ? (progress?.subjectSkills?.science || 0) : 0;
+  const englishSkill = user ? (progress?.subjectSkills?.english || 0) : 0;
+
+  const levels = user ? (progress?.levelProgression || [
     { id: 1, level: 1, title: 'Beginner Explorer', status: 'completed', xp: 500 },
     { id: 2, level: 2, title: 'Curious Learner', status: 'current', xp: 1200 },
     { id: 3, level: 3, title: 'Knowledge Seeker', status: 'locked', xp: 2500 },
@@ -36,15 +40,15 @@ const ProgressPage = () => {
     { id: 4, level: 4, title: 'Brainiac Buddy', status: 'locked', xp: 2500 },
   ];
 
-  const weeklyData = user ? [
-    { day: 'Mon', mins: 25 },
-    { day: 'Tue', mins: 40 },
-    { day: 'Wed', mins: 15 },
-    { day: 'Thu', mins: 45 },
-    { day: 'Fri', mins: 30 },
-    { day: 'Sat', mins: 60, current: true },
+  const weeklyData = user ? (progress?.weeklyActivity || [
+    { day: 'Mon', mins: 0 },
+    { day: 'Tue', mins: 0 },
+    { day: 'Wed', mins: 0 },
+    { day: 'Thu', mins: 0 },
+    { day: 'Fri', mins: 0 },
+    { day: 'Sat', mins: 0, current: true },
     { day: 'Sun', mins: 0 },
-  ] : [
+  ]) : [
     { day: 'Mon', mins: 0 },
     { day: 'Tue', mins: 0 },
     { day: 'Wed', mins: 0 },
@@ -60,29 +64,56 @@ const ProgressPage = () => {
       <div className="flex flex-col md:flex-row items-center justify-between mb-12 bg-brand-lavender p-8 rounded-[2.5rem]">
         <div>
           <h1 className="font-display text-4xl md:text-5xl text-brand-purple-dark mb-2">My Learning Journey</h1>
-          <p className="font-body text-xl text-brand-purple">You're doing amazing, keep it up!</p>
+          <p className="font-body text-xl text-brand-purple">
+            {user ? `Welcome back, ${user.name}! Keep crushing your quests.` : "Welcome! Create a local profile to start tracking your skills."}
+          </p>
         </div>
         <LingoCharacter pose="celebrate" size="md" className="hidden md:block w-32 -mt-10" />
       </div>
 
-      {/* Guest Explorer Welcome Banner */}
-      {!user && (
+      {/* Guest Explorer Welcome Banner / Active Profile Bar */}
+      {!user ? (
         <div className="bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#4F46E5] rounded-[2rem] p-6 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 border-2 border-white/20">
           <div className="space-y-1.5 text-center sm:text-left">
             <div className="inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-xs font-display font-black">
               <Sparkles className="w-3.5 h-3.5 text-brand-yellow" />
-              <span>Guest Explorer Mode</span>
+              <span>Guest Mode (No Profile Created)</span>
             </div>
-            <h3 className="font-display font-black text-xl sm:text-2xl">Create your profile to save progress!</h3>
+            <h3 className="font-display font-black text-xl sm:text-2xl">Create a Local ID to track progress & unlock badges!</h3>
             <p className="text-xs sm:text-sm text-white/85 max-w-lg font-body">
-              Track your completed quests, keep your learning streak on fire, and collect shining achievement badges.
+              All progress will be saved in your browser cache. You can test fresh from 0% or load sample tester presets.
             </p>
           </div>
           <button
             onClick={() => { sounds.playPop(); setAuthModalOpen(true); }}
             className="px-6 py-3 rounded-full bg-[#FFD53D] hover:bg-yellow-400 text-neutral-900 font-display font-black text-sm shadow-md transform hover:scale-105 active:scale-95 transition-all whitespace-nowrap cursor-pointer shrink-0"
           >
-            Sign In / Join Club
+            Create Local ID Now
+          </button>
+        </div>
+      ) : (
+        <div className="bg-emerald-50 rounded-[2rem] p-5 text-emerald-950 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 border border-emerald-200">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-200 flex items-center justify-center text-2xl shadow-xs">
+              {user.avatar}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-display font-black text-lg text-emerald-950">{user.name}</span>
+                <span className="text-[11px] font-display font-black px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-900">
+                  Level {user.level} {user.levelTitle}
+                </span>
+              </div>
+              <p className="text-xs text-emerald-700 font-body">
+                Local ID Active • Data cached in browser localStorage
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => { sounds.playPop(); setAuthModalOpen(true); }}
+            className="px-5 py-2 rounded-full bg-white hover:bg-neutral-50 text-neutral-800 font-display font-bold text-xs border border-emerald-300 shadow-xs transition-all cursor-pointer shrink-0"
+          >
+            Manage ID & Cache
           </button>
         </div>
       )}
@@ -170,42 +201,61 @@ const ProgressPage = () => {
 
           {/* Subject Progress */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-card">
-            <h3 className="font-display text-2xl text-brand-purple-dark mb-6">Subject Skills</h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-display text-2xl text-brand-purple-dark">Subject Skills</h3>
+              <span className={`text-xs font-display font-bold px-3 py-1 rounded-full ${user ? 'bg-purple-100 text-brand-purple' : 'bg-neutral-100 text-neutral-500'}`}>
+                {user ? `${user.name}'s Tracked Skills` : 'Guest Mode (0%)'}
+              </span>
+            </div>
             <div className="space-y-6">
               <div>
                 <div className="flex justify-between font-body font-bold mb-2">
                   <span className="text-brand-blue">Math</span>
-                  <span className="text-neutral-600">85%</span>
+                  <span className="text-neutral-600">{mathSkill}%</span>
                 </div>
-                <ProgressBar progress={85} color="#3B82F6" height="h-3" />
+                <ProgressBar progress={mathSkill} color="#3B82F6" height="h-3" />
               </div>
               <div>
                 <div className="flex justify-between font-body font-bold mb-2">
                   <span className="text-brand-green">Science</span>
-                  <span className="text-neutral-600">60%</span>
+                  <span className="text-neutral-600">{scienceSkill}%</span>
                 </div>
-                <ProgressBar progress={60} color="#22C55E" height="h-3" />
+                <ProgressBar progress={scienceSkill} color="#22C55E" height="h-3" />
               </div>
               <div>
                 <div className="flex justify-between font-body font-bold mb-2">
                   <span className="text-brand-purple">English</span>
-                  <span className="text-neutral-600">40%</span>
+                  <span className="text-neutral-600">{englishSkill}%</span>
                 </div>
-                <ProgressBar progress={40} color="#7C3AED" height="h-3" />
+                <ProgressBar progress={englishSkill} color="#7C3AED" height="h-3" />
               </div>
             </div>
           </div>
 
           {/* Achievements */}
           <div>
-            <h3 className="font-display text-2xl text-brand-purple-dark mb-6 flex items-center gap-2">
-              <Trophy className="w-6 h-6 text-brand-yellow" />
-              Recent Badges
-            </h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-display text-2xl text-brand-purple-dark flex items-center gap-2">
+                <Trophy className="w-6 h-6 text-brand-yellow" />
+                Recent Badges
+              </h3>
+              <span className="text-xs text-neutral-500 font-display font-bold">
+                {user ? `${(progress?.unlockedAchievements || []).length} / ${(achievements || []).length} Unlocked` : 'All Locked (Guest Mode)'}
+              </span>
+            </div>
             <div className="flex flex-wrap gap-4">
-              {(achievements || []).slice(0, 4).map(ach => (
-                <AchievementBadge key={ach.id} achievement={ach} />
-              ))}
+              {(achievements || []).slice(0, 4).map(ach => {
+                const isUnlocked = user ? (progress?.unlockedAchievements || []).includes(ach.id) : false;
+                return (
+                  <AchievementBadge 
+                    key={ach.id} 
+                    achievement={{
+                      ...ach,
+                      unlocked: isUnlocked
+                    }} 
+                  />
+                );
+              })}
             </div>
           </div>
 
