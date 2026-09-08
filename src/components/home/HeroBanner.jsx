@@ -156,26 +156,18 @@ const HeroBanner = () => {
     <div className="relative w-full select-none bg-[#591ac0]">
       {/* ================= CONDITIONAL HERO HEADER: IMAGE (NO STOPSCROLL) vs VIDEO (STOPSCROLL) ================= */}
       {heroMediaType === 'image' ? (
-        /* STATIC IMAGE HERO SECTION (100% Free Scroll, ZERO Stop-Scroll Pinning) */
-        <div className="relative w-full min-h-[500px] sm:min-h-[560px] lg:min-h-[620px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
+        /* STATIC IMAGE HERO SECTION (100% Free Scroll, ZERO Stop-Scroll Pinning, Edge-to-Edge Full Layout) */
+        <div className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
           
-          {/* Top Spacer for floating transparent navbar */}
-          <div className="w-full h-24 sm:h-28 relative z-10 pointer-events-none" />
-
-          {/* Center Vibrant Hero Artwork Image */}
-          <div className="relative z-10 w-full max-w-5xl px-4 flex items-center justify-center my-auto">
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="relative w-full flex items-center justify-center"
-            >
-              <img
-                src="/images/lingo_hero_exact.jpg"
-                alt="Lingo Toon - Learn. Play. Explore."
-                className="w-full max-w-4xl max-h-[440px] sm:max-h-[500px] object-contain object-center drop-shadow-[0_20px_45px_rgba(0,0,0,0.35)] pointer-events-none select-none rounded-3xl"
-              />
-            </motion.div>
+          {/* Edge-to-Edge Hero Artwork Image (Fills the entire purple layout, NO inner box) */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
+            <img
+              src="/images/lingo_hero_exact.jpg"
+              alt="Lingo Toon - Learn. Play. Explore."
+              className="w-full h-full object-contain md:object-cover object-center select-none pointer-events-none"
+            />
+            {/* Subtle ambient lighting vignette */}
+            <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/15 pointer-events-none" />
           </div>
 
           {/* Floating Twinkling Star Sparkles */}
@@ -207,6 +199,12 @@ const HeroBanner = () => {
           >
             ✦
           </motion.div>
+
+          {/* Top Spacer for floating transparent navbar */}
+          <div className="w-full h-20 relative z-10 pointer-events-none" />
+
+          {/* Center Interactive Anchor */}
+          <div className="relative z-10 flex-1 flex items-center justify-center pointer-events-none" />
 
           {/* Bottom Gentle Explore Button */}
           <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-2">
