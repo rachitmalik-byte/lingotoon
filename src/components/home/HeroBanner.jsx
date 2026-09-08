@@ -31,14 +31,6 @@ const HeroBanner = () => {
       setIsEnded(true);
       isEndedRef.current = true;
       document.body.style.overflow = '';
-      
-      // Gentle auto-scroll to courses section once video finishes
-      setTimeout(() => {
-        const el = document.getElementById('explore-section');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 700);
     };
 
     const handlePlay = () => setIsPlaying(true);
@@ -149,12 +141,13 @@ const HeroBanner = () => {
     setIsMuted(nextMute);
   };
 
-  // Single-scroll listener: activates on first wheel, touch, or scroll
+  // Single-scroll listener: activates ONLY on scroll (no click)
   useEffect(() => {
     if (heroMediaType !== 'video') return;
 
     const handleWheel = (e) => {
       if (e.deltaY > 0 && !hasStartedRef.current && window.scrollY < 80) {
+        e.preventDefault();
         startPlayback();
       }
     };
@@ -165,13 +158,14 @@ const HeroBanner = () => {
     };
     const handleTouchMove = (e) => {
       const deltaY = touchStartY - e.touches[0].clientY;
-      if (deltaY > 15 && !hasStartedRef.current && window.scrollY < 80) {
+      if (deltaY > 10 && !hasStartedRef.current && window.scrollY < 80) {
+        if (e.cancelable) e.preventDefault();
         startPlayback();
       }
     };
 
     const handleScroll = () => {
-      if (window.scrollY > 15 && !hasStartedRef.current) {
+      if (window.scrollY > 10 && !hasStartedRef.current) {
         startPlayback();
       }
       if (window.scrollY === 0 && isEndedRef.current) {
@@ -185,9 +179,9 @@ const HeroBanner = () => {
       }
     };
 
-    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
@@ -302,8 +296,7 @@ const HeroBanner = () => {
         /* ================= SINGLE-SCROLL 60FPS VIDEO ANIMATION SECTION ================= */
         <div 
           ref={trackRef} 
-          onClick={!isPlaying ? startPlayback : undefined}
-          className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0] cursor-pointer"
+          className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]"
         >
           
           {/* Hardware-Accelerated 60FPS Native Video (Optimized WebM + Fastdecode MP4 for Lite Devices) */}
@@ -366,15 +359,14 @@ const HeroBanner = () => {
           <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none">
             {!hasStarted && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: [0.98, 1.02, 0.98] }}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: [0, 4, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="px-5 py-2.5 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl pointer-events-auto cursor-pointer transition-transform hover:scale-105"
-                onClick={startPlayback}
+                className="px-5 py-2.5 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl pointer-events-none select-none"
               >
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                <span>Scroll or click to play intro</span>
-                <Play className="w-4 h-4 fill-amber-300 text-amber-300 ml-0.5" />
+                <span>Scroll down to play intro</span>
+                <ArrowDown className="w-4 h-4 text-amber-300 ml-0.5 animate-bounce" />
               </motion.div>
             )}
 
