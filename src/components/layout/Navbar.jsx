@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShieldAlert, X, Sparkles, Menu, Compass, Lock, User } from 'lucide-react';
+import { Search, ShieldAlert, X, Sparkles, Menu, Compass, Lock, User, Image, Video } from 'lucide-react';
 import Avatar from '../ui/Avatar';
 import Logo from '../ui/Logo';
 import { useUser } from '../../context/UserContext';
+import { useDeveloper } from '../../context/DeveloperContext';
 import { sounds } from '../../utils/soundEffects';
 import AuthModal from '../modals/AuthModal';
 import SearchModal from '../modals/SearchModal';
@@ -12,6 +13,7 @@ import EasterEggModal from '../interactive/EasterEggModal';
 
 const Navbar = () => {
   const { user } = useUser();
+  const { heroMediaType, setHeroMediaType } = useDeveloper();
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === '/';
@@ -128,25 +130,72 @@ const Navbar = () => {
           >
             <div className="flex items-center justify-between pointer-events-auto">
               
-              {/* LOGO with 5-Tap Easter Egg Trigger */}
-              <Link 
-                to="/" 
-                onClick={handleLogoClick}
-                className="flex items-center group relative z-10 shrink-0 cursor-pointer"
-                title="LiNGO TOON (Tap 5 times for a surprise!)"
-              >
-                <motion.div 
-                  layout
-                  transition={{ layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
-                  className={`transform transition-transform duration-500 ease-out ${
-                    scrolled 
-                      ? '-my-1 sm:-my-3 scale-100 sm:scale-110 drop-shadow-md group-hover:scale-115 active:scale-90' 
-                      : 'scale-100 group-hover:scale-105 active:scale-95'
-                  }`}
+              {/* LEFT: LOGO + HERO HEADER MEDIA TOGGLE (Top of page only) */}
+              <div className="flex items-center gap-2 sm:gap-3.5">
+                <Link 
+                  to="/" 
+                  onClick={handleLogoClick}
+                  className="flex items-center group relative z-10 shrink-0 cursor-pointer"
+                  title="LiNGO TOON (Tap 5 times for a surprise!)"
                 >
-                  <Logo size={scrolled ? 'sm' : 'md'} />
-                </motion.div>
-              </Link>
+                  <motion.div 
+                    layout
+                    transition={{ layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }}
+                    className={`transform transition-transform duration-500 ease-out ${
+                      scrolled 
+                        ? '-my-1 sm:-my-3 scale-100 sm:scale-110 drop-shadow-md group-hover:scale-115 active:scale-90' 
+                        : 'scale-100 group-hover:scale-105 active:scale-95'
+                    }`}
+                  >
+                    <Logo size={scrolled ? 'sm' : 'md'} />
+                  </motion.div>
+                </Link>
+
+                {/* Hero Header Mode Toggle: ONLY visible at top of page (when navbar is not compressed) */}
+                <AnimatePresence>
+                  {isTransparent && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.85, x: -10 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.85, x: -10 }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                      className="flex items-center p-0.5 sm:p-1 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 shadow-sm"
+                    >
+                      <button
+                        onClick={() => {
+                          sounds.playPop();
+                          setHeroMediaType('image');
+                        }}
+                        className={`px-2.5 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                          heroMediaType === 'image'
+                            ? 'bg-white text-brand-purple shadow-sm'
+                            : 'text-white/85 hover:text-white'
+                        }`}
+                        title="Image Header Mode (Clean, fast, no stop-scroll)"
+                      >
+                        <Image className="w-3.5 h-3.5" />
+                        <span>Image</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          sounds.playPop();
+                          setHeroMediaType('video');
+                        }}
+                        className={`px-2.5 sm:px-3 py-1 rounded-full font-display font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                          heroMediaType === 'video'
+                            ? 'bg-white text-brand-purple shadow-sm'
+                            : 'text-white/85 hover:text-white'
+                        }`}
+                        title="Video Header Mode (Interactive stop-scroll)"
+                      >
+                        <Video className="w-3.5 h-3.5" />
+                        <span>Video</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* CENTER NAVIGATION LINKS (Uncongested, breathable spacing) */}
               <nav className="hidden md:flex items-center gap-7 lg:gap-9">

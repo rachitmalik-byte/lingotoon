@@ -16,14 +16,23 @@ const defaultSettings = {
   maintenanceMode: false,
   strictKidSafety: true,
   easterEggSensitivity: 'normal',
-  stopScrollTrackHeight: '200vh'
+  stopScrollTrackHeight: '200vh',
+  heroMediaType: 'image' // 'image' by default as requested, toggleable to 'video'
 };
 
 export const DeveloperProvider = ({ children }) => {
   const [settings, setSettings] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return {
+          ...defaultSettings,
+          ...parsed,
+          heroMediaType: parsed.heroMediaType || 'image'
+        };
+      }
+      return defaultSettings;
     } catch {
       return defaultSettings;
     }
@@ -85,6 +94,8 @@ export const DeveloperProvider = ({ children }) => {
   return (
     <DeveloperContext.Provider value={{
       settings,
+      heroMediaType: settings.heroMediaType || 'image',
+      setHeroMediaType: (mode) => updateSetting('heroMediaType', mode),
       updateSetting,
       updateAnnouncement,
       telemetryLogs,
