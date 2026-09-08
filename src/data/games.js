@@ -89,6 +89,36 @@ export const games = [
     featured: true,
     playable: true,
   },
+  {
+    id: 'missing-letter',
+    aliasId: 'g7',
+    title: 'Missing Letter Safari',
+    description: 'Fill in the missing letter in the animal & object words to complete the safari album!',
+    subject: 'English',
+    difficulty: 'Easy',
+    playTime: '3 min',
+    color: 'emerald',
+    bgColor: '#D1FAE5',
+    accentColor: '#10B981',
+    image: '/images/game_word_builder.jpg',
+    featured: false,
+    playable: true,
+  },
+  {
+    id: 'rhyme-match',
+    aliasId: 'g8',
+    title: 'Rhyme Time Magic',
+    description: 'Discover and match delightful rhyming word pairs to unlock secret wizard spells!',
+    subject: 'English & Phonics',
+    difficulty: 'Medium',
+    playTime: '4 min',
+    color: 'pink',
+    bgColor: '#FCE7F3',
+    accentColor: '#EC4899',
+    image: '/images/game_math_match.jpg',
+    featured: false,
+    playable: true,
+  },
 ];
 
 // 1. Word Builder Levels
@@ -146,3 +176,24 @@ export const patternColors = [
 
 // 6. Alphabet Stepping Stones
 export const alphabetPath = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+// 7. Missing Letter Safari Levels
+export const missingLetterLevels = [
+  { word: 'L_ON', target: 'I', fullWord: 'LION', hint: 'The roaring king of the safari', choices: ['I', 'O', 'E', 'A'] },
+  { word: 'A_PLE', target: 'P', fullWord: 'APPLE', hint: 'A sweet crunchy red fruit', choices: ['P', 'B', 'D', 'T'] },
+  { word: 'R_CKET', target: 'O', fullWord: 'ROCKET', hint: 'Zooms high up into outer space', choices: ['O', 'U', 'A', 'E'] },
+  { word: 'D_CK', target: 'U', fullWord: 'DUCK', hint: 'Swims on the lake and says quack', choices: ['U', 'O', 'A', 'I'] },
+  { word: 'Z_BRA', target: 'E', fullWord: 'ZEBRA', hint: 'Gallops across plains in black & white stripes', choices: ['E', 'A', 'O', 'I'] },
+];
+
+// 8. Rhyme Time Magic Pairs
+export const rhymePairs = [
+  { id: 1, pairId: 'r1', word: 'CAT', rhyme: 'HAT', category: 'at' },
+  { id: 2, pairId: 'r1', word: 'HAT', rhyme: 'CAT', category: 'at' },
+  { id: 3, pairId: 'r2', word: 'FROG', rhyme: 'LOG', category: 'og' },
+  { id: 4, pairId: 'r2', word: 'LOG', rhyme: 'FROG', category: 'og' },
+  { id: 5, pairId: 'r3', word: 'STAR', rhyme: 'CAR', category: 'ar' },
+  { id: 6, pairId: 'r3', word: 'CAR', rhyme: 'STAR', category: 'ar' },
+  { id: 7, pairId: 'r4', word: 'SUN', rhyme: 'RUN', category: 'un' },
+  { id: 8, pairId: 'r4', word: 'RUN', rhyme: 'SUN', category: 'un' },
+];

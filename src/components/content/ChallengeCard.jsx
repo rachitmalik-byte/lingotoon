@@ -63,25 +63,25 @@ const ChallengeCard = ({ challenge }) => {
     <motion.div 
       whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 350, damping: 24 }}
-      className="w-full bg-gradient-to-br from-[#FFFDF9] via-[#FFF9EE] to-[#FFF2DA] rounded-[3.2rem] p-7 sm:p-11 shadow-[0_20px_55px_rgba(245,158,11,0.18)] border-2 border-amber-300/70 relative overflow-hidden select-none"
+      className="w-full bg-gradient-to-br from-[#FF9F0A] via-[#FF5E00] to-[#E02424] rounded-[3.2rem] p-7 sm:p-11 shadow-[0_24px_60px_rgba(255,94,0,0.38)] border-4 border-amber-300 relative overflow-hidden select-none"
     >
       {/* Radiant Fluid Background Accents */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-300/35 via-orange-200/25 to-transparent rounded-full blur-3xl pointer-events-none -translate-y-1/3 translate-x-1/4" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-yellow-300/25 via-amber-200/20 to-transparent rounded-full blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/4" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300/30 rounded-full blur-3xl pointer-events-none -translate-y-1/3 translate-x-1/4" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-600/25 rounded-full blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/4" />
 
       {/* Floating Sparkle Micro-accents */}
-      <div className="absolute top-8 right-12 text-amber-400/60 font-black text-xl pointer-events-none">✦</div>
-      <div className="absolute bottom-10 right-28 text-orange-400/50 font-black text-sm pointer-events-none">✦</div>
-      <div className="absolute top-1/2 left-8 text-yellow-500/50 font-black text-base pointer-events-none">✦</div>
+      <div className="absolute top-8 right-12 text-yellow-200 font-black text-2xl pointer-events-none drop-shadow">✦</div>
+      <div className="absolute bottom-10 right-28 text-yellow-300/80 font-black text-lg pointer-events-none drop-shadow">✦</div>
+      <div className="absolute top-1/2 left-8 text-amber-200/80 font-black text-xl pointer-events-none drop-shadow">✦</div>
 
       <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 relative z-10">
         
         {/* Mascot Golden Halo Display (Zero Emojis) */}
         <div className="w-40 h-40 sm:w-48 sm:h-48 flex-shrink-0 relative">
           {/* Pulsing Ambient Halo */}
-          <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-tr from-amber-400 via-orange-400 to-yellow-300 blur-lg opacity-40 animate-pulse" />
+          <div className="absolute inset-0 rounded-[3rem] bg-yellow-300 blur-xl opacity-60 animate-pulse" />
           
-          <div className="w-full h-full rounded-[2.8rem] overflow-hidden bg-gradient-to-tr from-amber-300 via-orange-300 to-yellow-200 p-2 shadow-xl border-4 border-white relative">
+          <div className="w-full h-full rounded-[2.8rem] overflow-hidden bg-white p-2.5 shadow-2xl border-4 border-amber-300 relative">
             <img 
               src="/images/mascot_lingo_hero.jpg" 
               alt="Lingo Quest Guide Mascot" 
@@ -91,9 +91,9 @@ const ChallengeCard = ({ challenge }) => {
 
           {/* Bespoke 3D Vector Golden Crown (Replaced Emoji) */}
           <motion.div 
-            animate={{ y: [0, -5, 0], rotate: [0, 3, -3, 0] }}
+            animate={{ y: [0, -6, 0], rotate: [0, 4, -4, 0] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-3 -right-3 w-13 h-13 rounded-full bg-white shadow-lg border-2 border-amber-300 flex items-center justify-center p-1.5"
+            className="absolute -top-3 -right-3 w-14 h-14 rounded-full bg-white shadow-2xl border-3 border-amber-400 flex items-center justify-center p-1.5 z-20"
             title="Golden Explorer Crown"
           >
             <GoldenCrownVector />
@@ -103,55 +103,55 @@ const ChallengeCard = ({ challenge }) => {
         {/* Challenge Content & Interactive Controls */}
         <div className="flex-1 w-full text-center lg:text-left space-y-5">
           <div>
-            <div className="inline-flex items-center gap-2 font-display text-xs font-black uppercase tracking-wider text-amber-900 bg-amber-200/70 border border-amber-300/80 px-4 py-1.5 rounded-full mb-3 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 fill-current" />
+            <div className="inline-flex items-center gap-2 font-display text-xs font-black uppercase tracking-wider text-amber-950 bg-amber-200 px-4 py-1.5 rounded-full mb-3 shadow-md border border-white/60">
+              <Sparkles className="w-3.5 h-3.5 text-amber-700 fill-current" />
               <span>Daily Golden Quest</span>
             </div>
             
-            <h3 className="font-display font-black text-3xl sm:text-4xl text-neutral-900 leading-tight tracking-tight">
+            <h3 className="font-display font-black text-3xl sm:text-5xl text-white leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
               {challenge.title}
             </h3>
             
-            <p className="font-body text-base sm:text-lg text-neutral-600 mt-1.5 max-w-xl font-medium">
+            <p className="font-body text-base sm:text-xl text-amber-100 mt-2 max-w-xl font-bold leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.25)]">
               {challenge.description}
             </p>
           </div>
 
-          {/* Clay Milestone Tracker Capsule */}
-          <div className="bg-white rounded-[2rem] p-5 border-2 border-amber-200/80 shadow-[0_12px_28px_rgba(245,158,11,0.12),inset_3px_3px_6px_rgba(255,255,255,0.95),inset_-4px_-4px_8px_rgba(245,158,11,0.06)] max-w-xl">
-            <div className="flex justify-between items-center mb-2.5 font-display font-black text-xs sm:text-sm">
-              <span className="text-neutral-700 flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-orange-500" />
+          {/* High-Contrast Milestone Tracker Capsule */}
+          <div className="bg-white rounded-[2.2rem] p-5 sm:p-6 border-2 border-white shadow-[0_16px_36px_rgba(0,0,0,0.2)] max-w-xl">
+            <div className="flex justify-between items-center mb-3 font-display font-black text-xs sm:text-sm">
+              <span className="text-neutral-900 flex items-center gap-1.5 text-sm sm:text-base">
+                <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
                 <span>Vocabulary Words Found</span>
               </span>
-              <span className="text-brand-orange font-black text-sm">
+              <span className="text-[#FF5E00] font-black text-sm sm:text-base">
                 {wordsFound} of {totalWords} Words
               </span>
             </div>
             
-            <div className="w-full bg-amber-100/70 rounded-full h-3.5 p-0.5 overflow-hidden shadow-inner mb-3">
+            <div className="w-full bg-amber-100 rounded-full h-4 p-0.5 overflow-hidden shadow-inner mb-3.5">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 0.9, ease: "easeOut" }}
-                className="h-full rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 shadow-xs"
+                className="h-full rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 shadow-sm"
               />
             </div>
 
             {/* Word Discovery Step Chips */}
-            <div className="flex items-center justify-between gap-1.5 pt-1">
+            <div className="flex items-center justify-between gap-2 pt-1">
               {[...Array(totalWords)].map((_, idx) => (
                 <div 
                   key={idx}
-                  className={`flex-1 py-1 px-2 rounded-lg text-center font-display font-extrabold text-[11px] transition-all flex items-center justify-center gap-1 ${
+                  className={`flex-1 py-1.5 px-2 rounded-xl text-center font-display font-black text-xs transition-all flex items-center justify-center gap-1 ${
                     idx < wordsFound 
-                      ? 'bg-amber-500 text-white shadow-xs' 
-                      : 'bg-amber-100/60 text-amber-700/60 border border-amber-200/50'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md' 
+                      : 'bg-amber-50 text-amber-800/80 border border-amber-200'
                   }`}
                 >
                   {idx < wordsFound ? (
                     <>
-                      <CheckCircle2 className="w-3 h-3" />
+                      <CheckCircle2 className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">Found</span>
                     </>
                   ) : (
@@ -163,25 +163,25 @@ const ChallengeCard = ({ challenge }) => {
           </div>
 
           {/* Interactive Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-1">
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
             <Link 
               to="/game/play/word-builder" 
               onClick={() => sounds.playCorrect()}
               className="w-full sm:w-auto"
             >
               <motion.button 
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                className="clay-btn-orange w-full sm:w-auto px-9 py-4 text-white font-display font-black text-base flex items-center justify-center gap-2.5 cursor-pointer uppercase tracking-wider"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-9 py-4 bg-white hover:bg-neutral-50 text-[#D84315] font-display font-black text-base sm:text-lg rounded-full shadow-[0_10px_28px_rgba(0,0,0,0.25)] flex items-center justify-center gap-2.5 cursor-pointer uppercase tracking-wider transition-all border-2 border-white"
               >
                 <span>ACCEPT QUEST</span>
-                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform stroke-[3]" />
+                <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform stroke-[3]" />
               </motion.button>
             </Link>
             
-            {/* Clay Reward Badge */}
-            <div className="clay-pill text-amber-950 font-display font-black text-xs sm:text-sm px-5 py-3.5 inline-flex items-center justify-center gap-2 border-2 border-amber-200 shadow-[0_6px_16px_rgba(245,158,11,0.12),inset_2px_2px_4px_rgba(255,255,255,0.95)]">
-              <Award className="w-4 h-4 text-amber-600" />
+            {/* Saturated Reward Badge */}
+            <div className="bg-black/25 backdrop-blur-md text-white font-display font-black text-xs sm:text-sm px-5 py-3.5 rounded-full inline-flex items-center justify-center gap-2 border border-white/30 shadow-lg">
+              <Award className="w-4 h-4 text-yellow-300" />
               <span>Reward: +50 XP & Golden Explorer Badge</span>
             </div>
           </div>

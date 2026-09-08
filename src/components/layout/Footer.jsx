@@ -172,29 +172,6 @@ const Footer = () => {
 
   return (
     <div className="relative">
-      
-      {/* =========================================================================
-          A/B TEST TOGGLE SWITCH (Positioned cleanly in the bottom corner)
-          Default State: OFF (Standard Footer)
-          When toggled ON: Activates clean minimal vector brown soil + sprouting plants
-         ========================================================================= */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 pointer-events-auto">
-        <button
-          onClick={toggleSoilStyle}
-          className="group flex items-center gap-2.5 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/90 hover:bg-neutral-900 text-white backdrop-blur-md border-2 border-white/20 shadow-2xl transition-all transform hover:scale-105 active:scale-95 cursor-pointer select-none text-xs font-display font-bold"
-          title={`Click to toggle A/B test footer: ${isSoilStyle ? 'Switch to Standard Footer' : 'Switch to Minimal Soil Style'}`}
-          aria-label="Toggle Footer Style"
-        >
-          <Sprout className={`w-4 h-4 transition-colors ${isSoilStyle ? 'text-green-400' : 'text-amber-200'}`} />
-          <span className="hidden sm:inline">A/B Footer:</span>
-          <span className={isSoilStyle ? 'text-green-400 font-extrabold' : 'text-neutral-300'}>
-            {isSoilStyle ? 'Nature Soil (ON)' : 'Standard (OFF)'}
-          </span>
-          <div className={`w-7 h-4 rounded-full p-0.5 transition-colors duration-300 flex items-center ${isSoilStyle ? 'bg-green-500 justify-end' : 'bg-neutral-600 justify-start'}`}>
-            <div className="w-3 h-3 rounded-full bg-white shadow-xs" />
-          </div>
-        </button>
-      </div>
 
       {/* =========================================================================
           VARIANT B: CLEAN MINIMAL VECTOR BROWN SOIL STRIP (When toggle is ON)

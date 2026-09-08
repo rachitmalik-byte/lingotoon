@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Star, Trophy, ArrowRight, Volume2, VolumeX, 
-  Sparkles, Music, Compass
+  Sparkles, Music, Compass, Search, Wand2 
 } from 'lucide-react';
 import { 
   wordBuilderLevels, mathMatchPairs, phonicsRounds, 
-  memoryAnimals, patternColors, alphabetPath 
+  memoryAnimals, patternColors, alphabetPath,
+  missingLetterLevels, rhymePairs
 } from '../data/games';
 import GameContainer from '../components/interactive/GameContainer';
 import Confetti from '../components/decorative/Confetti';
@@ -100,7 +101,9 @@ const GamePlayPage = () => {
   const isMemoryQuest = id === 'memory-quest' || id === 'g5';
   const isPatternQuest = id === 'pattern-quest' || id === 'g6';
   const isAlphabetAdventure = id === 'alphabet-adventure' || id === 'g1';
-  const isWordBuilder = !isMathMatch && !isPhonicsPop && !isMemoryQuest && !isPatternQuest && !isAlphabetAdventure;
+  const isMissingLetter = id === 'missing-letter' || id === 'g7';
+  const isRhymeMatch = id === 'rhyme-match' || id === 'g8';
+  const isWordBuilder = !isMathMatch && !isPhonicsPop && !isMemoryQuest && !isPatternQuest && !isAlphabetAdventure && !isMissingLetter && !isRhymeMatch;
 
   const [soundEnabled, setSoundEnabled] = useState(true);
   const toggleSound = () => {
@@ -144,6 +147,18 @@ const GamePlayPage = () => {
   const [currentStoneIndex, setCurrentStoneIndex] = useState(0);
   const [riverChoices, setRiverChoices] = useState([]);
   const [alphabetComplete, setAlphabetComplete] = useState(false);
+
+  // Missing Letter Safari state
+  const [missingLetterIndex, setMissingLetterIndex] = useState(0);
+  const [selectedMissingLetter, setSelectedMissingLetter] = useState(null);
+  const [isMissingLetterCorrect, setIsMissingLetterCorrect] = useState(false);
+  const [missingLetterComplete, setMissingLetterComplete] = useState(false);
+
+  // Rhyme Time Magic state
+  const [rhymeCards, setRhymeCards] = useState([]);
+  const [flippedRhymeCards, setFlippedRhymeCards] = useState([]);
+  const [matchedRhymePairIds, setMatchedRhymePairIds] = useState([]);
+  const [rhymeComplete, setRhymeComplete] = useState(false);
 
   const currentWordData = wordBuilderLevels?.[currentWordIndex] || wordBuilderLevels[0];
   const targetWord = currentWordData.word.toUpperCase();
@@ -419,16 +434,83 @@ const GamePlayPage = () => {
     }
   };
 
+  // 7. Missing Letter Safari Handlers
+  const currentMissingLetterData = missingLetterLevels[missingLetterIndex] || missingLetterLevels[0];
+  const handleMissingLetterChoice = (char) => {
+    if (missingLetterComplete || isMissingLetterCorrect) return;
+    setSelectedMissingLetter(char);
+    if (char === currentMissingLetterData.target) {
+      sounds.playCorrect();
+      setIsMissingLetterCorrect(true);
+      setScore(s => s + 30);
+      setTimeout(() => {
+        setIsMissingLetterCorrect(false);
+        setSelectedMissingLetter(null);
+        if (missingLetterIndex < missingLetterLevels.length - 1) {
+          setMissingLetterIndex(i => i + 1);
+        } else {
+          sounds.playFanfare();
+          setMissingLetterComplete(true);
+          updateGameScore('missing-letter', 150);
+        }
+      }, 1200);
+    } else {
+      sounds.playWrong();
+      setTimeout(() => setSelectedMissingLetter(null), 700);
+    }
+  };
+
+  // 8. Rhyme Time Magic Handlers
+  useEffect(() => {
+    if (isRhymeMatch) {
+      const shuffled = [...rhymePairs].sort(() => Math.random() - 0.5);
+      setRhymeCards(shuffled);
+      setFlippedRhymeCards([]);
+      setMatchedRhymePairIds([]);
+      setRhymeComplete(false);
+    }
+  }, [isRhymeMatch]);
+
+  const handleRhymeCardClick = (card) => {
+    if (flippedRhymeCards.length >= 2 || flippedRhymeCards.includes(card.id) || matchedRhymePairIds.includes(card.pairId) || rhymeComplete) return;
+    sounds.playPop();
+    const nextFlipped = [...flippedRhymeCards, card.id];
+    setFlippedRhymeCards(nextFlipped);
+    if (nextFlipped.length === 2) {
+      const c1 = rhymeCards.find(c => c.id === nextFlipped[0]);
+      const c2 = rhymeCards.find(c => c.id === nextFlipped[1]);
+      if (c1.pairId === c2.pairId) {
+        sounds.playCorrect();
+        setMatchedRhymePairIds(prev => {
+          const updated = [...prev, c1.pairId];
+          setScore(s => s + 30);
+          if (updated.length === rhymePairs.length / 2) {
+            sounds.playFanfare();
+            setRhymeComplete(true);
+            updateGameScore('rhyme-match', 160);
+          }
+          return updated;
+        });
+        setFlippedRhymeCards([]);
+      } else {
+        sounds.playWrong();
+        setTimeout(() => setFlippedRhymeCards([]), 850);
+      }
+    }
+  };
+
   const gameMeta = useMemo(() => {
     if (isMathMatch) return { title: 'Math Match Arcade', level: 'Math Level 1' };
     if (isPhonicsPop) return { title: 'Phonics Bubble Pop', level: `Round ${phonicsRoundIndex + 1}/5` };
     if (isMemoryQuest) return { title: 'Animal Memory Quest', level: 'Memory Grid' };
     if (isPatternQuest) return { title: 'Color Rhythm Quest', level: `Level ${patternRound}/4` };
     if (isAlphabetAdventure) return { title: 'Alphabet Stepping Stones', level: `Step ${currentStoneIndex + 1}/10` };
+    if (isMissingLetter) return { title: 'Missing Letter Safari', level: `Word ${missingLetterIndex + 1}/${missingLetterLevels.length}` };
+    if (isRhymeMatch) return { title: 'Rhyme Time Magic', level: 'Rhyme Pair Grid' };
     return { title: 'Word Builder Quest', level: `Word ${currentWordIndex + 1}/${wordBuilderLevels.length}` };
-  }, [isMathMatch, isPhonicsPop, isMemoryQuest, isPatternQuest, isAlphabetAdventure, phonicsRoundIndex, patternRound, currentStoneIndex, currentWordIndex]);
+  }, [isMathMatch, isPhonicsPop, isMemoryQuest, isPatternQuest, isAlphabetAdventure, isMissingLetter, isRhymeMatch, phonicsRoundIndex, patternRound, currentStoneIndex, missingLetterIndex, currentWordIndex]);
 
-  const isAnyGameComplete = wordGameComplete || mathComplete || phonicsComplete || memoryComplete || patternComplete || alphabetComplete;
+  const isAnyGameComplete = wordGameComplete || mathComplete || phonicsComplete || memoryComplete || patternComplete || alphabetComplete || missingLetterComplete || rhymeComplete;
 
   return (
     <GameContainer game={{ title: gameMeta.title }} score={score} level={gameMeta.level} onBack={() => navigate('/games')}>
@@ -690,6 +772,125 @@ const GamePlayPage = () => {
           </div>
         )}
 
+        {/* 7. MISSING LETTER SAFARI GAME VIEW */}
+        {isMissingLetter && !missingLetterComplete && (
+          <div className="w-full flex flex-col items-center space-y-6">
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 text-xs font-display font-bold">
+                <Search className="w-3.5 h-3.5 text-brand-yellow" />
+                <span>Safari Level {missingLetterIndex + 1} of {missingLetterLevels.length}</span>
+              </div>
+              <h2 className="font-display font-black text-2xl sm:text-3xl text-white">
+                Find the Missing Letter!
+              </h2>
+              <p className="text-purple-200 text-sm font-body">
+                {currentMissingLetterData.hint}
+              </p>
+            </div>
+
+            {/* Word Display with glowing blank */}
+            <div className="py-6 px-10 bg-white/10 backdrop-blur-md rounded-[2.5rem] border-2 border-white/20 shadow-2xl flex items-center gap-3">
+              {currentMissingLetterData.word.split('').map((char, idx) => {
+                if (char === '_') {
+                  return (
+                    <motion.div 
+                      key={idx}
+                      animate={isMissingLetterCorrect ? { scale: [1, 1.2, 1], backgroundColor: '#10B981' } : { scale: [1, 1.05, 1] }}
+                      transition={{ duration: 0.8, repeat: isMissingLetterCorrect ? 0 : Infinity }}
+                      className={`w-14 h-16 sm:w-16 sm:h-20 rounded-2xl flex items-center justify-center font-display font-black text-3xl sm:text-4xl border-3 ${
+                        isMissingLetterCorrect 
+                          ? 'bg-emerald-500 text-white border-white shadow-[0_0_25px_rgba(16,185,129,0.8)]' 
+                          : 'bg-amber-400/20 border-dashed border-amber-300 text-amber-300 animate-pulse'
+                      }`}
+                    >
+                      {isMissingLetterCorrect ? currentMissingLetterData.target : '?'}
+                    </motion.div>
+                  );
+                }
+                return (
+                  <div 
+                    key={idx} 
+                    className="w-14 h-16 sm:w-16 sm:h-20 rounded-2xl bg-white text-neutral-900 font-display font-black text-3xl sm:text-4xl shadow-lg border-2 border-white flex items-center justify-center"
+                  >
+                    {char}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Choice Buttons */}
+            <div className="w-full max-w-md text-center pt-2">
+              <p className="text-xs uppercase tracking-wider text-purple-200 font-display font-bold mb-3">
+                Tap the correct letter:
+              </p>
+              <div className="flex justify-center gap-3 sm:gap-4">
+                {currentMissingLetterData.choices.map((choice, i) => (
+                  <motion.button 
+                    key={i} 
+                    onClick={() => handleMissingLetterChoice(choice)}
+                    whileHover={{ scale: 1.1, y: -3 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-14 h-16 sm:w-18 sm:h-20 rounded-2xl bg-white hover:bg-neutral-50 text-neutral-900 font-display font-black text-2xl sm:text-3xl shadow-xl border-3 border-white hover:border-brand-yellow flex items-center justify-center cursor-pointer transition-all"
+                  >
+                    {choice}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 8. RHYME TIME MAGIC GAME VIEW */}
+        {isRhymeMatch && !rhymeComplete && (
+          <div className="w-full flex flex-col items-center space-y-6">
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200 text-xs font-display font-bold">
+                <Wand2 className="w-3.5 h-3.5 text-brand-yellow" />
+                <span>Rhyme Pair Wizardry</span>
+              </div>
+              <h2 className="font-display font-black text-2xl sm:text-3xl text-white">
+                Match Words that Rhyme!
+              </h2>
+              <p className="text-purple-200 text-sm font-body">
+                Flip cards to find words that share the same magical ending sound!
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-xl">
+              {rhymeCards.map((card) => {
+                const isFlipped = flippedRhymeCards.includes(card.id);
+                const isMatched = matchedRhymePairIds.includes(card.pairId);
+                return (
+                  <motion.button 
+                    key={card.id} 
+                    onClick={() => handleRhymeCardClick(card)}
+                    whileHover={!isMatched && !isFlipped ? { scale: 1.05, y: -2 } : {}}
+                    whileTap={!isMatched && !isFlipped ? { scale: 0.95 } : {}}
+                    className={`aspect-[4/3] rounded-2xl font-display font-black text-lg sm:text-xl transition-all duration-300 flex flex-col items-center justify-center p-2 border-3 cursor-pointer ${
+                      isMatched 
+                        ? 'bg-pink-500 text-white border-pink-300 shadow-[0_0_20px_rgba(236,72,153,0.6)]' 
+                        : isFlipped 
+                        ? 'bg-white text-neutral-900 border-white shadow-xl' 
+                        : 'bg-white/15 border-white/20 text-white/50 hover:bg-white/25 hover:border-white/40'
+                    }`}
+                  >
+                    {isFlipped || isMatched ? (
+                      <>
+                        <span>{card.word}</span>
+                        <span className="text-[11px] font-body opacity-75 mt-0.5 font-bold">
+                          {isMatched ? '✓ Rhyme' : `-${card.category}`}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-xl">✨</span>
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* UNIVERSAL VICTORY BANNER */}
         {isAnyGameComplete && (
           <motion.div 
@@ -738,6 +939,12 @@ const GamePlayPage = () => {
                   setPatternComplete(false);
                   setAlphabetComplete(false);
                   setCurrentStoneIndex(0);
+                  setMissingLetterComplete(false);
+                  setMissingLetterIndex(0);
+                  setSelectedMissingLetter(null);
+                  setRhymeComplete(false);
+                  setMatchedRhymePairIds([]);
+                  setFlippedRhymeCards([]);
                 }}
               >
                 Play Again
