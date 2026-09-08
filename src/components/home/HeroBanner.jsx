@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, Gamepad2 } from 'lucide-react';
+import { ArrowDown, Gamepad2, Volume2, VolumeX, RotateCcw, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useDeveloper } from '../../context/DeveloperContext';
 
@@ -8,130 +8,143 @@ const HeroBanner = () => {
   const { heroMediaType } = useDeveloper();
   const trackRef = useRef(null);
   const videoRef = useRef(null);
-  const [videoDuration, setVideoDuration] = useState(0);
-  const targetTimeRef = useRef(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasStarted, setHasStarted] = useState(false);
 
-  // Initialize video and load metadata only when video mode is active
+  const hasStartedRef = useRef(false);
+  const isEndedRef = useRef(false);
+
+  // Initialize and preload video
   useEffect(() => {
     if (heroMediaType !== 'video') return;
     const video = videoRef.current;
     if (!video) return;
 
     video.pause();
-    video.muted = true;
+    video.muted = isMuted;
     video.playsInline = true;
 
-    const handleLoadedMetadata = () => {
-      if (video.duration && !isNaN(video.duration)) {
-        setVideoDuration(video.duration);
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setIsEnded(true);
+      isEndedRef.current = true;
+    };
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('pause', handlePause);
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('pause', handlePause);
+    };
+  }, [heroMediaType, isMuted]);
+
+  // Smooth single-scroll play trigger
+  const startPlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!hasStartedRef.current || video.ended) {
+      video.currentTime = 0;
+    }
+    hasStartedRef.current = true;
+    setHasStarted(true);
+    setIsEnded(false);
+    isEndedRef.current = false;
+
+    video.muted = isMuted;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          video.muted = true;
+          setIsMuted(true);
+          video.play().then(() => setIsPlaying(true)).catch(() => {});
+        });
+    }
+  };
+
+  // Replay animation
+  const replayAnimation = (e) => {
+    e?.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.play().then(() => {
+      setIsPlaying(true);
+      setIsEnded(false);
+      isEndedRef.current = false;
+    }).catch(() => {});
+  };
+
+  // Toggle Sound
+  const toggleMute = (e) => {
+    e?.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    const nextMute = !isMuted;
+    video.muted = nextMute;
+    setIsMuted(nextMute);
+  };
+
+  // Single-scroll listener: activates on first wheel, touch, or scroll
+  useEffect(() => {
+    if (heroMediaType !== 'video') return;
+
+    const handleWheel = (e) => {
+      if (e.deltaY > 0 && !hasStartedRef.current && window.scrollY < 80) {
+        startPlayback();
       }
     };
 
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('canplay', handleLoadedMetadata);
-
-    if (video.readyState >= 1 && video.duration) {
-      setVideoDuration(video.duration);
-    } else {
-      video.load();
-    }
-
-    return () => {
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('canplay', handleLoadedMetadata);
+    let touchStartY = 0;
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
     };
-  }, []);
-
-  // Continuous Silky-Smooth Hardware-Accelerated Playback Engine
-  useEffect(() => {
-    if (heroMediaType !== 'video') return;
-    const track = trackRef.current;
-    const video = videoRef.current;
-    if (!track || !video) return;
-
-    let rafId = null;
-    let isVisible = true;
-    let smoothTime = video.currentTime || 0;
-    let isSeeking = false;
-
-    // Ensure video is paused for pure non-blocking frame scrubbing
-    video.pause();
-
-    // Only run when hero is near or inside the viewport to conserve resources
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-      },
-      { rootMargin: '300px' }
-    );
-    observer.observe(track);
-
-    // Scroll listener updates the target playback time with sub-pixel precision
-    const onScroll = () => {
-      const rect = track.getBoundingClientRect();
-      const totalScrollable = rect.height - window.innerHeight;
-      if (totalScrollable <= 0) return;
-
-      const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-      setScrollProgress(progress);
-
-      const duration = video.duration || videoDuration || 10;
-      targetTimeRef.current = progress * Math.max(0, duration - 0.05);
+    const handleTouchMove = (e) => {
+      const deltaY = touchStartY - e.touches[0].clientY;
+      if (deltaY > 15 && !hasStartedRef.current && window.scrollY < 80) {
+        startPlayback();
+      }
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // Hardware seek sync
-    const applySeek = () => {
-      if (!video || !isVisible) return;
-      if (isSeeking) return;
-
-      const delta = targetTimeRef.current - smoothTime;
-      // Damped interpolation for silky liquid movement
-      smoothTime += delta * 0.18;
-
-      if (Math.abs(smoothTime - video.currentTime) > 0.015) {
-        isSeeking = true;
-        if ('fastSeek' in video) {
-          try {
-            video.fastSeek(smoothTime);
-          } catch {
-            video.currentTime = smoothTime;
-          }
-        } else {
-          video.currentTime = smoothTime;
+    const handleScroll = () => {
+      if (window.scrollY > 15 && !hasStartedRef.current) {
+        startPlayback();
+      }
+      if (window.scrollY === 0 && isEndedRef.current) {
+        hasStartedRef.current = false;
+        setHasStarted(false);
+        setIsEnded(false);
+        isEndedRef.current = false;
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
         }
       }
     };
 
-    const handleSeeked = () => {
-      isSeeking = false;
-      // If user kept scrolling during previous seek, immediately catch up
-      if (Math.abs(targetTimeRef.current - smoothTime) > 0.015) {
-        applySeek();
-      }
-    };
-
-    video.addEventListener('seeked', handleSeeked);
-
-    const renderLoop = () => {
-      if (isVisible && video.readyState >= 1) {
-        applySeek();
-      }
-      rafId = requestAnimationFrame(renderLoop);
-    };
-
-    rafId = requestAnimationFrame(renderLoop);
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      video.removeEventListener('seeked', handleSeeked);
-      if (rafId) cancelAnimationFrame(rafId);
-      observer.disconnect();
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, [videoDuration, heroMediaType]);
+  }, [heroMediaType, isMuted]);
 
   const scrollToContent = () => {
     const el = document.getElementById('explore-section');
@@ -225,108 +238,146 @@ const HeroBanner = () => {
           </div>
         </div>
       ) : (
-        /* ================= STOP-SCROLL VIDEO SCRUB TRACK (250vh) ================= */
-        <div ref={trackRef} className="relative w-full h-[250vh]">
-          {/* Sticky Fullscreen Frame pinned while scrolling through track */}
-          <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center overflow-hidden bg-[#591ac0]">
-            
-            {/* Scroll-Scrubbed Animated Video */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
-              <video
-                ref={videoRef}
-                src="/videos/lingotoon_animated_logo.mp4"
-                poster="/images/lingo_hero_exact.jpg"
-                playsInline
-                muted
-                preload="auto"
-                disablePictureInPicture
-                disableRemotePlayback
-                className="w-full h-full object-contain md:object-cover object-center"
-              />
-              {/* Subtle ambient lighting vignette */}
-              <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/15 pointer-events-none" />
-            </div>
-
-            {/* Floating Twinkling Star Sparkles */}
-            <motion.div 
-              animate={{ scale: [0.8, 1.25, 0.8], rotate: [0, 15, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-24 left-[28%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-            >
-              ✦
-            </motion.div>
-            <motion.div 
-              animate={{ scale: [1, 1.3, 1], rotate: [0, -20, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="absolute top-20 right-[28%] text-brand-yellow font-black text-3xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-            >
-              ✦
-            </motion.div>
-            <motion.div 
-              animate={{ scale: [0.7, 1.15, 0.7] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-28 left-[24%] text-brand-yellow font-black text-xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-            >
-              ✦
-            </motion.div>
-            <motion.div 
-              animate={{ scale: [0.9, 1.25, 0.9] }}
-              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-              className="absolute bottom-24 right-[25%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
-            >
-              ✦
-            </motion.div>
-
-            {/* Top Spacer for floating transparent navbar */}
-            <div className="w-full h-20 relative z-10 pointer-events-none" />
-
-            {/* Center Interactive Anchor */}
-            <div className="relative z-10 flex-1 flex items-center justify-center pointer-events-none" />
-
-            {/* Bottom Gentle Explore Button & Interactive Scroll Indicator */}
-            <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-2">
-              {scrollProgress < 0.1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: [0, 4, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/30 text-white font-display font-bold text-xs flex items-center gap-2 shadow-lg mb-1 pointer-events-none"
-                >
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                  <span>Scroll down to play animated intro</span>
-                  <ArrowDown className="w-3.5 h-3.5 text-amber-300" />
-                </motion.div>
-              )}
-
-              <motion.button
-                onClick={scrollToContent}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="px-6 py-2.5 clay-pill text-brand-purple font-display font-bold text-sm sm:text-base flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer pointer-events-auto"
-              >
-                <span>Explore Courses</span>
-                <ArrowDown className="w-4 h-4 text-brand-orange" />
-              </motion.button>
-            </div>
-
-            {/* Seamless Organic Wave Divider Over Video (Curvey Smooth Pattern Flow) */}
-            <div className="absolute bottom-0 left-0 w-full leading-none z-20 pointer-events-none">
-              <svg 
-                viewBox="0 0 1440 100" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="w-full h-12 sm:h-16 md:h-20 block"
-                preserveAspectRatio="none"
-              >
-                <path 
-                  d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,53.3C840,43,960,21,1080,21.3C1200,21,1320,43,1380,53.3L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z" 
-                  fill="#FAF9F6"
-                />
-              </svg>
-            </div>
-
+        /* ================= SINGLE-SCROLL 60FPS VIDEO ANIMATION SECTION ================= */
+        <div 
+          ref={trackRef} 
+          onClick={!isPlaying ? startPlayback : undefined}
+          className="relative w-full h-screen min-h-[600px] flex flex-col justify-between items-center overflow-hidden bg-[#591ac0] cursor-pointer"
+        >
+          
+          {/* Hardware-Accelerated 60FPS Native Video */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
+            <video
+              ref={videoRef}
+              src="/videos/lingotoon_animated_logo.mp4"
+              playsInline
+              muted={isMuted}
+              preload="auto"
+              disablePictureInPicture
+              disableRemotePlayback
+              className="w-full h-full object-contain md:object-cover object-center"
+            />
+            {/* Ambient Lighting Vignette */}
+            <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/15 pointer-events-none" />
           </div>
+
+          {/* Floating Twinkling Star Sparkles */}
+          <motion.div 
+            animate={{ scale: [0.8, 1.25, 0.8], rotate: [0, 15, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-24 left-[28%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+          >
+            ✦
+          </motion.div>
+          <motion.div 
+            animate={{ scale: [1, 1.3, 1], rotate: [0, -20, 0] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            className="absolute top-20 right-[28%] text-brand-yellow font-black text-3xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+          >
+            ✦
+          </motion.div>
+          <motion.div 
+            animate={{ scale: [0.7, 1.15, 0.7] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-28 left-[24%] text-brand-yellow font-black text-xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+          >
+            ✦
+          </motion.div>
+          <motion.div 
+            animate={{ scale: [0.9, 1.25, 0.9] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+            className="absolute bottom-24 right-[25%] text-brand-yellow font-black text-2xl select-none pointer-events-none z-10 hidden md:block drop-shadow"
+          >
+            ✦
+          </motion.div>
+
+          {/* Top Spacer for floating transparent navbar */}
+          <div className="w-full h-20 relative z-10 pointer-events-none" />
+
+          {/* Center Interactive Anchor / Play Indicator */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none">
+            {!hasStarted && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: [0.98, 1.02, 0.98] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="px-5 py-2.5 rounded-full bg-black/45 backdrop-blur-md border border-white/30 text-white font-display font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl pointer-events-auto cursor-pointer transition-transform hover:scale-105"
+                onClick={startPlayback}
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                <span>Scroll or click to play intro</span>
+                <Play className="w-4 h-4 fill-amber-300 text-amber-300 ml-0.5" />
+              </motion.div>
+            )}
+          </div>
+
+          {/* Bottom Controls Bar: Audio Mute, Replay, and Explore Button */}
+          <div className="relative z-30 pb-7 sm:pb-9 flex flex-col items-center gap-3 w-full px-4">
+            
+            {/* Utility Row: Sound toggle & Replay */}
+            <div className="flex items-center gap-2.5 pointer-events-auto">
+              {/* Sound Toggle Button */}
+              <button 
+                onClick={toggleMute}
+                className="px-3 py-1.5 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/25 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+                title={isMuted ? "Unmute audio" : "Mute audio"}
+              >
+                {isMuted ? (
+                  <>
+                    <VolumeX className="w-3.5 h-3.5 text-neutral-300" />
+                    <span>Muted</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                    <span className="text-amber-200">Sound On</span>
+                  </>
+                )}
+              </button>
+
+              {/* Replay Button */}
+              {isEnded && (
+                <motion.button
+                  onClick={replayAnimation}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-md border border-white/35 text-white font-display font-bold text-xs flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer"
+                >
+                  <RotateCcw className="w-3 h-3 text-amber-300" />
+                  <span>Replay</span>
+                </motion.button>
+              )}
+            </div>
+
+            {/* Explore Button */}
+            <motion.button
+              onClick={scrollToContent}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="px-6 py-2.5 clay-pill text-brand-purple font-display font-bold text-sm sm:text-base flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer pointer-events-auto"
+            >
+              <span>Explore Courses</span>
+              <ArrowDown className="w-4 h-4 text-brand-orange" />
+            </motion.button>
+          </div>
+
+          {/* Seamless Organic Wave Divider Over Video (Curvey Smooth Pattern Flow) */}
+          <div className="absolute bottom-0 left-0 w-full leading-none z-20 pointer-events-none">
+            <svg 
+              viewBox="0 0 1440 100" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="w-full h-12 sm:h-16 md:h-20 block"
+              preserveAspectRatio="none"
+            >
+              <path 
+                d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,53.3C840,43,960,21,1080,21.3C1200,21,1320,43,1380,53.3L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z" 
+                fill="#FAF9F6"
+              />
+            </svg>
+          </div>
+
         </div>
       )}
 
